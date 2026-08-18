@@ -1,0 +1,46 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+
+# Ignore Visual Studio and IDE files
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore NuGet packages and caches
+*.nupkg
+packages/
+project.lock.json
+*.psmdcp
+
+# Ignore test results and coverage
+TestResults/
+coverage*
+
+# Ignore runtime and publish artifacts
+publish/
+Publish/
+*.runtimeconfig.json
+*.deps.json
+
+# Ignore local secrets and environment files
+.env
+.env.*
+
+# Docker overrides and local compose files
+docker-compose.override.yml
+docker-compose.*.local.yml
+
+# Rider
+.idea/
+
+# Misc
+*.log
+node_modules/
+
+# MSBuild BuildHost artifacts
+**/BuildHost-*

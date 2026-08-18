@@ -1,0 +1,167 @@
+name: climate-monitoring
+
+x-api-defaults: &api-defaults
+  restart: unless-stopped
+  networks: [backend]
+  environment: &common-environment
+    ASPNETCORE_ENVIRONMENT: Production
+    ASPNETCORE_HTTP_PORTS: 8080
+    Jwt__Issuer: ClimateMonitoring.Identity
+    Jwt__Audience: ClimateMonitoring.Client
+    Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+    InternalApi__ApiKey: ${INTERNAL_API_KEY:?INTERNAL_API_KEY is required}
+  depends_on:
+    sqlserver:
+      condition: service_healthy
+  healthcheck:
+    test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+    interval: 15s
+    timeout: 5s
+    retries: 10
+    start_period: 30s
+  security_opt:
+    - no-new-privileges:true
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?SQLSERVER_SA_PASSWORD is required}
+    ports:
+      - "${SQLSERVER_PORT:-1433}:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  audit-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/AuditService/Climate.Audit.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__AuditDb: Server=sqlserver,1433;Database=AuditDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+
+  event-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/EventService/Climate.Events.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__EventDb: Server=sqlserver,1433;Database=EventDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+
+  identity-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/IdentityService/Climate.Identity.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__IdentityDb: Server=sqlserver,1433;Database=IdentityDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+      Jwt__ExpirationMinutes: ${JWT_EXPIRATION_MINUTES:-60}
+      AdminSeed__Username: ${ADMIN_SEED_USERNAME:-admin}
+      AdminSeed__Email: ${ADMIN_SEED_EMAIL:-admin@example.com}
+      AdminSeed__Password: ${ADMIN_SEED_PASSWORD:?ADMIN_SEED_PASSWORD is required}
+      AuditService__BaseUrl: http://audit-service:8080/
+      AuditService__ApiKey: ${INTERNAL_API_KEY}
+
+  sensor-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/SensorService/Climate.Sensors.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__SensorDb: Server=sqlserver,1433;Database=SensorDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+      DemoSeed__Enabled: ${DEMO_SEED_ENABLED:-true}
+      AuditService__BaseUrl: http://audit-service:8080/
+      AuditService__ApiKey: ${INTERNAL_API_KEY}
+      RealtimeService__BaseUrl: http://monitoring-service:8080/
+      RealtimeService__ApiKey: ${INTERNAL_API_KEY}
+
+  alert-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/AlertService/Climate.Alerts.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__AlertDb: Server=sqlserver,1433;Database=AlertDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+      EventService__BaseUrl: http://event-service:8080/
+      EventService__ApiKey: ${INTERNAL_API_KEY}
+      RealtimeService__BaseUrl: http://monitoring-service:8080/
+      RealtimeService__ApiKey: ${INTERNAL_API_KEY}
+
+  monitoring-service:
+    <<: *api-defaults
+    build:
+      context: .
+      dockerfile: src/Services/MonitoringService/Climate.Monitoring.Api/Dockerfile
+    environment:
+      <<: *common-environment
+      ConnectionStrings__MonitoringDb: Server=sqlserver,1433;Database=MonitoringDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+      SensorService__BaseUrl: http://sensor-service:8080/
+      SensorService__ApiKey: ${INTERNAL_API_KEY}
+      AlertService__BaseUrl: http://alert-service:8080/
+      AlertService__ApiKey: ${INTERNAL_API_KEY}
+      AuditService__BaseUrl: http://audit-service:8080/
+      AuditService__ApiKey: ${INTERNAL_API_KEY}
+      Simulation__Enabled: ${SIMULATION_ENABLED:-true}
+      Simulation__IntervalSeconds: ${SIMULATION_INTERVAL_SECONDS:-30}
+
+  gateway:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: src/Gateway/Climate.Gateway/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: 8080
+      Cors__AllowedOrigins__0: ${FRONTEND_ORIGIN:-http://localhost:4200}
+      ReverseProxy__Clusters__identity__Destinations__primary__Address: http://identity-service:8080/
+      ReverseProxy__Clusters__sensors__Destinations__primary__Address: http://sensor-service:8080/
+      ReverseProxy__Clusters__monitoring__Destinations__primary__Address: http://monitoring-service:8080/
+      ReverseProxy__Clusters__alerts__Destinations__primary__Address: http://alert-service:8080/
+      ReverseProxy__Clusters__events__Destinations__primary__Address: http://event-service:8080/
+      ReverseProxy__Clusters__audit__Destinations__primary__Address: http://audit-service:8080/
+      DownstreamHealthEndpoints__0: http://identity-service:8080/health
+      DownstreamHealthEndpoints__1: http://sensor-service:8080/health
+      DownstreamHealthEndpoints__2: http://monitoring-service:8080/health
+      DownstreamHealthEndpoints__3: http://alert-service:8080/health
+      DownstreamHealthEndpoints__4: http://event-service:8080/health
+      DownstreamHealthEndpoints__5: http://audit-service:8080/health
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    networks: [backend]
+    depends_on:
+      identity-service: { condition: service_healthy }
+      sensor-service: { condition: service_healthy }
+      monitoring-service: { condition: service_healthy }
+      alert-service: { condition: service_healthy }
+      event-service: { condition: service_healthy }
+      audit-service: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  sqlserver-data:

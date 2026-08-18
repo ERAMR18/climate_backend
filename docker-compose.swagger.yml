@@ -1,0 +1,13 @@
+services:
+  identity-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }
+  sensor-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }
+  monitoring-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }
+  alert-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }
+  event-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }
+  audit-service:
+    environment: { ASPNETCORE_ENVIRONMENT: Development }

@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+.git/
+.vs/
+.vscode/
+.idea/
+.env
+*.user
+*.suo
+TestResults/
+docs/*
+!docs/openapi/
+docs/openapi/*
+!docs/openapi/climate-api-v1.json
+Prompt para generar backend .NET 10 basado en microservicios.md
