@@ -1,0 +1,58 @@
+[
+  {
+    "name": "login",
+    "violations": []
+  },
+  {
+    "name": "dashboard",
+    "violations": []
+  },
+  {
+    "name": "communities",
+    "violations": []
+  },
+  {
+    "name": "sensors",
+    "violations": []
+  },
+  {
+    "name": "alert-rules",
+    "violations": []
+  },
+  {
+    "name": "alerts",
+    "violations": []
+  },
+  {
+    "name": "events",
+    "violations": []
+  },
+  {
+    "name": "users",
+    "violations": []
+  },
+  {
+    "name": "audit",
+    "violations": []
+  },
+  {
+    "name": "readings",
+    "violations": []
+  },
+  {
+    "name": "rule-form",
+    "violations": []
+  },
+  {
+    "name": "rule-dialog",
+    "violations": []
+  },
+  {
+    "name": "mobile-rules",
+    "violations": []
+  },
+  {
+    "name": "mobile-navigation",
+    "violations": []
+  }
+]

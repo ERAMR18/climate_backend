@@ -9,6 +9,8 @@ internal sealed class SensorConfiguration : IEntityTypeConfiguration<Sensor>
     public void Configure(EntityTypeBuilder<Sensor> builder)
     {
         builder.ToTable("Sensors");
+        builder.Property(x => x.Location).HasMaxLength(250);
+        builder.Property(x => x.EnvironmentalType).HasMaxLength(100);
         builder.HasKey(sensor => sensor.Id);
         builder.Property(sensor => sensor.Name).HasMaxLength(120).IsRequired();
         builder.Property(sensor => sensor.Code).HasMaxLength(50).IsRequired();

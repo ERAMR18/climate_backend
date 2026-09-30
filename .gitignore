@@ -30,6 +30,7 @@ Publish/
 # Ignore local secrets and environment files
 .env
 .env.*
+!.env.example
 
 # Docker overrides and local compose files
 docker-compose.override.yml

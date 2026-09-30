@@ -41,6 +41,7 @@ app.UseSwaggerUI(options=>
     options.EnablePersistAuthorization();
 });
 app.UseRateLimiter();
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health",new HealthCheckOptions{ResponseWriter=HealthResponseWriter.WriteAsync}).DisableRateLimiting();
 app.MapReverseProxy();
 await app.RunAsync();

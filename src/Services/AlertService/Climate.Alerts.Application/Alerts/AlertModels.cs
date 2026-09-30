@@ -7,7 +7,7 @@ public sealed record AlertFilter(
     AlertLevel? AlertLevel,
     Guid? SensorId,
     Guid? CommunityId,
-    bool? IsActive);
+    bool? IsActive, DateTimeOffset? From = null, DateTimeOffset? To = null, AlertStatus? Status = null);
 
 public sealed record AlertResponse(
     Guid Id,
@@ -21,7 +21,10 @@ public sealed record AlertResponse(
     decimal ThresholdValue,
     DateTimeOffset GeneratedAt,
     bool IsActive,
-    DateTimeOffset? ResolvedAt)
+    DateTimeOffset? ResolvedAt, AlertStatus Status = AlertStatus.Active,
+    Guid? AttendedByUserId = null, DateTimeOffset? AttendedAt = null,
+    Guid? ClosedByUserId = null, DateTimeOffset? ClosedAt = null,
+    Guid? RuleId = null, string? RuleName = null, decimal? MinimumValueSnapshot = null, decimal? MaximumValueSnapshot = null)
 {
     public static AlertResponse FromEntity(ClimateAlert alert) =>
         new(
@@ -36,5 +39,6 @@ public sealed record AlertResponse(
             alert.ThresholdValue,
             alert.GeneratedAt,
             alert.IsActive,
-            alert.ResolvedAt);
+            alert.ResolvedAt, alert.Status, alert.AttendedByUserId, alert.AttendedAt,
+            alert.ClosedByUserId, alert.ClosedAt, alert.RuleId, alert.RuleName, alert.MinimumValueSnapshot, alert.MaximumValueSnapshot);
 }

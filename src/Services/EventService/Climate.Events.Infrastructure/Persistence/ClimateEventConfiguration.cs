@@ -9,6 +9,8 @@ internal sealed class ClimateEventConfiguration : IEntityTypeConfiguration<Clima
     public void Configure(EntityTypeBuilder<ClimateEvent> builder)
     {
         builder.ToTable("ClimateEvents");
+        builder.Property(x => x.Value).HasPrecision(18, 4);
+        builder.Property(x => x.Status).HasMaxLength(16);
         builder.HasKey(x => x.Id);
         builder.Property(x => x.RiskType).HasConversion<string>().HasMaxLength(32);
         builder.Property(x => x.AlertLevel).HasConversion<string>().HasMaxLength(16);

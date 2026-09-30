@@ -1,10 +1,14 @@
-using System.Net.Http.Json;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace Climate.Contracts.Audit;
 
-public sealed class AuditWriter(HttpClient httpClient, string apiKey)
+public sealed class AuditWriter(IAuditEventPublisher publisher)
 {
+    // Reserved actor for internal service operations; it is not an Identity account.
+    public Task RecordSystemAsync(string action, string resource, string? resourceId, string description, CancellationToken token) =>
+        RecordAsync(new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"), "system", action, resource, resourceId, description, null, token);
+
     public Task RecordAsync(ClaimsPrincipal user, string action, string resource, string? resourceId,
         string description, string? ipAddress, CancellationToken cancellationToken)
     {
@@ -15,14 +19,11 @@ public sealed class AuditWriter(HttpClient httpClient, string apiKey)
             : Task.CompletedTask;
     }
 
-    public async Task RecordAsync(Guid userId,string userName,string action,string resource,string? resourceId,
+    public Task RecordAsync(Guid userId,string userName,string action,string resource,string? resourceId,
         string description,string? ipAddress,CancellationToken cancellationToken)
     {
         DateTimeOffset now=DateTimeOffset.UtcNow;
-        var message=new AuditLogRequested(Guid.NewGuid(),now,Guid.NewGuid().ToString(),userId,userName,action,resource,resourceId,description,ipAddress);
-        using var request=new HttpRequestMessage(HttpMethod.Post,"api/v1/internal/audit"){Content=JsonContent.Create(new
-        { message.EventId,message.UserId,message.UserName,message.Action,message.Resource,message.ResourceId,message.Description,message.IpAddress,Timestamp=message.OccurredAt })};
-        request.Headers.Add("X-Internal-Api-Key",apiKey);
-        using HttpResponseMessage response=await httpClient.SendAsync(request,cancellationToken); response.EnsureSuccessStatusCode();
+        var message=new AuditLogRequested(Guid.NewGuid(),now,Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString(),userId,userName,action,resource,resourceId,description,ipAddress);
+        return publisher.PublishAsync(message,cancellationToken);
     }
 }

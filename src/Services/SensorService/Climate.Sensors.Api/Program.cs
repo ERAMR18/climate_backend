@@ -1,4 +1,5 @@
 using System.Text;
+using Climate.Sensors.Infrastructure.Persistence;
 using System.Text.Json.Serialization;
 using Climate.Contracts.Identity;
 using Climate.Contracts.Audit;
@@ -13,9 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-string sensorAuditUrl=builder.Configuration["AuditService:BaseUrl"]??throw new InvalidOperationException("Audit Service base URL is required.");
-string sensorAuditKey=builder.Configuration["AuditService:ApiKey"]??throw new InvalidOperationException("Audit Service API key is required.");
-builder.Services.AddSingleton(new AuditWriter(new HttpClient{BaseAddress=new Uri(sensorAuditUrl)},sensorAuditKey));
+builder.Services.AddAuditOutbox<SensorsDbContext>(builder.Configuration);
 string sensorRealtimeUrl=builder.Configuration["RealtimeService:BaseUrl"]??throw new InvalidOperationException("Realtime Service base URL is required.");
 string sensorRealtimeKey=builder.Configuration["RealtimeService:ApiKey"]??throw new InvalidOperationException("Realtime Service API key is required.");
 builder.Services.AddSingleton(new RealtimeWriter(new HttpClient{BaseAddress=new Uri(sensorRealtimeUrl)},sensorRealtimeKey));
@@ -95,9 +94,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health");
 
-await app.Services.InitializeSensorsDatabaseAsync(app.Lifetime.ApplicationStopping);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly"))
+    await Climate.Contracts.DatabaseStartup.RunAsync(app.Services.InitializeSensorsDatabaseAsync, app.Logger, app.Lifetime.ApplicationStopping);
 await app.RunAsync();
 
 public partial class Program;

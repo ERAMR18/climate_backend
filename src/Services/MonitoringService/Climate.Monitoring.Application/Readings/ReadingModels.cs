@@ -13,7 +13,7 @@ public sealed record SensorReadingResponse(
     SensorType SensorType,
     decimal Value,
     string Unit,
-    DateTimeOffset RecordedAt)
+    DateTimeOffset RecordedAt, bool? SensorWasActive = null)
 {
     public static SensorReadingResponse FromEntity(SensorReading reading) =>
         new(
@@ -23,7 +23,7 @@ public sealed record SensorReadingResponse(
             reading.SensorType,
             reading.Value,
             reading.Unit,
-            reading.RecordedAt);
+            reading.RecordedAt, reading.SensorWasActive);
 }
 
 public sealed record ChartPoint(DateTimeOffset Timestamp, decimal Value);

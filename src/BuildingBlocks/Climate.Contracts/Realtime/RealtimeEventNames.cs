@@ -5,6 +5,8 @@ public static class RealtimeEventNames
     public const string SensorReadingUpdated = nameof(SensorReadingUpdated);
     public const string AlertGenerated = nameof(AlertGenerated);
     public const string SensorStatusChanged = nameof(SensorStatusChanged);
+    public const string AlertAttended = nameof(AlertAttended);
+    public const string AlertClosed = nameof(AlertClosed);
     public const string SystemReset = nameof(SystemReset);
-    public static readonly IReadOnlyCollection<string> All = [SensorReadingUpdated,AlertGenerated,SensorStatusChanged,SystemReset];
+    public static readonly IReadOnlyCollection<string> All = [SensorReadingUpdated,AlertGenerated,AlertAttended,AlertClosed,SensorStatusChanged,SystemReset];
 }

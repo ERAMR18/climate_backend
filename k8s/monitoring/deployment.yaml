@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring
+  namespace: climate-monitoring
+  labels:
+    app.kubernetes.io/part-of: climate-monitoring
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels: &id001
+      app.kubernetes.io/name: monitoring
+      app.kubernetes.io/part-of: climate-monitoring
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1654
+        runAsGroup: 1654
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: monitoring
+        image: climate/monitoring:phase2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: climate-config
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 5
+          failureThreshold: 60
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        env:
+        - name: Jwt__SigningKey
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: JWT_SIGNING_KEY
+        - name: ConnectionStrings__MonitoringDb
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: SQL_MONITORING_CONNECTION
+        - name: RABBITMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: RABBITMQ_USER
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: RABBITMQ_PASSWORD
+        - name: InternalApi__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: INTERNAL_API_KEY
+        - name: SensorService__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: INTERNAL_API_KEY
+        - name: AlertService__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: INTERNAL_API_KEY
+      volumes:
+      - name: tmp
+        emptyDir: {}

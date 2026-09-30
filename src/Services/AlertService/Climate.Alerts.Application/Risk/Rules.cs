@@ -24,7 +24,7 @@ public sealed record RiskAssessment(
     AlertLevel Level,
     decimal ThresholdValue,
     string Title,
-    string Description);
+    string Description, Guid? RuleId = null, decimal? MinimumValue = null, decimal? MaximumValue = null);
 
 public interface IRiskRuleProvider
 {
@@ -33,5 +33,6 @@ public interface IRiskRuleProvider
 
 public interface IRiskEvaluationService
 {
+    Task<IReadOnlyCollection<RiskAssessment>> EvaluateAsync(SensorType sensorType, decimal value, CancellationToken token);
     IReadOnlyCollection<RiskAssessment> Evaluate(SensorType sensorType, decimal value);
 }

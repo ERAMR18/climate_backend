@@ -66,7 +66,9 @@ public sealed class SensorService(
             request.Latitude,
             request.Longitude,
             timeProvider.GetUtcNow());
+        sensor.SetInstallation(request.InstallationDate, request.Location, request.EnvironmentalType);
         await repository.AddSensorAsync(sensor, cancellationToken);
+        sensor.SetInstallation(request.InstallationDate, request.Location, request.EnvironmentalType);
         await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(SensorResponse.FromEntity(sensor, communityResult.Value.Name));
     }
@@ -109,6 +111,7 @@ public sealed class SensorService(
             request.Latitude,
             request.Longitude,
             timeProvider.GetUtcNow());
+        sensor.SetInstallation(request.InstallationDate, request.Location, request.EnvironmentalType);
         await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(SensorResponse.FromEntity(sensor, communityResult.Value.Name));
     }

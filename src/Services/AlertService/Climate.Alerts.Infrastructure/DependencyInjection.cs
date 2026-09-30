@@ -25,7 +25,10 @@ public static class DependencyInjection
             .Validate(options => options.Rules.Count > 0, "At least one risk rule is required.")
             .Validate(options => options.Rules.All(IsValid), "Risk thresholds must be ordered for their direction.")
             .ValidateOnStart();
+        services.AddScoped<IRiskEvaluationService, DatabaseRiskEvaluationService>();
         services.AddScoped<IAlertRepository, AlertRepository>();
+        services.AddHttpClient<ISensorActivityClient, SensorActivityClient>(client =>
+            client.BaseAddress = new Uri(configuration["SensorService:BaseUrl"] ?? throw new InvalidOperationException("SensorService:BaseUrl is required.")));
         services.AddOptions<EventServiceOptions>().Bind(configuration.GetSection(EventServiceOptions.SectionName))
             .Validate(x => Uri.TryCreate(x.BaseUrl, UriKind.Absolute, out _), "Event Service base URL is required.")
             .Validate(x => x.ApiKey.Length >= 32, "Event Service API key must contain at least 32 characters.").ValidateOnStart();

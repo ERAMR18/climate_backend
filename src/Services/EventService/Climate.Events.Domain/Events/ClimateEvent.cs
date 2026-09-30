@@ -6,6 +6,11 @@ public sealed class ClimateEvent
 {
     private ClimateEvent() { }
 
+    public decimal? Value { get; private set; }
+    public string Status { get; private set; } = "Active";
+    public Guid? ResponsibleUserId { get; private set; }
+    public void SetWorkflow(decimal? value, string status, Guid? userId)
+    { Value = value; Status = status; ResponsibleUserId = userId; }
     public Guid Id { get; private set; }
     public Guid AlertId { get; private set; }
     public Guid SensorId { get; private set; }

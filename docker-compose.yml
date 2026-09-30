@@ -6,6 +6,10 @@ x-api-defaults: &api-defaults
   environment: &common-environment
     ASPNETCORE_ENVIRONMENT: Production
     ASPNETCORE_HTTP_PORTS: 8080
+    RABBITMQ_HOST: rabbitmq
+    RABBITMQ_PORT: 5672
+    RABBITMQ_USER: ${RABBITMQ_USER:?RABBITMQ_USER is required}
+    RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?RABBITMQ_PASSWORD is required}
     Jwt__Issuer: ClimateMonitoring.Identity
     Jwt__Audience: ClimateMonitoring.Client
     Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
@@ -14,7 +18,7 @@ x-api-defaults: &api-defaults
     sqlserver:
       condition: service_healthy
   healthcheck:
-    test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+    test: ["CMD", "dotnet", "/app/health/Climate.HealthProbe.dll"]
     interval: 15s
     timeout: 5s
     retries: 10
@@ -23,6 +27,23 @@ x-api-defaults: &api-defaults
     - no-new-privileges:true
 
 services:
+  rabbitmq:
+    image: rabbitmq:4.1-management
+    user: rabbitmq
+    hostname: rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:?RABBITMQ_USER is required}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?RABBITMQ_PASSWORD is required}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: unless-stopped
@@ -31,7 +52,7 @@ services:
       MSSQL_PID: Developer
       MSSQL_SA_PASSWORD: ${SQLSERVER_SA_PASSWORD:?SQLSERVER_SA_PASSWORD is required}
     ports:
-      - "${SQLSERVER_PORT:-1433}:1433"
+      - "${SQLSERVER_BIND_ADDRESS:-127.0.0.1}:${SQLSERVER_PORT:-1433}:1433"
     volumes:
       - sqlserver-data:/var/opt/mssql
     networks: [backend]
@@ -72,8 +93,6 @@ services:
       AdminSeed__Username: ${ADMIN_SEED_USERNAME:-admin}
       AdminSeed__Email: ${ADMIN_SEED_EMAIL:-admin@example.com}
       AdminSeed__Password: ${ADMIN_SEED_PASSWORD:?ADMIN_SEED_PASSWORD is required}
-      AuditService__BaseUrl: http://audit-service:8080/
-      AuditService__ApiKey: ${INTERNAL_API_KEY}
 
   sensor-service:
     <<: *api-defaults
@@ -84,8 +103,6 @@ services:
       <<: *common-environment
       ConnectionStrings__SensorDb: Server=sqlserver,1433;Database=SensorDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
       DemoSeed__Enabled: ${DEMO_SEED_ENABLED:-true}
-      AuditService__BaseUrl: http://audit-service:8080/
-      AuditService__ApiKey: ${INTERNAL_API_KEY}
       RealtimeService__BaseUrl: http://monitoring-service:8080/
       RealtimeService__ApiKey: ${INTERNAL_API_KEY}
 
@@ -97,6 +114,8 @@ services:
     environment:
       <<: *common-environment
       ConnectionStrings__AlertDb: Server=sqlserver,1433;Database=AlertDb;User Id=sa;Password=${SQLSERVER_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True
+      SensorService__BaseUrl: http://sensor-service:8080/
+      SensorService__ApiKey: ${INTERNAL_API_KEY}
       EventService__BaseUrl: http://event-service:8080/
       EventService__ApiKey: ${INTERNAL_API_KEY}
       RealtimeService__BaseUrl: http://monitoring-service:8080/
@@ -114,8 +133,7 @@ services:
       SensorService__ApiKey: ${INTERNAL_API_KEY}
       AlertService__BaseUrl: http://alert-service:8080/
       AlertService__ApiKey: ${INTERNAL_API_KEY}
-      AuditService__BaseUrl: http://audit-service:8080/
-      AuditService__ApiKey: ${INTERNAL_API_KEY}
+      EventService__BaseUrl: http://event-service:8080/
       Simulation__Enabled: ${SIMULATION_ENABLED:-true}
       Simulation__IntervalSeconds: ${SIMULATION_INTERVAL_SECONDS:-30}
 
@@ -151,7 +169,7 @@ services:
       event-service: { condition: service_healthy }
       audit-service: { condition: service_healthy }
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+      test: ["CMD", "dotnet", "/app/health/Climate.HealthProbe.dll"]
       interval: 15s
       timeout: 10s
       retries: 5
@@ -165,3 +183,4 @@ networks:
 
 volumes:
   sqlserver-data:
+  rabbitmq-data:

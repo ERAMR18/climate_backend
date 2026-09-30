@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: rabbitmq-ingress
+  namespace: climate-monitoring
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: rabbitmq
+      app.kubernetes.io/part-of: climate-monitoring
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: climate-monitoring
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values: [identity, sensors, monitoring, alerts, events, audit]
+      ports:
+        - protocol: TCP
+          port: 5672

@@ -22,6 +22,29 @@ namespace Climate.Events.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Climate.Contracts.Audit.AuditOutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PublishedAt", "CreatedAt");
+
+                    b.ToTable("AuditOutbox", (string)null);
+                });
+
             modelBuilder.Entity("Climate.Events.Domain.Events.ClimateEvent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -50,6 +73,9 @@ namespace Climate.Events.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset?>("ResolvedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid?>("ResponsibleUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RiskType")
                         .IsRequired()
                         .HasMaxLength(32)
@@ -57,6 +83,15 @@ namespace Climate.Events.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid>("SensorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<decimal?>("Value")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 

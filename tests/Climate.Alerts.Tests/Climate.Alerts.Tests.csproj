@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../src/Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj" />
     <ProjectReference Include="..\..\src\Services\AlertService\Climate.Alerts.Application\Climate.Alerts.Application.csproj" />
     <ProjectReference Include="..\..\src\Services\AlertService\Climate.Alerts.Domain\Climate.Alerts.Domain.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Climate.SharedKernel\Climate.SharedKernel.csproj" />

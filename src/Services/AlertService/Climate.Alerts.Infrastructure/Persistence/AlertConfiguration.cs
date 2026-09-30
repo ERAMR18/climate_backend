@@ -10,6 +10,12 @@ internal sealed class AlertConfiguration : IEntityTypeConfiguration<ClimateAlert
     {
         builder.ToTable("Alerts");
         builder.HasKey(alert => alert.Id);
+        builder.Property(x => x.Status).HasConversion<string>().HasMaxLength(16);
+        builder.Property(x => x.RuleName).HasMaxLength(200);
+        builder.Property(x => x.MinimumValueSnapshot).HasPrecision(18, 4);
+        builder.Property(x => x.MaximumValueSnapshot).HasPrecision(18, 4);
+        builder.Property(x => x.Version).IsRowVersion();
+        builder.HasIndex(x => new { x.CommunityId, x.Status, x.GeneratedAt });
         builder.Property(alert => alert.AlertType).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(alert => alert.Level).HasConversion<string>().HasMaxLength(16).IsRequired();
         builder.Property(alert => alert.Title).HasMaxLength(200).IsRequired();

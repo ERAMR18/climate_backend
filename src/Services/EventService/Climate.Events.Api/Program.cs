@@ -1,3 +1,4 @@
+using Climate.Contracts.Audit;
 using System.Text;
 using System.Text.Json.Serialization;
 using Climate.Events.Api.Configuration;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuditOutbox<EventsDbContext>(builder.Configuration);
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -37,7 +39,9 @@ if (app.Environment.IsDevelopment()) { app.UseSwagger(); app.UseSwaggerUI(); }
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health");
-await app.Services.InitializeEventsDatabaseAsync(app.Lifetime.ApplicationStopping);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly"))
+    await Climate.Contracts.DatabaseStartup.RunAsync(app.Services.InitializeEventsDatabaseAsync, app.Logger, app.Lifetime.ApplicationStopping);
 await app.RunAsync();
 public partial class Program;

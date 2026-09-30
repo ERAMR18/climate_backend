@@ -14,9 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-string monitoringAuditUrl=builder.Configuration["AuditService:BaseUrl"]??throw new InvalidOperationException("Audit Service base URL is required.");
-string monitoringAuditKey=builder.Configuration["AuditService:ApiKey"]??throw new InvalidOperationException("Audit Service API key is required.");
-builder.Services.AddSingleton(new AuditWriter(new HttpClient{BaseAddress=new Uri(monitoringAuditUrl)},monitoringAuditKey));
+builder.Services.AddAuditOutbox<MonitoringDbContext>(builder.Configuration);
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
@@ -90,8 +88,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<MonitoringHub>("/hubs/monitoring");
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health");
-await app.Services.InitializeMonitoringDatabaseAsync(app.Lifetime.ApplicationStopping);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly"))
+    await Climate.Contracts.DatabaseStartup.RunAsync(app.Services.InitializeMonitoringDatabaseAsync, app.Logger, app.Lifetime.ApplicationStopping);
 await app.RunAsync();
 
 public partial class Program;

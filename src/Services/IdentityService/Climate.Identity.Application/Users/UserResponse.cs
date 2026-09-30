@@ -9,7 +9,7 @@ public sealed record UserResponse(
     string Role,
     bool IsActive,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt)
+    DateTimeOffset UpdatedAt, DateTimeOffset? LastLoginAt = null)
 {
     public static UserResponse FromUser(User user) =>
         new(
@@ -19,5 +19,5 @@ public sealed record UserResponse(
             user.Role,
             user.IsActive,
             user.CreatedAt,
-            user.UpdatedAt);
+            user.UpdatedAt, user.LastLoginAt);
 }

@@ -3,6 +3,7 @@ using Climate.Alerts.Api.Errors;
 using Climate.Alerts.Application.Alerts;
 using Climate.Contracts.Monitoring;
 using Climate.Contracts.Realtime;
+using Climate.Contracts.Audit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,6 +17,7 @@ namespace Climate.Alerts.Api.Controllers;
 public sealed class InternalEvaluationController(
     IAlertService service,
     RealtimeWriter realtimeWriter,
+    AuditWriter auditWriter,
     IOptions<InternalApiOptions> options) : ControllerBase
 {
     [HttpPost]
@@ -32,7 +34,10 @@ public sealed class InternalEvaluationController(
         var result = await service.EvaluateAsync(reading, cancellationToken);
         if(result.IsSuccess)
             foreach(AlertResponse alert in result.Value)
+            {
+                await auditWriter.RecordSystemAsync("EvaluateAlert", "Alert", alert.Id.ToString(), "Alert assessment updated.", cancellationToken);
                 await realtimeWriter.PublishAsync(RealtimeEventNames.AlertGenerated,alert,cancellationToken);
+            }
         return this.ToActionResult(result);
     }
 }

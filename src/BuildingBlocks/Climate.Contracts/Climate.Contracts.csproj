@@ -2,6 +2,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Climate.SharedKernel\Climate.SharedKernel.csproj" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.10" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -6,6 +6,8 @@ namespace Climate.Monitoring.Infrastructure.Persistence;
 
 internal sealed class MonitoringRepository(MonitoringDbContext dbContext) : IMonitoringRepository
 {
+    public async Task<IReadOnlyDictionary<Guid, decimal>> GetSimulationOverridesAsync(CancellationToken token) =>
+        await dbContext.SimulationOverrides.AsNoTracking().ToDictionaryAsync(x => x.SensorId, x => x.Value, token);
     public async Task AddAsync(SensorReading reading, CancellationToken cancellationToken) =>
         await dbContext.Readings.AddAsync(reading, cancellationToken);
 

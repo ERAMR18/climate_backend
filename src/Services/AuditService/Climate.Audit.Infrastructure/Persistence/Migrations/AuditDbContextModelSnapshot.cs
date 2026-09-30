@@ -33,6 +33,10 @@ namespace Climate.Audit.Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("CorrelationId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)

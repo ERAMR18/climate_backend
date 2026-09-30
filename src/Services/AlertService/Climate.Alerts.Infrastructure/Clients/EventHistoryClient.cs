@@ -19,7 +19,10 @@ internal sealed class EventHistoryClient(HttpClient client, IOptions<EventServic
             AlertLevel = alert.Level.ToString(),
             alert.Description,
             OccurredAt = alert.GeneratedAt,
-            alert.ResolvedAt
+            alert.ResolvedAt,
+            Value = alert.SensorValue,
+            Status = alert.Status.ToString(),
+            ResponsibleUserId = alert.ClosedByUserId ?? alert.AttendedByUserId
         };
         using var request = new HttpRequestMessage(HttpMethod.Post, "api/v1/internal/events") { Content = JsonContent.Create(payload) };
         request.Headers.Add("X-Internal-Api-Key", options.Value.ApiKey);

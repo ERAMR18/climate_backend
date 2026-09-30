@@ -12,6 +12,7 @@ public interface IUserService
 
     Task<IReadOnlyCollection<UserResponse>> GetAllAsync(CancellationToken cancellationToken);
 
+    Task<IReadOnlyCollection<UserResponse>> SearchAsync(string? search, string? role, bool? isActive, CancellationToken token);
     Task<Result<UserResponse>> UpdateAsync(Guid id, UpdateUserRequest request, CancellationToken cancellationToken);
 
     Task<Result> SetStatusAsync(Guid id, UpdateUserStatusRequest request, CancellationToken cancellationToken);

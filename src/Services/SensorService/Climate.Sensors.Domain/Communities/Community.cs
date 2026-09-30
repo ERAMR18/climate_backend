@@ -30,6 +30,12 @@ public sealed class Community
     public decimal Longitude { get; private set; }
     public bool IsActive { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
+    public string? Municipality { get; private set; }
+    public string? Department { get; private set; }
+    public string? Country { get; private set; }
+    public void SetGeography(string? municipality, string? department, string? country)
+    { Municipality = NormalizeOptional(municipality); Department = NormalizeOptional(department); Country = NormalizeOptional(country); }
+    public void SetStatus(bool active) => IsActive = active;
 
     public static Community Create(
         Guid id,

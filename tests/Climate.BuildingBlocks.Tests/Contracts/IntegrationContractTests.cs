@@ -7,10 +7,12 @@ namespace Climate.BuildingBlocks.Tests.Contracts;
 public sealed class IntegrationContractTests
 {
     [Fact]
-    public void RealtimeEventCatalogContainsTheFourPublicEvents()
+    public void RealtimeCatalogPreservesOriginalEventsAndAddsWorkflow()
     {
-        Assert.Equal(4,Climate.Contracts.Realtime.RealtimeEventNames.All.Count);
+        Assert.Equal(6,Climate.Contracts.Realtime.RealtimeEventNames.All.Count);
         Assert.Contains(Climate.Contracts.Realtime.RealtimeEventNames.AlertGenerated,Climate.Contracts.Realtime.RealtimeEventNames.All);
+        Assert.Contains(Climate.Contracts.Realtime.RealtimeEventNames.AlertAttended,Climate.Contracts.Realtime.RealtimeEventNames.All);
+        Assert.Contains(Climate.Contracts.Realtime.RealtimeEventNames.AlertClosed,Climate.Contracts.Realtime.RealtimeEventNames.All);
     }
     [Fact]
     public void SensorReadingRecordedPreservesEventMetadata()

@@ -6,14 +6,14 @@ public sealed record CreateCommunityRequest(
     string Name,
     string? Description,
     decimal Latitude,
-    decimal Longitude);
+    decimal Longitude, string? Municipality = null, string? Department = null, string? Country = null);
 
 public sealed record UpdateCommunityRequest(
     string Name,
     string? Description,
     decimal Latitude,
     decimal Longitude,
-    bool IsActive);
+    bool IsActive, string? Municipality = null, string? Department = null, string? Country = null);
 
 public sealed record CommunityResponse(
     Guid Id,
@@ -22,7 +22,7 @@ public sealed record CommunityResponse(
     decimal Latitude,
     decimal Longitude,
     bool IsActive,
-    DateTimeOffset CreatedAt)
+    DateTimeOffset CreatedAt, string? Municipality = null, string? Department = null, string? Country = null, int SensorCount = 0)
 {
     public static CommunityResponse FromEntity(Community community) =>
         new(
@@ -32,5 +32,5 @@ public sealed record CommunityResponse(
             community.Latitude,
             community.Longitude,
             community.IsActive,
-            community.CreatedAt);
+            community.CreatedAt, community.Municipality, community.Department, community.Country);
 }

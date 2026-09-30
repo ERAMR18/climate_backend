@@ -1,0 +1,5 @@
+secrets.yaml
+secrets.*.yaml
+!secrets.example.yaml
+*.local.yaml
+rendered*.yaml

@@ -1,3 +1,4 @@
+using Climate.Contracts.Audit;
 using Climate.Identity.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ public sealed class IdentityDbContext(DbContextOptions<IdentityDbContext> option
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.AddAuditOutbox();
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IdentityDbContext).Assembly);
     }
 }

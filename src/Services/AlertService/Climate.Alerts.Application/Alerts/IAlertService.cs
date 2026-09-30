@@ -10,5 +10,6 @@ public interface IAlertService
     Task<Result<IReadOnlyCollection<AlertResponse>>> EvaluateAsync(
         SensorReadingRecorded reading,
         CancellationToken cancellationToken);
+    Task<Result> TransitionAsync(Guid id, Guid userId, bool close, CancellationToken cancellationToken);
     Task<Result> ResolveAsync(Guid id, CancellationToken cancellationToken);
 }
