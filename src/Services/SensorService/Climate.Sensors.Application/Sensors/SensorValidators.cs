@@ -7,6 +7,9 @@ public sealed class CreateSensorRequestValidator : AbstractValidator<CreateSenso
     public CreateSensorRequestValidator()
     {
         Include(new SensorFieldsValidator<CreateSensorRequest>());
+        RuleFor(x => x.Location).MaximumLength(250);
+        RuleFor(x => x.EnvironmentalType).MaximumLength(100);
+        RuleFor(x => x.EnvironmentalType).NotEmpty().When(x => x.Type == Domain.Sensors.SensorType.Other);
     }
 }
 
@@ -15,6 +18,9 @@ public sealed class UpdateSensorRequestValidator : AbstractValidator<UpdateSenso
     public UpdateSensorRequestValidator()
     {
         Include(new SensorFieldsValidator<UpdateSensorRequest>());
+        RuleFor(x => x.Location).MaximumLength(250);
+        RuleFor(x => x.EnvironmentalType).MaximumLength(100);
+        RuleFor(x => x.EnvironmentalType).NotEmpty().When(x => x.Type == Domain.Sensors.SensorType.Other);
     }
 }
 

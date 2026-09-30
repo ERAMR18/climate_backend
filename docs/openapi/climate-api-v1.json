@@ -12,6 +12,32 @@
                     }
                 ],
     "paths":  {
+                  "/api/auth/logout":  {
+                                           "post":  {
+                                                        "tags":  [
+                                                                     "Auth"
+                                                                 ],
+                                                        "responses":  {
+                                                                          "200":  {
+                                                                                      "description":  "OK"
+                                                                                  },
+                                                                          "401":  {
+                                                                                      "description":  "Unauthorized"
+                                                                                  },
+                                                                          "403":  {
+                                                                                      "description":  "Forbidden"
+                                                                                  }
+                                                                      },
+                                                        "operationId":  "Auth_post_api_auth_logout",
+                                                        "security":  [
+                                                                         {
+                                                                             "Bearer":  [
+
+                                                                                        ]
+                                                                         }
+                                                                     ]
+                                                    }
+                                       },
                   "/api/auth/register":  {
                                              "post":  {
                                                           "tags":  [
@@ -210,6 +236,141 @@
                                                        "operationId":  "Auth_post_api_auth_login"
                                                    }
                                       },
+                  "/api/users":  {
+                                     "post":  {
+                                                  "tags":  [
+                                                               "Users"
+                                                           ],
+                                                  "requestBody":  {
+                                                                      "content":  {
+                                                                                      "application/json":  {
+                                                                                                               "schema":  {
+                                                                                                                              "$ref":  "#/components/schemas/CreateUserRequest"
+                                                                                                                          }
+                                                                                                           },
+                                                                                      "text/json":  {
+                                                                                                        "schema":  {
+                                                                                                                       "$ref":  "#/components/schemas/CreateUserRequest"
+                                                                                                                   }
+                                                                                                    },
+                                                                                      "application/*+json":  {
+                                                                                                                 "schema":  {
+                                                                                                                                "$ref":  "#/components/schemas/CreateUserRequest"
+                                                                                                                            }
+                                                                                                             }
+                                                                                  }
+                                                                  },
+                                                  "responses":  {
+                                                                    "201":  {
+                                                                                "description":  "Created",
+                                                                                "content":  {
+                                                                                                "text/plain":  {
+                                                                                                                   "schema":  {
+                                                                                                                                  "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                              }
+                                                                                                               },
+                                                                                                "application/json":  {
+                                                                                                                         "schema":  {
+                                                                                                                                        "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                                    }
+                                                                                                                     },
+                                                                                                "text/json":  {
+                                                                                                                  "schema":  {
+                                                                                                                                 "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                             }
+                                                                                                              }
+                                                                                            }
+                                                                            },
+                                                                    "401":  {
+                                                                                "description":  "Unauthorized"
+                                                                            },
+                                                                    "403":  {
+                                                                                "description":  "Forbidden"
+                                                                            }
+                                                                },
+                                                  "operationId":  "Users_post_api_users",
+                                                  "security":  [
+                                                                   {
+                                                                       "Bearer":  [
+
+                                                                                  ]
+                                                                   }
+                                                               ]
+                                              },
+                                     "get":  {
+                                                 "tags":  [
+                                                              "Users"
+                                                          ],
+                                                 "parameters":  [
+                                                                    {
+                                                                        "name":  "search",
+                                                                        "in":  "query",
+                                                                        "schema":  {
+                                                                                       "type":  "string"
+                                                                                   }
+                                                                    },
+                                                                    {
+                                                                        "name":  "role",
+                                                                        "in":  "query",
+                                                                        "schema":  {
+                                                                                       "type":  "string"
+                                                                                   }
+                                                                    },
+                                                                    {
+                                                                        "name":  "isActive",
+                                                                        "in":  "query",
+                                                                        "schema":  {
+                                                                                       "type":  "boolean"
+                                                                                   }
+                                                                    }
+                                                                ],
+                                                 "responses":  {
+                                                                   "200":  {
+                                                                               "description":  "OK",
+                                                                               "content":  {
+                                                                                               "text/plain":  {
+                                                                                                                  "schema":  {
+                                                                                                                                 "type":  "array",
+                                                                                                                                 "items":  {
+                                                                                                                                               "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                                           }
+                                                                                                                             }
+                                                                                                              },
+                                                                                               "application/json":  {
+                                                                                                                        "schema":  {
+                                                                                                                                       "type":  "array",
+                                                                                                                                       "items":  {
+                                                                                                                                                     "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                                                 }
+                                                                                                                                   }
+                                                                                                                    },
+                                                                                               "text/json":  {
+                                                                                                                 "schema":  {
+                                                                                                                                "type":  "array",
+                                                                                                                                "items":  {
+                                                                                                                                              "$ref":  "#/components/schemas/UserResponse"
+                                                                                                                                          }
+                                                                                                                            }
+                                                                                                             }
+                                                                                           }
+                                                                           },
+                                                                   "401":  {
+                                                                               "description":  "Unauthorized"
+                                                                           },
+                                                                   "403":  {
+                                                                               "description":  "Forbidden"
+                                                                           }
+                                                               },
+                                                 "operationId":  "Users_get_api_users",
+                                                 "security":  [
+                                                                  {
+                                                                      "Bearer":  [
+
+                                                                                 ]
+                                                                  }
+                                                              ]
+                                             }
+                                 },
                   "/api/users/me":  {
                                         "get":  {
                                                     "tags":  [
@@ -270,58 +431,6 @@
                                                                  ]
                                                 }
                                     },
-                  "/api/users":  {
-                                     "get":  {
-                                                 "tags":  [
-                                                              "Users"
-                                                          ],
-                                                 "responses":  {
-                                                                   "200":  {
-                                                                               "description":  "OK",
-                                                                               "content":  {
-                                                                                               "text/plain":  {
-                                                                                                                  "schema":  {
-                                                                                                                                 "type":  "array",
-                                                                                                                                 "items":  {
-                                                                                                                                               "$ref":  "#/components/schemas/UserResponse"
-                                                                                                                                           }
-                                                                                                                             }
-                                                                                                              },
-                                                                                               "application/json":  {
-                                                                                                                        "schema":  {
-                                                                                                                                       "type":  "array",
-                                                                                                                                       "items":  {
-                                                                                                                                                     "$ref":  "#/components/schemas/UserResponse"
-                                                                                                                                                 }
-                                                                                                                                   }
-                                                                                                                    },
-                                                                                               "text/json":  {
-                                                                                                                 "schema":  {
-                                                                                                                                "type":  "array",
-                                                                                                                                "items":  {
-                                                                                                                                              "$ref":  "#/components/schemas/UserResponse"
-                                                                                                                                          }
-                                                                                                                            }
-                                                                                                             }
-                                                                                           }
-                                                                           },
-                                                                   "401":  {
-                                                                               "description":  "Unauthorized"
-                                                                           },
-                                                                   "403":  {
-                                                                               "description":  "Forbidden"
-                                                                           }
-                                                               },
-                                                 "operationId":  "Users_get_api_users",
-                                                 "security":  [
-                                                                  {
-                                                                      "Bearer":  [
-
-                                                                                 ]
-                                                                  }
-                                                              ]
-                                             }
-                                 },
                   "/api/users/{id}":  {
                                           "get":  {
                                                       "tags":  [
@@ -528,6 +637,36 @@
                                                        "tags":  [
                                                                     "Communities"
                                                                 ],
+                                                       "parameters":  [
+                                                                          {
+                                                                              "name":  "search",
+                                                                              "in":  "query",
+                                                                              "schema":  {
+                                                                                             "type":  "string"
+                                                                                         }
+                                                                          },
+                                                                          {
+                                                                              "name":  "isActive",
+                                                                              "in":  "query",
+                                                                              "schema":  {
+                                                                                             "type":  "boolean"
+                                                                                         }
+                                                                          },
+                                                                          {
+                                                                              "name":  "municipality",
+                                                                              "in":  "query",
+                                                                              "schema":  {
+                                                                                             "type":  "string"
+                                                                                         }
+                                                                          },
+                                                                          {
+                                                                              "name":  "department",
+                                                                              "in":  "query",
+                                                                              "schema":  {
+                                                                                             "type":  "string"
+                                                                                         }
+                                                                          }
+                                                                      ],
                                                        "responses":  {
                                                                          "200":  {
                                                                                      "description":  "OK",
@@ -635,6 +774,80 @@
                                                                      ]
                                                     }
                                        },
+                  "/api/communities/{id}/activate":  {
+                                                         "patch":  {
+                                                                       "tags":  [
+                                                                                    "Communities"
+                                                                                ],
+                                                                       "parameters":  [
+                                                                                          {
+                                                                                              "name":  "id",
+                                                                                              "in":  "path",
+                                                                                              "required":  true,
+                                                                                              "schema":  {
+                                                                                                             "type":  "string",
+                                                                                                             "format":  "uuid"
+                                                                                                         }
+                                                                                          }
+                                                                                      ],
+                                                                       "responses":  {
+                                                                                         "200":  {
+                                                                                                     "description":  "OK"
+                                                                                                 },
+                                                                                         "401":  {
+                                                                                                     "description":  "Unauthorized"
+                                                                                                 },
+                                                                                         "403":  {
+                                                                                                     "description":  "Forbidden"
+                                                                                                 }
+                                                                                     },
+                                                                       "operationId":  "Communities_patch_api_communities_id_activate",
+                                                                       "security":  [
+                                                                                        {
+                                                                                            "Bearer":  [
+
+                                                                                                       ]
+                                                                                        }
+                                                                                    ]
+                                                                   }
+                                                     },
+                  "/api/communities/{id}/deactivate":  {
+                                                           "patch":  {
+                                                                         "tags":  [
+                                                                                      "Communities"
+                                                                                  ],
+                                                                         "parameters":  [
+                                                                                            {
+                                                                                                "name":  "id",
+                                                                                                "in":  "path",
+                                                                                                "required":  true,
+                                                                                                "schema":  {
+                                                                                                               "type":  "string",
+                                                                                                               "format":  "uuid"
+                                                                                                           }
+                                                                                            }
+                                                                                        ],
+                                                                         "responses":  {
+                                                                                           "200":  {
+                                                                                                       "description":  "OK"
+                                                                                                   },
+                                                                                           "401":  {
+                                                                                                       "description":  "Unauthorized"
+                                                                                                   },
+                                                                                           "403":  {
+                                                                                                       "description":  "Forbidden"
+                                                                                                   }
+                                                                                       },
+                                                                         "operationId":  "Communities_patch_api_communities_id_deactivate",
+                                                                         "security":  [
+                                                                                          {
+                                                                                              "Bearer":  [
+
+                                                                                                         ]
+                                                                                          }
+                                                                                      ]
+                                                                     }
+                                                       },
                   "/api/communities/{id}":  {
                                                 "get":  {
                                                             "tags":  [
@@ -765,6 +978,44 @@
                                                    "tags":  [
                                                                 "Sensors"
                                                             ],
+                                                   "parameters":  [
+                                                                      {
+                                                                          "name":  "communityId",
+                                                                          "in":  "query",
+                                                                          "schema":  {
+                                                                                         "type":  "string",
+                                                                                         "format":  "uuid"
+                                                                                     }
+                                                                      },
+                                                                      {
+                                                                          "name":  "type",
+                                                                          "in":  "query",
+                                                                          "schema":  {
+                                                                                         "$ref":  "#/components/schemas/SensorType"
+                                                                                     }
+                                                                      },
+                                                                      {
+                                                                          "name":  "isActive",
+                                                                          "in":  "query",
+                                                                          "schema":  {
+                                                                                         "type":  "boolean"
+                                                                                     }
+                                                                      },
+                                                                      {
+                                                                          "name":  "code",
+                                                                          "in":  "query",
+                                                                          "schema":  {
+                                                                                         "type":  "string"
+                                                                                     }
+                                                                      },
+                                                                      {
+                                                                          "name":  "search",
+                                                                          "in":  "query",
+                                                                          "schema":  {
+                                                                                         "type":  "string"
+                                                                                     }
+                                                                      }
+                                                                  ],
                                                    "responses":  {
                                                                      "200":  {
                                                                                  "description":  "OK",
@@ -1106,6 +1357,59 @@
                                                                                   ]
                                                                  }
                                                    },
+                  "/api/dashboard/summary":  {
+                                                 "get":  {
+                                                             "tags":  [
+                                                                          "Dashboard"
+                                                                      ],
+                                                             "parameters":  [
+                                                                                {
+                                                                                    "name":  "communityId",
+                                                                                    "in":  "query",
+                                                                                    "schema":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "uuid"
+                                                                                               }
+                                                                                }
+                                                                            ],
+                                                             "responses":  {
+                                                                               "200":  {
+                                                                                           "description":  "OK",
+                                                                                           "content":  {
+                                                                                                           "text/plain":  {
+                                                                                                                              "schema":  {
+                                                                                                                                             "$ref":  "#/components/schemas/DashboardSummary"
+                                                                                                                                         }
+                                                                                                                          },
+                                                                                                           "application/json":  {
+                                                                                                                                    "schema":  {
+                                                                                                                                                   "$ref":  "#/components/schemas/DashboardSummary"
+                                                                                                                                               }
+                                                                                                                                },
+                                                                                                           "text/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/DashboardSummary"
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                       }
+                                                                                       },
+                                                                               "401":  {
+                                                                                           "description":  "Unauthorized"
+                                                                                       },
+                                                                               "403":  {
+                                                                                           "description":  "Forbidden"
+                                                                                       }
+                                                                           },
+                                                             "operationId":  "Dashboard_get_api_dashboard_summary",
+                                                             "security":  [
+                                                                              {
+                                                                                  "Bearer":  [
+
+                                                                                             ]
+                                                                              }
+                                                                          ]
+                                                         }
+                                             },
                   "/api/monitoring/current":  {
                                                   "get":  {
                                                               "tags":  [
@@ -1437,7 +1741,100 @@
                                                                                                 ]
                                                                                  }
                                                                              ]
-                                                            }
+                                                            },
+                                                   "get":  {
+                                                               "tags":  [
+                                                                            "Readings"
+                                                                        ],
+                                                               "parameters":  [
+                                                                                  {
+                                                                                      "name":  "communityId",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "string",
+                                                                                                     "format":  "uuid"
+                                                                                                 }
+                                                                                  },
+                                                                                  {
+                                                                                      "name":  "sensorId",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "string",
+                                                                                                     "format":  "uuid"
+                                                                                                 }
+                                                                                  },
+                                                                                  {
+                                                                                      "name":  "from",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "string",
+                                                                                                     "format":  "date-time"
+                                                                                                 }
+                                                                                  },
+                                                                                  {
+                                                                                      "name":  "to",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "string",
+                                                                                                     "format":  "date-time"
+                                                                                                 }
+                                                                                  },
+                                                                                  {
+                                                                                      "name":  "page",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "format":  "int32",
+                                                                                                     "default":  1
+                                                                                                 }
+                                                                                  },
+                                                                                  {
+                                                                                      "name":  "pageSize",
+                                                                                      "in":  "query",
+                                                                                      "schema":  {
+                                                                                                     "type":  "integer",
+                                                                                                     "format":  "int32",
+                                                                                                     "default":  100
+                                                                                                 }
+                                                                                  }
+                                                                              ],
+                                                               "responses":  {
+                                                                                 "200":  {
+                                                                                             "description":  "OK",
+                                                                                             "content":  {
+                                                                                                             "text/plain":  {
+                                                                                                                                "schema":  {
+                                                                                                                                               "$ref":  "#/components/schemas/ReadingPage"
+                                                                                                                                           }
+                                                                                                                            },
+                                                                                                             "application/json":  {
+                                                                                                                                      "schema":  {
+                                                                                                                                                     "$ref":  "#/components/schemas/ReadingPage"
+                                                                                                                                                 }
+                                                                                                                                  },
+                                                                                                             "text/json":  {
+                                                                                                                               "schema":  {
+                                                                                                                                              "$ref":  "#/components/schemas/ReadingPage"
+                                                                                                                                          }
+                                                                                                                           }
+                                                                                                         }
+                                                                                         },
+                                                                                 "401":  {
+                                                                                             "description":  "Unauthorized"
+                                                                                         },
+                                                                                 "403":  {
+                                                                                             "description":  "Forbidden"
+                                                                                         }
+                                                                             },
+                                                               "operationId":  "Readings_get_api_monitoring_readings",
+                                                               "security":  [
+                                                                                {
+                                                                                    "Bearer":  [
+
+                                                                                               ]
+                                                                                }
+                                                                            ]
+                                                           }
                                                },
                   "/api/monitoring/simulation/status":  {
                                                             "get":  {
@@ -1654,6 +2051,477 @@
                                                                                  ]
                                                                 }
                                                    },
+                  "/api/monitoring/simulation/values/{sensorId}":  {
+                                                                       "get":  {
+                                                                                   "tags":  [
+                                                                                                "Readings"
+                                                                                            ],
+                                                                                   "parameters":  [
+                                                                                                      {
+                                                                                                          "name":  "sensorId",
+                                                                                                          "in":  "path",
+                                                                                                          "required":  true,
+                                                                                                          "schema":  {
+                                                                                                                         "type":  "string",
+                                                                                                                         "format":  "uuid"
+                                                                                                                     }
+                                                                                                      }
+                                                                                                  ],
+                                                                                   "responses":  {
+                                                                                                     "200":  {
+                                                                                                                 "description":  "OK",
+                                                                                                                 "content":  {
+                                                                                                                                 "text/plain":  {
+                                                                                                                                                    "schema":  {
+                                                                                                                                                                   "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                               }
+                                                                                                                                                },
+                                                                                                                                 "application/json":  {
+                                                                                                                                                          "schema":  {
+                                                                                                                                                                         "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                                     }
+                                                                                                                                                      },
+                                                                                                                                 "text/json":  {
+                                                                                                                                                   "schema":  {
+                                                                                                                                                                  "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                              }
+                                                                                                                                               }
+                                                                                                                             }
+                                                                                                             },
+                                                                                                     "401":  {
+                                                                                                                 "description":  "Unauthorized"
+                                                                                                             },
+                                                                                                     "403":  {
+                                                                                                                 "description":  "Forbidden"
+                                                                                                             }
+                                                                                                 },
+                                                                                   "operationId":  "Readings_get_api_monitoring_simulation_values_sensorId",
+                                                                                   "security":  [
+                                                                                                    {
+                                                                                                        "Bearer":  [
+
+                                                                                                                   ]
+                                                                                                    }
+                                                                                                ]
+                                                                               },
+                                                                       "put":  {
+                                                                                   "tags":  [
+                                                                                                "Readings"
+                                                                                            ],
+                                                                                   "parameters":  [
+                                                                                                      {
+                                                                                                          "name":  "sensorId",
+                                                                                                          "in":  "path",
+                                                                                                          "required":  true,
+                                                                                                          "schema":  {
+                                                                                                                         "type":  "string",
+                                                                                                                         "format":  "uuid"
+                                                                                                                     }
+                                                                                                      }
+                                                                                                  ],
+                                                                                   "requestBody":  {
+                                                                                                       "content":  {
+                                                                                                                       "application/json":  {
+                                                                                                                                                "schema":  {
+                                                                                                                                                               "$ref":  "#/components/schemas/SimulationValueRequest"
+                                                                                                                                                           }
+                                                                                                                                            },
+                                                                                                                       "text/json":  {
+                                                                                                                                         "schema":  {
+                                                                                                                                                        "$ref":  "#/components/schemas/SimulationValueRequest"
+                                                                                                                                                    }
+                                                                                                                                     },
+                                                                                                                       "application/*+json":  {
+                                                                                                                                                  "schema":  {
+                                                                                                                                                                 "$ref":  "#/components/schemas/SimulationValueRequest"
+                                                                                                                                                             }
+                                                                                                                                              }
+                                                                                                                   }
+                                                                                                   },
+                                                                                   "responses":  {
+                                                                                                     "200":  {
+                                                                                                                 "description":  "OK",
+                                                                                                                 "content":  {
+                                                                                                                                 "text/plain":  {
+                                                                                                                                                    "schema":  {
+                                                                                                                                                                   "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                               }
+                                                                                                                                                },
+                                                                                                                                 "application/json":  {
+                                                                                                                                                          "schema":  {
+                                                                                                                                                                         "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                                     }
+                                                                                                                                                      },
+                                                                                                                                 "text/json":  {
+                                                                                                                                                   "schema":  {
+                                                                                                                                                                  "$ref":  "#/components/schemas/SimulationValueResponse"
+                                                                                                                                                              }
+                                                                                                                                               }
+                                                                                                                             }
+                                                                                                             },
+                                                                                                     "401":  {
+                                                                                                                 "description":  "Unauthorized"
+                                                                                                             },
+                                                                                                     "403":  {
+                                                                                                                 "description":  "Forbidden"
+                                                                                                             }
+                                                                                                 },
+                                                                                   "operationId":  "Readings_put_api_monitoring_simulation_values_sensorId",
+                                                                                   "security":  [
+                                                                                                    {
+                                                                                                        "Bearer":  [
+
+                                                                                                                   ]
+                                                                                                    }
+                                                                                                ]
+                                                                               },
+                                                                       "delete":  {
+                                                                                      "tags":  [
+                                                                                                   "Readings"
+                                                                                               ],
+                                                                                      "parameters":  [
+                                                                                                         {
+                                                                                                             "name":  "sensorId",
+                                                                                                             "in":  "path",
+                                                                                                             "required":  true,
+                                                                                                             "schema":  {
+                                                                                                                            "type":  "string",
+                                                                                                                            "format":  "uuid"
+                                                                                                                        }
+                                                                                                         }
+                                                                                                     ],
+                                                                                      "responses":  {
+                                                                                                        "200":  {
+                                                                                                                    "description":  "OK"
+                                                                                                                },
+                                                                                                        "401":  {
+                                                                                                                    "description":  "Unauthorized"
+                                                                                                                },
+                                                                                                        "403":  {
+                                                                                                                    "description":  "Forbidden"
+                                                                                                                }
+                                                                                                    },
+                                                                                      "operationId":  "Readings_delete_api_monitoring_simulation_values_sensorId",
+                                                                                      "security":  [
+                                                                                                       {
+                                                                                                           "Bearer":  [
+
+                                                                                                                      ]
+                                                                                                       }
+                                                                                                   ]
+                                                                                  }
+                                                                   },
+                  "/api/alert-rules":  {
+                                           "get":  {
+                                                       "tags":  [
+                                                                    "AlertRules"
+                                                                ],
+                                                       "responses":  {
+                                                                         "200":  {
+                                                                                     "description":  "OK",
+                                                                                     "content":  {
+                                                                                                     "text/plain":  {
+                                                                                                                        "schema":  {
+                                                                                                                                       "type":  "array",
+                                                                                                                                       "items":  {
+                                                                                                                                                     "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                                 }
+                                                                                                                                   }
+                                                                                                                    },
+                                                                                                     "application/json":  {
+                                                                                                                              "schema":  {
+                                                                                                                                             "type":  "array",
+                                                                                                                                             "items":  {
+                                                                                                                                                           "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                                       }
+                                                                                                                                         }
+                                                                                                                          },
+                                                                                                     "text/json":  {
+                                                                                                                       "schema":  {
+                                                                                                                                      "type":  "array",
+                                                                                                                                      "items":  {
+                                                                                                                                                    "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                                }
+                                                                                                                                  }
+                                                                                                                   }
+                                                                                                 }
+                                                                                 },
+                                                                         "401":  {
+                                                                                     "description":  "Unauthorized"
+                                                                                 },
+                                                                         "403":  {
+                                                                                     "description":  "Forbidden"
+                                                                                 }
+                                                                     },
+                                                       "operationId":  "AlertRules_get_api_alert_rules",
+                                                       "security":  [
+                                                                        {
+                                                                            "Bearer":  [
+
+                                                                                       ]
+                                                                        }
+                                                                    ]
+                                                   },
+                                           "post":  {
+                                                        "tags":  [
+                                                                     "AlertRules"
+                                                                 ],
+                                                        "requestBody":  {
+                                                                            "content":  {
+                                                                                            "application/json":  {
+                                                                                                                     "schema":  {
+                                                                                                                                    "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                                }
+                                                                                                                 },
+                                                                                            "text/json":  {
+                                                                                                              "schema":  {
+                                                                                                                             "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                         }
+                                                                                                          },
+                                                                                            "application/*+json":  {
+                                                                                                                       "schema":  {
+                                                                                                                                      "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                                  }
+                                                                                                                   }
+                                                                                        }
+                                                                        },
+                                                        "responses":  {
+                                                                          "200":  {
+                                                                                      "description":  "OK",
+                                                                                      "content":  {
+                                                                                                      "text/plain":  {
+                                                                                                                         "schema":  {
+                                                                                                                                        "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                    }
+                                                                                                                     },
+                                                                                                      "application/json":  {
+                                                                                                                               "schema":  {
+                                                                                                                                              "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                          }
+                                                                                                                           },
+                                                                                                      "text/json":  {
+                                                                                                                        "schema":  {
+                                                                                                                                       "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                   }
+                                                                                                                    }
+                                                                                                  }
+                                                                                  },
+                                                                          "401":  {
+                                                                                      "description":  "Unauthorized"
+                                                                                  },
+                                                                          "403":  {
+                                                                                      "description":  "Forbidden"
+                                                                                  }
+                                                                      },
+                                                        "operationId":  "AlertRules_post_api_alert_rules",
+                                                        "security":  [
+                                                                         {
+                                                                             "Bearer":  [
+
+                                                                                        ]
+                                                                         }
+                                                                     ]
+                                                    }
+                                       },
+                  "/api/alert-rules/{id}":  {
+                                                "get":  {
+                                                            "tags":  [
+                                                                         "AlertRules"
+                                                                     ],
+                                                            "parameters":  [
+                                                                               {
+                                                                                   "name":  "id",
+                                                                                   "in":  "path",
+                                                                                   "required":  true,
+                                                                                   "schema":  {
+                                                                                                  "type":  "string",
+                                                                                                  "format":  "uuid"
+                                                                                              }
+                                                                               }
+                                                                           ],
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "description":  "OK",
+                                                                                          "content":  {
+                                                                                                          "text/plain":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                        }
+                                                                                                                         },
+                                                                                                          "application/json":  {
+                                                                                                                                   "schema":  {
+                                                                                                                                                  "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                              }
+                                                                                                                               },
+                                                                                                          "text/json":  {
+                                                                                                                            "schema":  {
+                                                                                                                                           "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                       }
+                                                                                                                        }
+                                                                                                      }
+                                                                                      },
+                                                                              "401":  {
+                                                                                          "description":  "Unauthorized"
+                                                                                      },
+                                                                              "403":  {
+                                                                                          "description":  "Forbidden"
+                                                                                      }
+                                                                          },
+                                                            "operationId":  "AlertRules_get_api_alert_rules_id",
+                                                            "security":  [
+                                                                             {
+                                                                                 "Bearer":  [
+
+                                                                                            ]
+                                                                             }
+                                                                         ]
+                                                        },
+                                                "put":  {
+                                                            "tags":  [
+                                                                         "AlertRules"
+                                                                     ],
+                                                            "parameters":  [
+                                                                               {
+                                                                                   "name":  "id",
+                                                                                   "in":  "path",
+                                                                                   "required":  true,
+                                                                                   "schema":  {
+                                                                                                  "type":  "string",
+                                                                                                  "format":  "uuid"
+                                                                                              }
+                                                                               }
+                                                                           ],
+                                                            "requestBody":  {
+                                                                                "content":  {
+                                                                                                "application/json":  {
+                                                                                                                         "schema":  {
+                                                                                                                                        "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                                    }
+                                                                                                                     },
+                                                                                                "text/json":  {
+                                                                                                                  "schema":  {
+                                                                                                                                 "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                             }
+                                                                                                              },
+                                                                                                "application/*+json":  {
+                                                                                                                           "schema":  {
+                                                                                                                                          "$ref":  "#/components/schemas/AlertRuleRequest"
+                                                                                                                                      }
+                                                                                                                       }
+                                                                                            }
+                                                                            },
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "description":  "OK",
+                                                                                          "content":  {
+                                                                                                          "text/plain":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                        }
+                                                                                                                         },
+                                                                                                          "application/json":  {
+                                                                                                                                   "schema":  {
+                                                                                                                                                  "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                              }
+                                                                                                                               },
+                                                                                                          "text/json":  {
+                                                                                                                            "schema":  {
+                                                                                                                                           "$ref":  "#/components/schemas/AlertRuleResponse"
+                                                                                                                                       }
+                                                                                                                        }
+                                                                                                      }
+                                                                                      },
+                                                                              "401":  {
+                                                                                          "description":  "Unauthorized"
+                                                                                      },
+                                                                              "403":  {
+                                                                                          "description":  "Forbidden"
+                                                                                      }
+                                                                          },
+                                                            "operationId":  "AlertRules_put_api_alert_rules_id",
+                                                            "security":  [
+                                                                             {
+                                                                                 "Bearer":  [
+
+                                                                                            ]
+                                                                             }
+                                                                         ]
+                                                        }
+                                            },
+                  "/api/alert-rules/{id}/activate":  {
+                                                         "patch":  {
+                                                                       "tags":  [
+                                                                                    "AlertRules"
+                                                                                ],
+                                                                       "parameters":  [
+                                                                                          {
+                                                                                              "name":  "id",
+                                                                                              "in":  "path",
+                                                                                              "required":  true,
+                                                                                              "schema":  {
+                                                                                                             "type":  "string",
+                                                                                                             "format":  "uuid"
+                                                                                                         }
+                                                                                          }
+                                                                                      ],
+                                                                       "responses":  {
+                                                                                         "200":  {
+                                                                                                     "description":  "OK"
+                                                                                                 },
+                                                                                         "401":  {
+                                                                                                     "description":  "Unauthorized"
+                                                                                                 },
+                                                                                         "403":  {
+                                                                                                     "description":  "Forbidden"
+                                                                                                 }
+                                                                                     },
+                                                                       "operationId":  "AlertRules_patch_api_alert_rules_id_activate",
+                                                                       "security":  [
+                                                                                        {
+                                                                                            "Bearer":  [
+
+                                                                                                       ]
+                                                                                        }
+                                                                                    ]
+                                                                   }
+                                                     },
+                  "/api/alert-rules/{id}/deactivate":  {
+                                                           "patch":  {
+                                                                         "tags":  [
+                                                                                      "AlertRules"
+                                                                                  ],
+                                                                         "parameters":  [
+                                                                                            {
+                                                                                                "name":  "id",
+                                                                                                "in":  "path",
+                                                                                                "required":  true,
+                                                                                                "schema":  {
+                                                                                                               "type":  "string",
+                                                                                                               "format":  "uuid"
+                                                                                                           }
+                                                                                            }
+                                                                                        ],
+                                                                         "responses":  {
+                                                                                           "200":  {
+                                                                                                       "description":  "OK"
+                                                                                                   },
+                                                                                           "401":  {
+                                                                                                       "description":  "Unauthorized"
+                                                                                                   },
+                                                                                           "403":  {
+                                                                                                       "description":  "Forbidden"
+                                                                                                   }
+                                                                                       },
+                                                                         "operationId":  "AlertRules_patch_api_alert_rules_id_deactivate",
+                                                                         "security":  [
+                                                                                          {
+                                                                                              "Bearer":  [
+
+                                                                                                         ]
+                                                                                          }
+                                                                                      ]
+                                                                     }
+                                                       },
                   "/api/alerts":  {
                                       "get":  {
                                                   "tags":  [
@@ -1695,6 +2563,29 @@
                                                                          "in":  "query",
                                                                          "schema":  {
                                                                                         "type":  "boolean"
+                                                                                    }
+                                                                     },
+                                                                     {
+                                                                         "name":  "from",
+                                                                         "in":  "query",
+                                                                         "schema":  {
+                                                                                        "type":  "string",
+                                                                                        "format":  "date-time"
+                                                                                    }
+                                                                     },
+                                                                     {
+                                                                         "name":  "to",
+                                                                         "in":  "query",
+                                                                         "schema":  {
+                                                                                        "type":  "string",
+                                                                                        "format":  "date-time"
+                                                                                    }
+                                                                     },
+                                                                     {
+                                                                         "name":  "status",
+                                                                         "in":  "query",
+                                                                         "schema":  {
+                                                                                        "$ref":  "#/components/schemas/AlertStatus"
                                                                                     }
                                                                      }
                                                                  ],
@@ -1799,6 +2690,80 @@
                                                                     ]
                                                    }
                                        },
+                  "/api/alerts/{id}/attend":  {
+                                                  "patch":  {
+                                                                "tags":  [
+                                                                             "Alerts"
+                                                                         ],
+                                                                "parameters":  [
+                                                                                   {
+                                                                                       "name":  "id",
+                                                                                       "in":  "path",
+                                                                                       "required":  true,
+                                                                                       "schema":  {
+                                                                                                      "type":  "string",
+                                                                                                      "format":  "uuid"
+                                                                                                  }
+                                                                                   }
+                                                                               ],
+                                                                "responses":  {
+                                                                                  "200":  {
+                                                                                              "description":  "OK"
+                                                                                          },
+                                                                                  "401":  {
+                                                                                              "description":  "Unauthorized"
+                                                                                          },
+                                                                                  "403":  {
+                                                                                              "description":  "Forbidden"
+                                                                                          }
+                                                                              },
+                                                                "operationId":  "Alerts_patch_api_alerts_id_attend",
+                                                                "security":  [
+                                                                                 {
+                                                                                     "Bearer":  [
+
+                                                                                                ]
+                                                                                 }
+                                                                             ]
+                                                            }
+                                              },
+                  "/api/alerts/{id}/close":  {
+                                                 "patch":  {
+                                                               "tags":  [
+                                                                            "Alerts"
+                                                                        ],
+                                                               "parameters":  [
+                                                                                  {
+                                                                                      "name":  "id",
+                                                                                      "in":  "path",
+                                                                                      "required":  true,
+                                                                                      "schema":  {
+                                                                                                     "type":  "string",
+                                                                                                     "format":  "uuid"
+                                                                                                 }
+                                                                                  }
+                                                                              ],
+                                                               "responses":  {
+                                                                                 "200":  {
+                                                                                             "description":  "OK"
+                                                                                         },
+                                                                                 "401":  {
+                                                                                             "description":  "Unauthorized"
+                                                                                         },
+                                                                                 "403":  {
+                                                                                             "description":  "Forbidden"
+                                                                                         }
+                                                                             },
+                                                               "operationId":  "Alerts_patch_api_alerts_id_close",
+                                                               "security":  [
+                                                                                {
+                                                                                    "Bearer":  [
+
+                                                                                               ]
+                                                                                }
+                                                                            ]
+                                                           }
+                                             },
                   "/api/alerts/{id}/resolve":  {
                                                    "patch":  {
                                                                  "tags":  [
@@ -1990,6 +2955,75 @@
                                                                     ]
                                                    }
                                        },
+                  "/api/events/statistics":  {
+                                                 "get":  {
+                                                             "tags":  [
+                                                                          "EventStatistics"
+                                                                      ],
+                                                             "parameters":  [
+                                                                                {
+                                                                                    "name":  "communityId",
+                                                                                    "in":  "query",
+                                                                                    "schema":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "uuid"
+                                                                                               }
+                                                                                },
+                                                                                {
+                                                                                    "name":  "from",
+                                                                                    "in":  "query",
+                                                                                    "schema":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "date-time"
+                                                                                               }
+                                                                                },
+                                                                                {
+                                                                                    "name":  "to",
+                                                                                    "in":  "query",
+                                                                                    "schema":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "date-time"
+                                                                                               }
+                                                                                }
+                                                                            ],
+                                                             "responses":  {
+                                                                               "200":  {
+                                                                                           "description":  "OK",
+                                                                                           "content":  {
+                                                                                                           "text/plain":  {
+                                                                                                                              "schema":  {
+                                                                                                                                             "$ref":  "#/components/schemas/EventStatisticsResponse"
+                                                                                                                                         }
+                                                                                                                          },
+                                                                                                           "application/json":  {
+                                                                                                                                    "schema":  {
+                                                                                                                                                   "$ref":  "#/components/schemas/EventStatisticsResponse"
+                                                                                                                                               }
+                                                                                                                                },
+                                                                                                           "text/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/EventStatisticsResponse"
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                       }
+                                                                                       },
+                                                                               "401":  {
+                                                                                           "description":  "Unauthorized"
+                                                                                       },
+                                                                               "403":  {
+                                                                                           "description":  "Forbidden"
+                                                                                       }
+                                                                           },
+                                                             "operationId":  "EventStatistics_get_api_events_statistics",
+                                                             "security":  [
+                                                                              {
+                                                                                  "Bearer":  [
+
+                                                                                             ]
+                                                                              }
+                                                                          ]
+                                                         }
+                                             },
                   "/api/audit":  {
                                      "get":  {
                                                  "tags":  [
@@ -2139,6 +3173,28 @@
               },
     "components":  {
                        "schemas":  {
+                                       "CreateUserRequest":  {
+                                                                 "type":  "object",
+                                                                 "properties":  {
+                                                                                    "username":  {
+                                                                                                     "type":  "string",
+                                                                                                     "nullable":  true
+                                                                                                 },
+                                                                                    "email":  {
+                                                                                                  "type":  "string",
+                                                                                                  "nullable":  true
+                                                                                              },
+                                                                                    "password":  {
+                                                                                                     "type":  "string",
+                                                                                                     "nullable":  true
+                                                                                                 },
+                                                                                    "role":  {
+                                                                                                 "type":  "string",
+                                                                                                 "nullable":  true
+                                                                                             }
+                                                                                },
+                                                                 "additionalProperties":  false
+                                                             },
                                        "LoginRequest":  {
                                                             "type":  "object",
                                                             "properties":  {
@@ -2273,7 +3329,12 @@
                                                                                "updatedAt":  {
                                                                                                  "type":  "string",
                                                                                                  "format":  "date-time"
-                                                                                             }
+                                                                                             },
+                                                                               "lastLoginAt":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "date-time",
+                                                                                                   "nullable":  true
+                                                                                               }
                                                                            },
                                                             "additionalProperties":  false
                                                         },
@@ -2306,7 +3367,23 @@
                                                                                     "createdAt":  {
                                                                                                       "type":  "string",
                                                                                                       "format":  "date-time"
-                                                                                                  }
+                                                                                                  },
+                                                                                    "municipality":  {
+                                                                                                         "type":  "string",
+                                                                                                         "nullable":  true
+                                                                                                     },
+                                                                                    "department":  {
+                                                                                                       "type":  "string",
+                                                                                                       "nullable":  true
+                                                                                                   },
+                                                                                    "country":  {
+                                                                                                    "type":  "string",
+                                                                                                    "nullable":  true
+                                                                                                },
+                                                                                    "sensorCount":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "format":  "int32"
+                                                                                                    }
                                                                                 },
                                                                  "additionalProperties":  false
                                                              },
@@ -2328,7 +3405,19 @@
                                                                                          "longitude":  {
                                                                                                            "type":  "number",
                                                                                                            "format":  "double"
-                                                                                                       }
+                                                                                                       },
+                                                                                         "municipality":  {
+                                                                                                              "type":  "string",
+                                                                                                              "nullable":  true
+                                                                                                          },
+                                                                                         "department":  {
+                                                                                                            "type":  "string",
+                                                                                                            "nullable":  true
+                                                                                                        },
+                                                                                         "country":  {
+                                                                                                         "type":  "string",
+                                                                                                         "nullable":  true
+                                                                                                     }
                                                                                      },
                                                                       "additionalProperties":  false
                                                                   },
@@ -2365,7 +3454,20 @@
                                                                                       "longitude":  {
                                                                                                         "type":  "number",
                                                                                                         "format":  "double"
-                                                                                                    }
+                                                                                                    },
+                                                                                      "installationDate":  {
+                                                                                                               "type":  "string",
+                                                                                                               "format":  "date",
+                                                                                                               "nullable":  true
+                                                                                                           },
+                                                                                      "location":  {
+                                                                                                       "type":  "string",
+                                                                                                       "nullable":  true
+                                                                                                   },
+                                                                                      "environmentalType":  {
+                                                                                                                "type":  "string",
+                                                                                                                "nullable":  true
+                                                                                                            }
                                                                                   },
                                                                    "additionalProperties":  false
                                                                },
@@ -2421,7 +3523,20 @@
                                                                                  "updatedAt":  {
                                                                                                    "type":  "string",
                                                                                                    "format":  "date-time"
-                                                                                               }
+                                                                                               },
+                                                                                 "installationDate":  {
+                                                                                                          "type":  "string",
+                                                                                                          "format":  "date",
+                                                                                                          "nullable":  true
+                                                                                                      },
+                                                                                 "location":  {
+                                                                                                  "type":  "string",
+                                                                                                  "nullable":  true
+                                                                                              },
+                                                                                 "environmentalType":  {
+                                                                                                           "type":  "string",
+                                                                                                           "nullable":  true
+                                                                                                       }
                                                                              },
                                                               "additionalProperties":  false
                                                           },
@@ -2431,7 +3546,11 @@
                                                                        "Humidity",
                                                                        "WindSpeed",
                                                                        "Rainfall",
-                                                                       "WaterLevel"
+                                                                       "WaterLevel",
+                                                                       "RiverLevel",
+                                                                       "ReservoirLevel",
+                                                                       "Smoke",
+                                                                       "Other"
                                                                    ],
                                                           "type":  "string"
                                                       },
@@ -2456,7 +3575,19 @@
                                                                                                        },
                                                                                          "isActive":  {
                                                                                                           "type":  "boolean"
-                                                                                                      }
+                                                                                                      },
+                                                                                         "municipality":  {
+                                                                                                              "type":  "string",
+                                                                                                              "nullable":  true
+                                                                                                          },
+                                                                                         "department":  {
+                                                                                                            "type":  "string",
+                                                                                                            "nullable":  true
+                                                                                                        },
+                                                                                         "country":  {
+                                                                                                         "type":  "string",
+                                                                                                         "nullable":  true
+                                                                                                     }
                                                                                      },
                                                                       "additionalProperties":  false
                                                                   },
@@ -2493,7 +3624,20 @@
                                                                                       "longitude":  {
                                                                                                         "type":  "number",
                                                                                                         "format":  "double"
-                                                                                                    }
+                                                                                                    },
+                                                                                      "installationDate":  {
+                                                                                                               "type":  "string",
+                                                                                                               "format":  "date",
+                                                                                                               "nullable":  true
+                                                                                                           },
+                                                                                      "location":  {
+                                                                                                       "type":  "string",
+                                                                                                       "nullable":  true
+                                                                                                   },
+                                                                                      "environmentalType":  {
+                                                                                                                "type":  "string",
+                                                                                                                "nullable":  true
+                                                                                                            }
                                                                                   },
                                                                    "additionalProperties":  false
                                                                },
@@ -2530,6 +3674,123 @@
                                                                                    },
                                                                     "additionalProperties":  false
                                                                 },
+                                       "DashboardChartPoint":  {
+                                                                   "type":  "object",
+                                                                   "properties":  {
+                                                                                      "sensorType":  {
+                                                                                                         "$ref":  "#/components/schemas/SensorType"
+                                                                                                     },
+                                                                                      "unit":  {
+                                                                                                   "type":  "string",
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                                      "timestamp":  {
+                                                                                                        "type":  "string",
+                                                                                                        "format":  "date-time"
+                                                                                                    },
+                                                                                      "value":  {
+                                                                                                    "type":  "number",
+                                                                                                    "format":  "double"
+                                                                                                }
+                                                                                  },
+                                                                   "additionalProperties":  false
+                                                               },
+                                       "DashboardSummary":  {
+                                                                "type":  "object",
+                                                                "properties":  {
+                                                                                   "communityCount":  {
+                                                                                                          "type":  "integer",
+                                                                                                          "format":  "int32"
+                                                                                                      },
+                                                                                   "activeSensorCount":  {
+                                                                                                             "type":  "integer",
+                                                                                                             "format":  "int32"
+                                                                                                         },
+                                                                                   "inactiveSensorCount":  {
+                                                                                                               "type":  "integer",
+                                                                                                               "format":  "int32"
+                                                                                                           },
+                                                                                   "activeAlertCount":  {
+                                                                                                            "type":  "integer",
+                                                                                                            "format":  "int32"
+                                                                                                        },
+                                                                                   "byAlertLevel":  {
+                                                                                                        "type":  "object",
+                                                                                                        "additionalProperties":  {
+                                                                                                                                     "type":  "integer",
+                                                                                                                                     "format":  "int32"
+                                                                                                                                 },
+                                                                                                        "nullable":  true
+                                                                                                    },
+                                                                                   "communities":  {
+                                                                                                       "type":  "array",
+                                                                                                       "items":  {
+
+                                                                                                                 },
+                                                                                                       "nullable":  true
+                                                                                                   },
+                                                                                   "sensors":  {
+                                                                                                   "type":  "array",
+                                                                                                   "items":  {
+
+                                                                                                             },
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                                   "alerts":  {
+                                                                                                  "type":  "array",
+                                                                                                  "items":  {
+
+                                                                                                            },
+                                                                                                  "nullable":  true
+                                                                                              },
+                                                                                   "readings":  {
+                                                                                                    "type":  "array",
+                                                                                                    "items":  {
+                                                                                                                  "$ref":  "#/components/schemas/SensorReadingResponse"
+                                                                                                              },
+                                                                                                    "nullable":  true
+                                                                                                },
+                                                                                   "simulation":  {
+                                                                                                      "$ref":  "#/components/schemas/SimulationStatusResponse"
+                                                                                                  },
+                                                                                   "events":  {
+
+                                                                                              },
+                                                                                   "evolution":  {
+                                                                                                     "type":  "array",
+                                                                                                     "items":  {
+                                                                                                                   "$ref":  "#/components/schemas/DashboardChartPoint"
+                                                                                                               },
+                                                                                                     "nullable":  true
+                                                                                                 }
+                                                                               },
+                                                                "additionalProperties":  false
+                                                            },
+                                       "ReadingPage":  {
+                                                           "type":  "object",
+                                                           "properties":  {
+                                                                              "items":  {
+                                                                                            "type":  "array",
+                                                                                            "items":  {
+                                                                                                          "$ref":  "#/components/schemas/SensorReadingResponse"
+                                                                                                      },
+                                                                                            "nullable":  true
+                                                                                        },
+                                                                              "total":  {
+                                                                                            "type":  "integer",
+                                                                                            "format":  "int32"
+                                                                                        },
+                                                                              "page":  {
+                                                                                           "type":  "integer",
+                                                                                           "format":  "int32"
+                                                                                       },
+                                                                              "pageSize":  {
+                                                                                               "type":  "integer",
+                                                                                               "format":  "int32"
+                                                                                           }
+                                                                          },
+                                                           "additionalProperties":  false
+                                                       },
                                        "SensorChartResponse":  {
                                                                    "type":  "object",
                                                                    "properties":  {
@@ -2580,7 +3841,11 @@
                                                                                         "recordedAt":  {
                                                                                                            "type":  "string",
                                                                                                            "format":  "date-time"
-                                                                                                       }
+                                                                                                       },
+                                                                                        "sensorWasActive":  {
+                                                                                                                "type":  "boolean",
+                                                                                                                "nullable":  true
+                                                                                                            }
                                                                                     },
                                                                      "additionalProperties":  false
                                                                  },
@@ -2593,6 +3858,36 @@
                                                                                        },
                                                                         "additionalProperties":  false
                                                                     },
+                                       "SimulationValueRequest":  {
+                                                                      "type":  "object",
+                                                                      "properties":  {
+                                                                                         "value":  {
+                                                                                                       "type":  "number",
+                                                                                                       "format":  "double"
+                                                                                                   }
+                                                                                     },
+                                                                      "additionalProperties":  false
+                                                                  },
+                                       "SimulationValueResponse":  {
+                                                                       "type":  "object",
+                                                                       "properties":  {
+                                                                                          "sensorId":  {
+                                                                                                           "type":  "string",
+                                                                                                           "format":  "uuid"
+                                                                                                       },
+                                                                                          "value":  {
+                                                                                                        "type":  "number",
+                                                                                                        "format":  "double",
+                                                                                                        "nullable":  true
+                                                                                                    },
+                                                                                          "updatedAt":  {
+                                                                                                            "type":  "string",
+                                                                                                            "format":  "date-time",
+                                                                                                            "nullable":  true
+                                                                                                        }
+                                                                                      },
+                                                                       "additionalProperties":  false
+                                                                   },
                                        "AlertLevel":  {
                                                           "enum":  [
                                                                        "Green",
@@ -2650,10 +3945,144 @@
                                                                                                    "type":  "string",
                                                                                                    "format":  "date-time",
                                                                                                    "nullable":  true
-                                                                                               }
+                                                                                               },
+                                                                                "status":  {
+                                                                                               "$ref":  "#/components/schemas/AlertStatus"
+                                                                                           },
+                                                                                "attendedByUserId":  {
+                                                                                                         "type":  "string",
+                                                                                                         "format":  "uuid",
+                                                                                                         "nullable":  true
+                                                                                                     },
+                                                                                "attendedAt":  {
+                                                                                                   "type":  "string",
+                                                                                                   "format":  "date-time",
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                                "closedByUserId":  {
+                                                                                                       "type":  "string",
+                                                                                                       "format":  "uuid",
+                                                                                                       "nullable":  true
+                                                                                                   },
+                                                                                "closedAt":  {
+                                                                                                 "type":  "string",
+                                                                                                 "format":  "date-time",
+                                                                                                 "nullable":  true
+                                                                                             },
+                                                                                "ruleId":  {
+                                                                                               "type":  "string",
+                                                                                               "format":  "uuid",
+                                                                                               "nullable":  true
+                                                                                           },
+                                                                                "ruleName":  {
+                                                                                                 "type":  "string",
+                                                                                                 "nullable":  true
+                                                                                             },
+                                                                                "minimumValueSnapshot":  {
+                                                                                                             "type":  "number",
+                                                                                                             "format":  "double",
+                                                                                                             "nullable":  true
+                                                                                                         },
+                                                                                "maximumValueSnapshot":  {
+                                                                                                             "type":  "number",
+                                                                                                             "format":  "double",
+                                                                                                             "nullable":  true
+                                                                                                         }
                                                                             },
                                                              "additionalProperties":  false
                                                          },
+                                       "AlertRuleRequest":  {
+                                                                "type":  "object",
+                                                                "properties":  {
+                                                                                   "name":  {
+                                                                                                "type":  "string",
+                                                                                                "nullable":  true
+                                                                                            },
+                                                                                   "sensorType":  {
+                                                                                                      "$ref":  "#/components/schemas/SensorType"
+                                                                                                  },
+                                                                                   "minimumValue":  {
+                                                                                                        "type":  "number",
+                                                                                                        "format":  "double",
+                                                                                                        "nullable":  true
+                                                                                                    },
+                                                                                   "maximumValue":  {
+                                                                                                        "type":  "number",
+                                                                                                        "format":  "double",
+                                                                                                        "nullable":  true
+                                                                                                    },
+                                                                                   "alertLevel":  {
+                                                                                                      "$ref":  "#/components/schemas/AlertLevel"
+                                                                                                  },
+                                                                                   "riskType":  {
+                                                                                                    "$ref":  "#/components/schemas/RiskType"
+                                                                                                },
+                                                                                   "message":  {
+                                                                                                   "type":  "string",
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                                   "isActive":  {
+                                                                                                    "type":  "boolean"
+                                                                                                }
+                                                                               },
+                                                                "additionalProperties":  false
+                                                            },
+                                       "AlertRuleResponse":  {
+                                                                 "type":  "object",
+                                                                 "properties":  {
+                                                                                    "id":  {
+                                                                                               "type":  "string",
+                                                                                               "format":  "uuid"
+                                                                                           },
+                                                                                    "name":  {
+                                                                                                 "type":  "string",
+                                                                                                 "nullable":  true
+                                                                                             },
+                                                                                    "sensorType":  {
+                                                                                                       "$ref":  "#/components/schemas/SensorType"
+                                                                                                   },
+                                                                                    "minimumValue":  {
+                                                                                                         "type":  "number",
+                                                                                                         "format":  "double",
+                                                                                                         "nullable":  true
+                                                                                                     },
+                                                                                    "maximumValue":  {
+                                                                                                         "type":  "number",
+                                                                                                         "format":  "double",
+                                                                                                         "nullable":  true
+                                                                                                     },
+                                                                                    "alertLevel":  {
+                                                                                                       "$ref":  "#/components/schemas/AlertLevel"
+                                                                                                   },
+                                                                                    "riskType":  {
+                                                                                                     "$ref":  "#/components/schemas/RiskType"
+                                                                                                 },
+                                                                                    "message":  {
+                                                                                                    "type":  "string",
+                                                                                                    "nullable":  true
+                                                                                                },
+                                                                                    "isActive":  {
+                                                                                                     "type":  "boolean"
+                                                                                                 },
+                                                                                    "createdAt":  {
+                                                                                                      "type":  "string",
+                                                                                                      "format":  "date-time"
+                                                                                                  },
+                                                                                    "updatedAt":  {
+                                                                                                      "type":  "string",
+                                                                                                      "format":  "date-time"
+                                                                                                  }
+                                                                                },
+                                                                 "additionalProperties":  false
+                                                             },
+                                       "AlertStatus":  {
+                                                           "enum":  [
+                                                                        "Active",
+                                                                        "Attended",
+                                                                        "Closed"
+                                                                    ],
+                                                           "type":  "string"
+                                                       },
                                        "RiskType":  {
                                                         "enum":  [
                                                                      "Flood",
@@ -2701,10 +4130,58 @@
                                                                                                    "type":  "string",
                                                                                                    "format":  "date-time",
                                                                                                    "nullable":  true
-                                                                                               }
+                                                                                               },
+                                                                                "value":  {
+                                                                                              "type":  "number",
+                                                                                              "format":  "double",
+                                                                                              "nullable":  true
+                                                                                          },
+                                                                                "status":  {
+                                                                                               "type":  "string",
+                                                                                               "nullable":  true
+                                                                                           },
+                                                                                "responsibleUserId":  {
+                                                                                                          "type":  "string",
+                                                                                                          "format":  "uuid",
+                                                                                                          "nullable":  true
+                                                                                                      }
                                                                             },
                                                              "additionalProperties":  false
                                                          },
+                                       "EventStatisticsResponse":  {
+                                                                       "type":  "object",
+                                                                       "properties":  {
+                                                                                          "total":  {
+                                                                                                        "type":  "integer",
+                                                                                                        "format":  "int32"
+                                                                                                    },
+                                                                                          "byRiskType":  {
+                                                                                                             "type":  "object",
+                                                                                                             "additionalProperties":  {
+                                                                                                                                          "type":  "integer",
+                                                                                                                                          "format":  "int32"
+                                                                                                                                      },
+                                                                                                             "nullable":  true
+                                                                                                         },
+                                                                                          "byAlertLevel":  {
+                                                                                                               "type":  "object",
+                                                                                                               "additionalProperties":  {
+                                                                                                                                            "type":  "integer",
+                                                                                                                                            "format":  "int32"
+                                                                                                                                        },
+                                                                                                               "nullable":  true
+                                                                                                           },
+                                                                                          "byStatus":  {
+                                                                                                           "type":  "object",
+                                                                                                           "additionalProperties":  {
+                                                                                                                                        "type":  "integer",
+                                                                                                                                        "format":  "int32"
+                                                                                                                                    },
+                                                                                                           "nullable":  true
+                                                                                                       }
+                                                                                      },
+                                                                       "additionalProperties":  false
+                                                                   },
                                        "AuditResponse":  {
                                                              "type":  "object",
                                                              "properties":  {
@@ -2743,7 +4220,11 @@
                                                                                 "timestamp":  {
                                                                                                   "type":  "string",
                                                                                                   "format":  "date-time"
-                                                                                              }
+                                                                                              },
+                                                                                "correlationId":  {
+                                                                                                      "type":  "string",
+                                                                                                      "nullable":  true
+                                                                                                  }
                                                                             },
                                                              "additionalProperties":  false
                                                          }
@@ -2753,7 +4234,7 @@
                                                               "type":  "http",
                                                               "scheme":  "bearer",
                                                               "bearerFormat":  "JWT",
-                                                              "description":  "Paste only the accessToken returned by POST /api/auth/login. Do not include the 'Bearer ' prefix; Swagger UI adds it automatically."
+                                                              "description":  "Paste only the accessToken returned by POST /api/auth/login. Do not include the \u0027Bearer \u0027 prefix; Swagger UI adds it automatically."
                                                           }
                                            }
                    },

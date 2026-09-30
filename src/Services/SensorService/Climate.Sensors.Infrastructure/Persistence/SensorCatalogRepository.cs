@@ -7,6 +7,29 @@ namespace Climate.Sensors.Infrastructure.Persistence;
 
 internal sealed class SensorCatalogRepository(SensorsDbContext dbContext) : ISensorCatalogRepository
 {
+    public Task<int> CountSensorsAsync(Guid communityId, CancellationToken token) => dbContext.Sensors.CountAsync(x => x.CommunityId == communityId, token);
+    public async Task<IReadOnlyCollection<Climate.Sensors.Application.Communities.CommunityResponse>> SearchCommunitiesAsync(string? search, bool? isActive, string? municipality, string? department, CancellationToken token)
+    {
+        var q = dbContext.Communities.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search)) { var term = search.Trim(); q = q.Where(x => x.Name.Contains(term) || (x.Description != null && x.Description.Contains(term))); }
+        if (isActive.HasValue) q = q.Where(x => x.IsActive == isActive.Value);
+        if (!string.IsNullOrWhiteSpace(municipality)) q = q.Where(x => x.Municipality == municipality.Trim());
+        if (!string.IsNullOrWhiteSpace(department)) q = q.Where(x => x.Department == department.Trim());
+        return await q.OrderBy(x => x.Name).Select(x => new Climate.Sensors.Application.Communities.CommunityResponse(
+            x.Id, x.Name, x.Description, x.Latitude, x.Longitude, x.IsActive, x.CreatedAt, x.Municipality, x.Department, x.Country,
+            dbContext.Sensors.Count(sensor => sensor.CommunityId == x.Id))).ToArrayAsync(token);
+    }
+
+    public async Task<IReadOnlyCollection<Sensor>> SearchSensorsAsync(Guid? communityId, SensorType? type, bool? isActive, string? code, string? search, CancellationToken token)
+    {
+        var q = dbContext.Sensors.AsNoTracking().AsQueryable();
+        if (communityId.HasValue) q = q.Where(x => x.CommunityId == communityId.Value);
+        if (type.HasValue) q = q.Where(x => x.Type == type.Value);
+        if (isActive.HasValue) q = q.Where(x => x.IsActive == isActive.Value);
+        if (!string.IsNullOrWhiteSpace(code)) { var normalized = code.Trim().ToUpperInvariant(); q = q.Where(x => x.NormalizedCode.Contains(normalized)); }
+        if (!string.IsNullOrWhiteSpace(search)) { var term = search.Trim(); q = q.Where(x => x.Name.Contains(term) || x.Code.Contains(term)); }
+        return await q.Include(x => x.Community).OrderBy(x => x.Code).ToArrayAsync(token);
+    }
     public async Task<IReadOnlyCollection<Community>> ListCommunitiesAsync(CancellationToken cancellationToken) =>
         await dbContext.Communities.AsNoTracking().OrderBy(community => community.Name).ToArrayAsync(cancellationToken);
 

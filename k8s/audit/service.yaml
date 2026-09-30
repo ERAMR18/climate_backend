@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: audit-service
+  namespace: climate-monitoring
+  labels:
+    app.kubernetes.io/part-of: climate-monitoring
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: audit
+    app.kubernetes.io/part-of: climate-monitoring
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http

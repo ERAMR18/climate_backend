@@ -87,7 +87,7 @@ public sealed class MonitoringController(
     [HttpPost("simulation/reset")]
     [Authorize(Policy = "ResetSystem")]
     public async Task<ActionResult<SimulationStatusResponse>> Reset(CancellationToken cancellationToken)
-    { SimulationStatusResponse status=await simulationService.ResetAsync(cancellationToken); await AuditAsync(AuditActions.ResetSystem,"Simulation reset.",cancellationToken); await realtimePublisher.PublishAsync(RealtimeEventNames.SystemReset,status,cancellationToken); return Ok(status); }
+    { SimulationStatusResponse status=await simulationService.ResetAsync(cancellationToken); await AuditAsync(AuditActions.ResetSimulation,"Simulation reset.",cancellationToken); await realtimePublisher.PublishAsync(RealtimeEventNames.SystemReset,status,cancellationToken); return Ok(status); }
 
     [HttpPost("system/reset")]
     [Authorize(Policy = "ResetSystem")]

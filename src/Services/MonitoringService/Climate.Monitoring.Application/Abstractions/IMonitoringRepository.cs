@@ -4,6 +4,7 @@ namespace Climate.Monitoring.Application.Abstractions;
 
 public interface IMonitoringRepository
 {
+    Task<IReadOnlyDictionary<Guid, decimal>> GetSimulationOverridesAsync(CancellationToken token);
     Task AddAsync(SensorReading reading, CancellationToken cancellationToken);
     Task<IReadOnlyCollection<SensorReading>> GetCurrentAsync(CancellationToken cancellationToken);
     Task<SensorReading?> GetLatestAsync(Guid sensorId, CancellationToken cancellationToken);

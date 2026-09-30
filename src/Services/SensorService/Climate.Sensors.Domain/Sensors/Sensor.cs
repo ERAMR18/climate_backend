@@ -41,6 +41,11 @@ public sealed class Sensor
     public bool IsActive { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
+    public DateOnly? InstallationDate { get; private set; }
+    public string? Location { get; private set; }
+    public string? EnvironmentalType { get; private set; }
+    public void SetInstallation(DateOnly? date, string? location, string? environmentalType)
+    { InstallationDate = date; Location = location?.Trim(); EnvironmentalType = environmentalType?.Trim(); }
 
     public static Sensor Create(
         Guid id,

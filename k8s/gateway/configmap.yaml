@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-config
+  namespace: climate-monitoring
+  labels:
+    app.kubernetes.io/part-of: climate-monitoring
+data:
+  ASPNETCORE_ENVIRONMENT: Production
+  ASPNETCORE_HTTP_PORTS: '8080'
+  Cors__AllowedOrigins__0: http://frontend.example.invalid
+  ReverseProxy__Clusters__identity__Destinations__primary__Address: http://identity-service:8080/
+  DownstreamHealthEndpoints__0: http://identity-service:8080/health
+  ReverseProxy__Clusters__sensors__Destinations__primary__Address: http://sensor-service:8080/
+  DownstreamHealthEndpoints__1: http://sensor-service:8080/health
+  ReverseProxy__Clusters__monitoring__Destinations__primary__Address: http://monitoring-service:8080/
+  DownstreamHealthEndpoints__2: http://monitoring-service:8080/health
+  ReverseProxy__Clusters__alerts__Destinations__primary__Address: http://alert-service:8080/
+  DownstreamHealthEndpoints__3: http://alert-service:8080/health
+  ReverseProxy__Clusters__events__Destinations__primary__Address: http://event-service:8080/
+  DownstreamHealthEndpoints__4: http://event-service:8080/health
+  ReverseProxy__Clusters__audit__Destinations__primary__Address: http://audit-service:8080/
+  DownstreamHealthEndpoints__5: http://audit-service:8080/health

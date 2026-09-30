@@ -83,6 +83,8 @@ public sealed class UserService(
         }
 
         AccessToken token = tokenGenerator.Generate(user);
+        user.RecordLogin(timeProvider.GetUtcNow());
+        await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(new LoginResponse(token.Value, token.ExpiresAt, UserResponse.FromUser(user)));
     }
 
@@ -99,6 +101,9 @@ public sealed class UserService(
         IReadOnlyCollection<User> users = await repository.ListAsync(cancellationToken);
         return users.Select(UserResponse.FromUser).ToArray();
     }
+
+    public async Task<IReadOnlyCollection<UserResponse>> SearchAsync(string? search, string? role, bool? isActive, CancellationToken token) =>
+        (await repository.SearchAsync(search, role, isActive, token)).Select(UserResponse.FromUser).ToArray();
 
     public async Task<Result<UserResponse>> UpdateAsync(
         Guid id,

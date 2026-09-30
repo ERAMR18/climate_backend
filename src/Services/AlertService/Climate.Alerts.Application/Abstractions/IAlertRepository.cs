@@ -13,6 +13,6 @@ public interface IAlertRepository
         Guid? sensorId,
         Guid? communityId,
         bool? isActive,
-        CancellationToken cancellationToken);
+        CancellationToken cancellationToken, DateTimeOffset? from = null, DateTimeOffset? until = null, AlertStatus? status = null);
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

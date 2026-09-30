@@ -16,7 +16,8 @@ internal sealed class SimulatedValueGenerator(IOptions<SimulationOptions> option
             SensorType.Humidity => _options.Humidity,
             SensorType.WindSpeed => _options.WindSpeed,
             SensorType.Rainfall => _options.Rainfall,
-            SensorType.WaterLevel => _options.WaterLevel,
+            SensorType.WaterLevel or SensorType.RiverLevel or SensorType.ReservoirLevel => _options.WaterLevel,
+            SensorType.Smoke or SensorType.Other => new SensorRangeOptions { Minimum = 0, Maximum = 100, DecimalPlaces = 2 },
             _ => throw new ArgumentOutOfRangeException(nameof(sensorType), sensorType, "Unsupported sensor type.")
         };
 

@@ -44,6 +44,15 @@ internal sealed class UserRepository(IdentityDbContext dbContext) : IUserReposit
     public async Task<IReadOnlyCollection<User>> ListAsync(CancellationToken cancellationToken) =>
         await dbContext.Users.AsNoTracking().OrderBy(user => user.Username).ToArrayAsync(cancellationToken);
 
+    public async Task<IReadOnlyCollection<User>> SearchAsync(string? search, string? role, bool? isActive, CancellationToken token)
+    {
+        var query = dbContext.Users.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search)) { var term = search.Trim().ToUpperInvariant(); query = query.Where(x => x.NormalizedUsername.Contains(term) || x.NormalizedEmail.Contains(term)); }
+        if (!string.IsNullOrWhiteSpace(role)) query = query.Where(x => x.Role == role);
+        if (isActive.HasValue) query = query.Where(x => x.IsActive == isActive.Value);
+        return await query.OrderBy(x => x.Username).ToArrayAsync(token);
+    }
+
     public Task SaveChangesAsync(CancellationToken cancellationToken) =>
         dbContext.SaveChangesAsync(cancellationToken);
 }

@@ -1,3 +1,4 @@
+using Climate.Contracts.Audit;
 using Climate.Sensors.Domain.Communities;
 using Climate.Sensors.Domain.Sensors;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,5 @@ public sealed class SensorsDbContext(DbContextOptions<SensorsDbContext> options)
     public DbSet<Community> Communities => Set<Community>();
     public DbSet<Sensor> Sensors => Set<Sensor>();
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SensorsDbContext).Assembly);
+    protected override void OnModelCreating(ModelBuilder modelBuilder) { modelBuilder.AddAuditOutbox(); modelBuilder.ApplyConfigurationsFromAssembly(typeof(SensorsDbContext).Assembly); }
 }

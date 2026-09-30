@@ -28,7 +28,7 @@ public sealed class CommunityService(
         Community? community = await repository.GetCommunityAsync(id, cancellationToken);
         return community is null
             ? Result.Failure<CommunityResponse>(CommunityErrors.NotFound)
-            : Result.Success(CommunityResponse.FromEntity(community));
+            : Result.Success(CommunityResponse.FromEntity(community) with { SensorCount = await repository.CountSensorsAsync(id, cancellationToken) });
     }
 
     public async Task<Result<CommunityResponse>> CreateAsync(
@@ -53,6 +53,7 @@ public sealed class CommunityService(
             request.Latitude,
             request.Longitude,
             timeProvider.GetUtcNow());
+        community.SetGeography(request.Municipality, request.Department, request.Country);
         await repository.AddCommunityAsync(community, cancellationToken);
         await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(CommunityResponse.FromEntity(community));
@@ -81,8 +82,9 @@ public sealed class CommunityService(
         }
 
         community.Update(request.Name, request.Description, request.Latitude, request.Longitude, request.IsActive);
+        community.SetGeography(request.Municipality, request.Department, request.Country);
         await repository.SaveChangesAsync(cancellationToken);
-        return Result.Success(CommunityResponse.FromEntity(community));
+        return Result.Success(CommunityResponse.FromEntity(community) with { SensorCount = await repository.CountSensorsAsync(id, cancellationToken) });
     }
 }
 

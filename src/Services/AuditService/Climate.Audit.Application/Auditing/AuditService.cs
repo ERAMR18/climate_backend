@@ -16,11 +16,14 @@ public sealed class AuditService(IAuditLogRepository repository) : IAuditService
     public async Task<Result<AuditResponse>> RecordAsync(RecordAuditRequest request, CancellationToken cancellationToken)
     {
         if (request.EventId==Guid.Empty || request.UserId==Guid.Empty || string.IsNullOrWhiteSpace(request.UserName) ||
-            string.IsNullOrWhiteSpace(request.Action) || string.IsNullOrWhiteSpace(request.Resource) || string.IsNullOrWhiteSpace(request.Description))
+            string.IsNullOrWhiteSpace(request.Action) || string.IsNullOrWhiteSpace(request.Resource) || string.IsNullOrWhiteSpace(request.Description) ||
+            request.UserName.Length > 100 || request.Action.Length > 64 || request.Resource.Length > 100 ||
+            request.Description.Length > 1000 || request.ResourceId?.Length > 100 || request.IpAddress?.Length > 64 ||
+            request.CorrelationId?.Length > 128 || request.Timestamp == default)
             return Result.Failure<AuditResponse>(AuditErrors.Invalid);
         AuditLog? existing=await repository.GetByIdAsync(request.EventId,cancellationToken);
         if(existing is not null) return Result.Success(AuditResponse.FromEntity(existing));
-        AuditLog log=AuditLog.Create(request.EventId,request.UserId,request.UserName,request.Action,request.Resource,request.ResourceId,request.Description,request.IpAddress,request.Timestamp);
+        AuditLog log=AuditLog.Create(request.EventId,request.UserId,request.UserName,request.Action,request.Resource,request.ResourceId,request.Description,request.IpAddress,request.Timestamp,request.CorrelationId);
         await repository.AddAsync(log,cancellationToken); await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(AuditResponse.FromEntity(log));
     }

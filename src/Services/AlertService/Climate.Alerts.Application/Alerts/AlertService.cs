@@ -10,7 +10,7 @@ public sealed class AlertService(
     IAlertRepository repository,
     IRiskEvaluationService riskEvaluationService,
     IEventHistoryClient eventHistoryClient,
-    TimeProvider timeProvider) : IAlertService
+    TimeProvider timeProvider, ISensorActivityClient sensorActivity) : IAlertService
 {
     public async Task<IReadOnlyCollection<AlertResponse>> ListAsync(
         AlertFilter filter,
@@ -21,7 +21,7 @@ public sealed class AlertService(
             filter.SensorId,
             filter.CommunityId,
             filter.IsActive,
-            cancellationToken)).Select(AlertResponse.FromEntity).ToArray();
+            cancellationToken, filter.From, filter.To, filter.Status)).Select(AlertResponse.FromEntity).ToArray();
 
     public async Task<Result<AlertResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -35,9 +35,11 @@ public sealed class AlertService(
         SensorReadingRecorded reading,
         CancellationToken cancellationToken)
     {
-        IReadOnlyCollection<RiskAssessment> assessments = riskEvaluationService.Evaluate(
+        if (!await sensorActivity.IsActiveAsync(reading.SensorId, cancellationToken))
+            return Result.Success<IReadOnlyCollection<AlertResponse>>([]);
+        IReadOnlyCollection<RiskAssessment> assessments = await riskEvaluationService.EvaluateAsync(
             reading.SensorType,
-            reading.Value);
+            reading.Value, cancellationToken);
         var affected = new List<AlertResponse>();
 
         foreach (RiskAssessment assessment in assessments)
@@ -84,6 +86,7 @@ public sealed class AlertService(
                     reading.RecordedAt);
             }
 
+            active.SetRule(assessment.RuleId, assessment.Title, assessment.MinimumValue, assessment.MaximumValue);
             affected.Add(AlertResponse.FromEntity(active));
         }
 
@@ -98,6 +101,17 @@ public sealed class AlertService(
         }
 
         return Result.Success<IReadOnlyCollection<AlertResponse>>(affected);
+    }
+
+    public async Task<Result> TransitionAsync(Guid id, Guid userId, bool close, CancellationToken cancellationToken)
+    {
+        var alert = await repository.GetByIdAsync(id, cancellationToken);
+        if (alert is null) return Result.Failure(AlertErrors.NotFound);
+        bool changed = close ? alert.Close(userId, timeProvider.GetUtcNow()) : alert.Attend(userId, timeProvider.GetUtcNow());
+        if (!changed) return Result.Failure(ApplicationError.Conflict("alert.invalid_transition", "Attend an active alert before closing it; a closed alert cannot be changed."));
+        await repository.SaveChangesAsync(cancellationToken);
+        await eventHistoryClient.RecordAsync(alert, cancellationToken);
+        return Result.Success();
     }
 
     public async Task<Result> ResolveAsync(Guid id, CancellationToken cancellationToken)

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: climate-monitoring
+  labels:
+    app.kubernetes.io/part-of: climate-monitoring
+data:
+  GATEWAY_PUBLIC_URL: http://gateway.example.invalid

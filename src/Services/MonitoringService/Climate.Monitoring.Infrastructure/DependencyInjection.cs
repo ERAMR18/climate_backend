@@ -44,7 +44,7 @@ public static class DependencyInjection
             client.BaseAddress = provider.GetRequiredService<Microsoft.Extensions.Options.IOptions<SensorServiceOptions>>().Value.BaseUrl);
         services.AddHttpClient<IAlertEvaluationClient, AlertEvaluationClient>((provider, client) =>
             client.BaseAddress = provider.GetRequiredService<Microsoft.Extensions.Options.IOptions<AlertServiceOptions>>().Value.BaseUrl);
-        services.AddHostedService<ClimateSimulationWorker>();
+        if (!configuration.GetValue<bool>("OpenApi:ExportOnly")) services.AddHostedService<ClimateSimulationWorker>();
         return services;
     }
 

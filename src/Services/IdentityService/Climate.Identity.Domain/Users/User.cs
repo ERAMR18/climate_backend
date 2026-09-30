@@ -39,6 +39,8 @@ public sealed class User
     public DateTimeOffset CreatedAt { get; private set; }
 
     public DateTimeOffset UpdatedAt { get; private set; }
+    public DateTimeOffset? LastLoginAt { get; private set; }
+    public void RecordLogin(DateTimeOffset now) => LastLoginAt = now;
 
     public static User Create(
         Guid id,

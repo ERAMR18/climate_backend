@@ -1,4 +1,5 @@
 using System.Text;
+using Climate.Identity.Infrastructure.Persistence;
 using Climate.Contracts.Identity;
 using Climate.Contracts.Audit;
 using Climate.Identity.Api.Errors;
@@ -11,9 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-string identityAuditUrl=builder.Configuration["AuditService:BaseUrl"]??throw new InvalidOperationException("Audit Service base URL is required.");
-string identityAuditKey=builder.Configuration["AuditService:ApiKey"]??throw new InvalidOperationException("Audit Service API key is required.");
-builder.Services.AddSingleton(new AuditWriter(new HttpClient{BaseAddress=new Uri(identityAuditUrl)},identityAuditKey));
+builder.Services.AddAuditOutbox<IdentityDbContext>(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
@@ -78,9 +77,11 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health");
 
-await app.Services.InitializeIdentityDatabaseAsync(app.Lifetime.ApplicationStopping);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly"))
+    await Climate.Contracts.DatabaseStartup.RunAsync(app.Services.InitializeIdentityDatabaseAsync, app.Logger, app.Lifetime.ApplicationStopping);
 await app.RunAsync();
 
 public partial class Program;

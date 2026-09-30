@@ -15,15 +15,17 @@ public sealed class SensorReading
         string unit,
         DateTimeOffset recordedAt)
     {
+        SensorWasActive = true;
         Id = id;
         SensorId = sensorId;
         CommunityId = communityId;
         SensorType = sensorType;
         Value = value;
         Unit = unit.Trim();
-        RecordedAt = recordedAt;
+        RecordedAt = recordedAt.ToUniversalTime();
     }
 
+    public bool? SensorWasActive { get; private set; }
     public Guid Id { get; private set; }
     public Guid SensorId { get; private set; }
     public Guid CommunityId { get; private set; }

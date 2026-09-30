@@ -1,6 +1,7 @@
 param(
     [string]$OutputPath = "docs/openapi/climate-api-v1.json",
-    [string]$ComposeEnvFile = ".env"
+    [string]$ComposeEnvFile = ".env",
+    [string]$InputDirectory = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -8,8 +9,12 @@ $serviceNames = @("identity-service", "sensor-service", "monitoring-service", "a
 $documents = @()
 
 foreach ($serviceName in $serviceNames) {
+    if ($InputDirectory) {
+        $documents += Get-Content -LiteralPath (Join-Path $InputDirectory "$serviceName.json") -Raw | ConvertFrom-Json
+        continue
+    }
     $url = "http://${serviceName}:8080/swagger/v1/swagger.json"
-    $json = docker compose --env-file $ComposeEnvFile exec -T gateway curl --fail --silent $url
+    $json = docker compose --env-file $ComposeEnvFile exec -T gateway dotnet /app/health/Climate.HealthProbe.dll $url --print
     if ($LASTEXITCODE -ne 0) { throw "Could not download OpenAPI from $serviceName." }
     $documents += $json | ConvertFrom-Json
 }

@@ -18,7 +18,7 @@ public sealed class ClimateEventService(IClimateEventRepository repository) : IC
 
     public async Task<Result<EventResponse>> RecordAsync(RecordClimateEventRequest request, CancellationToken cancellationToken)
     {
-        if (request.EventId == Guid.Empty || request.AlertId == Guid.Empty || request.SensorId == Guid.Empty ||
+        if (request.Status is not ("Active" or "Attended" or "Closed") || request.EventId == Guid.Empty || request.AlertId == Guid.Empty || request.SensorId == Guid.Empty ||
             request.CommunityId == Guid.Empty || string.IsNullOrWhiteSpace(request.Description))
             return Result.Failure<EventResponse>(EventErrors.Invalid);
 
@@ -30,6 +30,7 @@ public sealed class ClimateEventService(IClimateEventRepository repository) : IC
             await repository.AddAsync(item, cancellationToken);
         }
         else item.Update(request.AlertLevel, request.Description, request.ResolvedAt);
+        item.SetWorkflow(request.Value, request.Status, request.ResponsibleUserId);
         await repository.SaveChangesAsync(cancellationToken);
         return Result.Success(EventResponse.FromEntity(item));
     }

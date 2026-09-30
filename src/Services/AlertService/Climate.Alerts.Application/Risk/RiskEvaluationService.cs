@@ -5,6 +5,8 @@ namespace Climate.Alerts.Application.Risk;
 
 public sealed class RiskEvaluationService(IRiskRuleProvider ruleProvider) : IRiskEvaluationService
 {
+    public Task<IReadOnlyCollection<RiskAssessment>> EvaluateAsync(SensorType sensorType, decimal value, CancellationToken token) => Task.FromResult(Evaluate(sensorType, value));
+
     public IReadOnlyCollection<RiskAssessment> Evaluate(SensorType sensorType, decimal value) =>
         ruleProvider.GetRules(sensorType)
             .Select(rule => EvaluateRule(rule, value))

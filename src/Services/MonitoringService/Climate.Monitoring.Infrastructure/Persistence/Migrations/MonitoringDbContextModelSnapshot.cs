@@ -22,6 +22,29 @@ namespace Climate.Monitoring.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Climate.Contracts.Audit.AuditOutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PublishedAt", "CreatedAt");
+
+                    b.ToTable("AuditOutbox", (string)null);
+                });
+
             modelBuilder.Entity("Climate.Monitoring.Domain.Readings.SensorReading", b =>
                 {
                     b.Property<Guid>("Id")
@@ -43,6 +66,9 @@ namespace Climate.Monitoring.Infrastructure.Persistence.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
+                    b.Property<bool?>("SensorWasActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -61,6 +87,24 @@ namespace Climate.Monitoring.Infrastructure.Persistence.Migrations
                     b.HasIndex("SensorId", "RecordedAt");
 
                     b.ToTable("SensorReadings", (string)null);
+                });
+
+            modelBuilder.Entity("Climate.Monitoring.Domain.Readings.SimulationOverride", b =>
+                {
+                    b.Property<Guid>("SensorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("Value")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("SensorId");
+
+                    b.ToTable("SimulationOverrides", (string)null);
                 });
 #pragma warning restore 612, 618
         }

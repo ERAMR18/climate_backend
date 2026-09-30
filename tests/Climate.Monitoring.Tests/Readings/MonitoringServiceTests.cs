@@ -18,6 +18,18 @@ public sealed class MonitoringServiceTests
     private readonly Mock<IRealtimePublisher> _realtimePublisher = new();
 
     [Fact]
+    public async Task InactiveCatalogEntryCannotProduceManualOrSimulatedReadings()
+    {
+        var sensor = CreateSensor(ContractSensorType.Smoke, "%") with { IsActive = false };
+        _sensorClient.Setup(x => x.GetActiveSensorsAsync(It.IsAny<CancellationToken>())).ReturnsAsync([sensor]);
+        var result = await CreateService().CreateAsync(new CreateReadingRequest(sensor.Id, 80m), CancellationToken.None);
+        Assert.True(result.IsFailure);
+        await CreateService().GenerateSimulationBatchAsync(CancellationToken.None);
+        _repository.Verify(x => x.AddAsync(It.IsAny<SensorReading>(), It.IsAny<CancellationToken>()), Times.Never);
+        _alertClient.Verify(x => x.EvaluateAsync(It.IsAny<SensorReading>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
     public async Task CreatePersistsReadingUsingCatalogMetadata()
     {
         SensorSummary sensor = CreateSensor(ContractSensorType.Temperature, "°C");

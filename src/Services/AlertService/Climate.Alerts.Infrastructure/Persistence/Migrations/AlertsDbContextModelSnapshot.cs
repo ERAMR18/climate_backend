@@ -22,6 +22,59 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Climate.Alerts.Domain.Alerts.AlertRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AlertLevel")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("MaximumValue")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<decimal?>("MinimumValue")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("RiskType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("SensorType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SensorType", "IsActive");
+
+                    b.ToTable("AlertRules", (string)null);
+                });
+
             modelBuilder.Entity("Climate.Alerts.Domain.Alerts.ClimateAlert", b =>
                 {
                     b.Property<Guid>("Id")
@@ -32,6 +85,18 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
+
+                    b.Property<DateTimeOffset?>("AttendedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("AttendedByUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("ClosedByUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CommunityId")
                         .HasColumnType("uniqueidentifier");
@@ -53,9 +118,24 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
+                    b.Property<decimal?>("MaximumValueSnapshot")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal?>("MinimumValueSnapshot")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<DateTimeOffset?>("ResolvedAt")
                         .HasPrecision(3)
                         .HasColumnType("datetimeoffset(3)");
+
+                    b.Property<Guid?>("RuleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RuleName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid>("SensorId")
                         .HasColumnType("uniqueidentifier");
@@ -63,6 +143,11 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("SensorValue")
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<decimal>("ThresholdValue")
                         .HasPrecision(18, 4)
@@ -73,6 +158,12 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GeneratedAt");
@@ -81,9 +172,34 @@ namespace Climate.Alerts.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Level", "IsActive");
 
+                    b.HasIndex("CommunityId", "Status", "GeneratedAt");
+
                     b.HasIndex("SensorId", "AlertType", "IsActive");
 
                     b.ToTable("Alerts", (string)null);
+                });
+
+            modelBuilder.Entity("Climate.Contracts.Audit.AuditOutboxMessage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PublishedAt", "CreatedAt");
+
+                    b.ToTable("AuditOutbox", (string)null);
                 });
 #pragma warning restore 612, 618
         }

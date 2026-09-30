@@ -1,3 +1,4 @@
+using Climate.Contracts.Audit;
 using System.Text;
 using System.Text.Json.Serialization;
 using Climate.Alerts.Api.Configuration;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAuditOutbox<AlertsDbContext>(builder.Configuration);
 string alertRealtimeUrl=builder.Configuration["RealtimeService:BaseUrl"]??throw new InvalidOperationException("Realtime Service base URL is required.");
 string alertRealtimeKey=builder.Configuration["RealtimeService:ApiKey"]??throw new InvalidOperationException("Realtime Service API key is required.");
 builder.Services.AddSingleton(new RealtimeWriter(new HttpClient{BaseAddress=new Uri(alertRealtimeUrl)},alertRealtimeKey));
@@ -80,8 +82,10 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false });
 app.MapHealthChecks("/health");
-await app.Services.InitializeAlertsDatabaseAsync(app.Lifetime.ApplicationStopping);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly"))
+    await Climate.Contracts.DatabaseStartup.RunAsync(app.Services.InitializeAlertsDatabaseAsync, app.Logger, app.Lifetime.ApplicationStopping);
 await app.RunAsync();
 
 public partial class Program;

@@ -10,6 +10,8 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.10" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -22,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Services\SensorService\Climate.Sensors.Application\Climate.Sensors.Application.csproj" />
+    <ProjectReference Include="..\..\src\Services\SensorService\Climate.Sensors.Api\Climate.Sensors.Api.csproj" />
     <ProjectReference Include="..\..\src\Services\SensorService\Climate.Sensors.Domain\Climate.Sensors.Domain.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Climate.SharedKernel\Climate.SharedKernel.csproj" />
     <ProjectReference Include="..\..\src\BuildingBlocks\Climate.Contracts\Climate.Contracts.csproj" />

@@ -8,6 +8,9 @@ public sealed class CreateCommunityRequestValidator : AbstractValidator<CreateCo
     {
         RuleFor(request => request.Name).NotEmpty().MaximumLength(120);
         RuleFor(request => request.Description).MaximumLength(500);
+        RuleFor(request => request.Municipality).MaximumLength(120);
+        RuleFor(request => request.Department).MaximumLength(120);
+        RuleFor(request => request.Country).MaximumLength(120);
         RuleFor(request => request.Latitude).InclusiveBetween(-90, 90);
         RuleFor(request => request.Longitude).InclusiveBetween(-180, 180);
     }
@@ -19,6 +22,9 @@ public sealed class UpdateCommunityRequestValidator : AbstractValidator<UpdateCo
     {
         RuleFor(request => request.Name).NotEmpty().MaximumLength(120);
         RuleFor(request => request.Description).MaximumLength(500);
+        RuleFor(request => request.Municipality).MaximumLength(120);
+        RuleFor(request => request.Department).MaximumLength(120);
+        RuleFor(request => request.Country).MaximumLength(120);
         RuleFor(request => request.Latitude).InclusiveBetween(-90, 90);
         RuleFor(request => request.Longitude).InclusiveBetween(-180, 180);
     }

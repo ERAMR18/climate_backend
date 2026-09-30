@@ -1,10 +1,21 @@
 # Climate Monitoring System
 
+## Cierre de Fase 2
+
+- [Arquitectura y flujo de auditoría](docs/phase-2-architecture.md).
+- [Kubernetes, imágenes, configuración y diagnóstico](docs/kubernetes.md).
+- [Matriz de 68 RF y 8 RNF](docs/phase-2-compliance.md).
+- [Resultados y comandos de validación](docs/phase-2-validation.md).
+
+Las pruebas críticas verifican UpdateSensor con Audit detenido y recuperación
+persistente con dos consumidores. El despliegue real Kubernetes permanece
+pendiente de un clúster accesible; SQL sigue fuera de Kubernetes.
+
 ## Requisitos previos
 
 Antes de iniciar, instala:
 
-- .NET SDK **10.0.300** (la versión está fijada en `global.json`).
+- .NET SDK **10.0.300** o una versión posterior de la familia 10.0 (`latestFeature` en `global.json`).
 - Docker Desktop con Docker Compose v2, recomendado para ejecutar todo el sistema.
 - PowerShell 5.1 o superior, necesario para regenerar el contrato OpenAPI.
 - Opcional para ejecución sin Docker: SQL Server 2022 accesible en `localhost:1433`.
@@ -47,9 +58,12 @@ flowchart LR
     MO --> SE
     MO --> AL
     AL --> EV
-    ID --> AU
-    SE --> AU
-    MO --> AU
+    ID --> RMQ[RabbitMQ]
+    SE --> RMQ
+    MO --> RMQ
+    AL --> RMQ
+    EV --> RMQ
+    RMQ -->|consumidor con ACK después de guardar| AU
 ```
 
 ### Microservicios
@@ -90,8 +104,33 @@ Variables principales:
 | `SIMULATION_ENABLED`, `SIMULATION_INTERVAL_SECONDS` | Simulador de lecturas |
 | `FRONTEND_ORIGIN` | Origen permitido por CORS |
 | `GATEWAY_PORT`, `SQLSERVER_PORT` | Puertos publicados |
+| `RABBITMQ_HOST`, `RABBITMQ_PORT` | Dirección AMQP; Compose usa `rabbitmq:5672` en su red interna |
+| `RABBITMQ_USER`, `RABBITMQ_PASSWORD` | Credenciales del broker, obligatorias y sin valores predeterminados en código |
 
 No confirmes `.env` ni secretos reales en el repositorio.
+
+## Auditoría con outbox — secciones 11–20
+
+Identity, Sensor, Monitoring, Alert y Event guardan `AuditLogRequested` en una tabla
+`AuditOutbox` de su propia base, dentro de la transacción de la operación HTTP.
+Un worker publica eventos persistentes con confirmación de RabbitMQ y marca los
+confirmados. Audit valida, guarda por EventId y ejecuta ACK después del commit.
+Los fallos del broker dejan eventos pendientes para reintentar tras un reinicio.
+
+Las consultas siguen pasando por Gateway. El endpoint HTTP interno de escritura
+fue retirado. RabbitMQ mantiene sus puertos internos en Compose.
+
+Este bloque también agrega último acceso y filtros de usuarios, creación
+administrativa, geografía y conteos de comunidades, tipos/campos/filtros de sensores
+y validación de sensores inactivos. Angular conserva sus pantallas y añade esos datos.
+
+Detalles y límites: [secciones 11–20](docs/phase-2-sections-11-20.md).
+Las acciones de reglas y atender/cerrar alertas ya están implementadas y verificadas
+en el bloque de [secciones 21–30](docs/phase-2-sections-21-30.md).
+
+Prueba aislada con RabbitMQ real: `powershell -File scripts/Test-AuditMessaging.ps1`.
+Las migraciones nuevas se aplican con el mecanismo habitual de arranque de cada API;
+no se deben omitir antes de iniciar el worker de outbox.
 
 ## Ejecutar con Docker (recomendado)
 
@@ -115,7 +154,7 @@ docker compose --env-file .env down
 
 ## Ejecutar localmente
 
-1. Inicia SQL Server, crea `.env` y ajusta las seis variables `ConnectionStrings__*` de `.env.example`.
+1. Inicia SQL Server y un RabbitMQ accesible, crea `.env` y ajusta `RABBITMQ_*` y las seis variables `ConnectionStrings__*` de `.env.example`. Compose mantiene AMQP interno; para procesos .NET en el host configura un broker local o publica AMQP solo en loopback mediante un override local.
 2. Carga esas variables en la terminal o configura los mismos valores con User Secrets.
 3. Restaura, compila y ejecuta cada proceso en una terminal distinta:
 
@@ -194,6 +233,12 @@ Todas las rutas se consumen a través de `http://localhost:8080`:
 - Monitoreo: `/api/monitoring/current`, `/api/monitoring/readings`, `/api/monitoring/sensors/{sensorId}/history`.
 - Simulación: `/api/monitoring/simulation/status|start|stop|reset`.
 - Alertas, eventos y auditoría: `/api/alerts`, `/api/events`, `/api/audit`.
+- Reglas configurables: `/api/alert-rules`; crear, editar y activar/desactivar requiere Administrator.
+- Workflow: `PATCH /api/alerts/{id}/attend` y `/close`, con responsable y validación de transición.
+- Estadísticas: `/api/events/statistics?communityId=...&from=...&to=...`.
+- Dashboard agregado: `/api/dashboard/summary?communityId=...`.
+- Valores simulados persistentes: `/api/monitoring/simulation/values/{sensorId}`.
+- Lecturas globales paginadas: `GET /api/monitoring/readings?communityId=...&sensorId=...&page=1`.
 
 El detalle normativo de métodos, consultas y modelos está en el contrato OpenAPI; no dupliques manualmente esos tipos en el frontend.
 
@@ -202,6 +247,27 @@ El detalle normativo de métodos, consultas y modelos está en el contrato OpenA
 Al primer arranque se crea el administrador configurado en `ADMIN_SEED_USERNAME`, `ADMIN_SEED_EMAIL` y `ADMIN_SEED_PASSWORD`. Con los valores de ejemplo es `admin` / `CHANGE_ME_Admin_2026!`; cambia la contraseña antes de cualquier despliegue. Los roles disponibles son `Administrator`, `Operator` y `Viewer`.
 
 Con `DEMO_SEED_ENABLED=true`, el Sensor Service agrega de forma idempotente tres comunidades de demostración —Ciudad de Guatemala, Puerto Barrios y Quetzaltenango— y quince sensores de temperatura, humedad, viento, lluvia y nivel de agua. El simulador de Monitoring genera lecturas para los sensores activos. Reiniciar los servicios no duplica estos registros.
+
+## Kubernetes e imágenes — secciones 31–40
+
+Los [manifiestos y pasos de configuración](k8s/README.md) mantienen SQL Server
+en Docker y despliegan ocho aplicaciones y RabbitMQ en `climate-monitoring`.
+Construye con `scripts/Build-Images.ps1 -IncludeFrontend` y verifica las imágenes
+con `scripts/Test-Images.ps1`. Compose continúa disponible para desarrollo.
+
+Consulta [los resultados y límites de validación](docs/phase-2-sections-31-40.md).
+
+Las secciones 41–50 agregan retención explícita del PVC RabbitMQ, aislamiento de
+red y reintentos de inicialización SQL. `scripts/Test-Images.ps1 -TestRecovery`
+comprueba recuperación del broker, outbox e idempotencia con dos consumidores.
+Consulta la [guía Kubernetes](k8s/README.md) para configuración, secretos, SQL
+externo, sondas y límites del escalado.
+La evidencia de esta entrega está en [secciones 41–50](docs/phase-2-sections-41-50.md).
+
+Si el catálogo de vulnerabilidades de NuGet no está disponible, `NU1900` se
+reporta como advertencia; las vulnerabilidades detectadas continúan tratándose
+como errores. Una compilación con esa advertencia no acredita una revisión
+actualizada de vulnerabilidades: repetir la consulta cuando vuelva la conexión.
 
 ## Solución de problemas
 

@@ -32,6 +32,9 @@ public sealed class UserServiceTests
         Assert.True(result.IsSuccess);
         Assert.Equal(expectedToken.Value, result.Value.AccessToken);
         Assert.Equal(user.Id, result.Value.User.Id);
+        Assert.NotNull(user.LastLoginAt);
+        Assert.Equal(user.LastLoginAt, result.Value.User.LastLoginAt);
+        _repository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -49,6 +52,8 @@ public sealed class UserServiceTests
 
         Assert.True(result.IsFailure);
         Assert.Equal(UserErrors.InvalidCredentials, result.Error);
+        Assert.Null(user.LastLoginAt);
+        _repository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         _tokenGenerator.Verify(generator => generator.Generate(It.IsAny<User>()), Times.Never);
     }
 

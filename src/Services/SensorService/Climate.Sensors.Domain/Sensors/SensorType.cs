@@ -6,5 +6,9 @@ public enum SensorType
     Humidity,
     WindSpeed,
     Rainfall,
-    WaterLevel
+    WaterLevel, // Legacy value 4 remains unchanged.
+    RiverLevel,
+    ReservoirLevel,
+    Smoke,
+    Other
 }

@@ -14,13 +14,26 @@ public sealed class AlertServiceTests
     private readonly Mock<IAlertRepository> _repository = new();
     private readonly Mock<IRiskEvaluationService> _evaluation = new();
     private readonly Mock<IEventHistoryClient> _eventHistory = new();
+    private readonly Mock<ISensorActivityClient> _sensorActivity = new();
+
+    public AlertServiceTests() => _sensorActivity.Setup(x => x.IsActiveAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
+
+    [Fact]
+    public async Task InactiveSensorDoesNotEvaluateRulesOrCreateAlerts()
+    {
+        _sensorActivity.Setup(x => x.IsActiveAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(false);
+        var result = await CreateService().EvaluateAsync(CreateReading(99m), CancellationToken.None);
+        Assert.Empty(result.Value);
+        _evaluation.Verify(x => x.Evaluate(It.IsAny<SensorType>(), It.IsAny<decimal>()), Times.Never);
+        _repository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+    }
 
     [Fact]
     public async Task EvaluateCreatesAlertForNonGreenAssessment()
     {
         SensorReadingRecorded reading = CreateReading(7.5m);
-        _evaluation.Setup(value => value.Evaluate(reading.SensorType, reading.Value))
-            .Returns([CreateAssessment(AlertLevel.Red)]);
+        _evaluation.Setup(value => value.EvaluateAsync(reading.SensorType, reading.Value, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([CreateAssessment(AlertLevel.Red)]);
         ClimateAlert? persisted = null;
         _repository.Setup(value => value.AddAsync(It.IsAny<ClimateAlert>(), It.IsAny<CancellationToken>()))
             .Callback<ClimateAlert, CancellationToken>((alert, _) => persisted = alert)
@@ -42,8 +55,8 @@ public sealed class AlertServiceTests
     {
         SensorReadingRecorded reading = CreateReading(6m);
         ClimateAlert existing = CreateAlert(AlertLevel.Yellow);
-        _evaluation.Setup(value => value.Evaluate(reading.SensorType, reading.Value))
-            .Returns([CreateAssessment(AlertLevel.Orange)]);
+        _evaluation.Setup(value => value.EvaluateAsync(reading.SensorType, reading.Value, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([CreateAssessment(AlertLevel.Orange)]);
         _repository.Setup(value => value.GetActiveAsync(
                 reading.SensorId,
                 RiskType.Flood,
@@ -64,8 +77,8 @@ public sealed class AlertServiceTests
     {
         SensorReadingRecorded reading = CreateReading(2m);
         ClimateAlert existing = CreateAlert(AlertLevel.Yellow);
-        _evaluation.Setup(value => value.Evaluate(reading.SensorType, reading.Value))
-            .Returns([CreateAssessment(AlertLevel.Green)]);
+        _evaluation.Setup(value => value.EvaluateAsync(reading.SensorType, reading.Value, It.IsAny<CancellationToken>()))
+            .ReturnsAsync([CreateAssessment(AlertLevel.Green)]);
         _repository.Setup(value => value.GetActiveAsync(
                 reading.SensorId,
                 RiskType.Flood,
@@ -86,7 +99,7 @@ public sealed class AlertServiceTests
     }
 
     private AlertService CreateService() =>
-        new(_repository.Object, _evaluation.Object, _eventHistory.Object, TimeProvider.System);
+        new(_repository.Object, _evaluation.Object, _eventHistory.Object, TimeProvider.System, _sensorActivity.Object);
 
     private static RiskAssessment CreateAssessment(AlertLevel level) =>
         new(RiskType.Flood, level, 7m, "Flood risk", "Configured threshold exceeded.");

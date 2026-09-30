@@ -62,7 +62,7 @@ public sealed class MonitoringService(
         }
 
         SensorSummary? sensor = (await sensorClient.GetActiveSensorsAsync(cancellationToken))
-            .SingleOrDefault(item => item.Id == request.SensorId);
+            .SingleOrDefault(item => item.Id == request.SensorId && item.IsActive);
         if (sensor is null)
         {
             return Result.Failure<SensorReadingResponse>(MonitoringErrors.SensorNotFound);
@@ -120,16 +120,18 @@ public sealed class MonitoringService(
     public async Task GenerateSimulationBatchAsync(CancellationToken cancellationToken)
     {
         IReadOnlyCollection<SensorSummary> sensors = await sensorClient.GetActiveSensorsAsync(cancellationToken);
+        var overrides = await repository.GetSimulationOverridesAsync(cancellationToken);
         DateTimeOffset now = timeProvider.GetUtcNow();
         var readings = new List<SensorReading>(sensors.Count);
         foreach (SensorSummary sensor in sensors)
         {
-            SensorReading reading = CreateReading(sensor, valueGenerator.NextValue(sensor.Type), now);
+            if (!sensor.IsActive) continue;
+            SensorReading reading = CreateReading(sensor, overrides is not null && overrides.TryGetValue(sensor.Id, out var simulatedValue) ? simulatedValue : valueGenerator.NextValue(sensor.Type), now);
             readings.Add(reading);
             await repository.AddAsync(reading, cancellationToken);
         }
 
-        if (sensors.Count > 0)
+        if (readings.Count > 0)
         {
             await repository.SaveChangesAsync(cancellationToken);
             foreach (SensorReading reading in readings)

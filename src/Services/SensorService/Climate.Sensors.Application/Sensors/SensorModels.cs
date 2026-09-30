@@ -10,7 +10,7 @@ public sealed record CreateSensorRequest(
     string Unit,
     Guid CommunityId,
     decimal Latitude,
-    decimal Longitude);
+    decimal Longitude, DateOnly? InstallationDate = null, string? Location = null, string? EnvironmentalType = null);
 
 public sealed record UpdateSensorRequest(
     string Name,
@@ -20,7 +20,7 @@ public sealed record UpdateSensorRequest(
     string Unit,
     Guid CommunityId,
     decimal Latitude,
-    decimal Longitude);
+    decimal Longitude, DateOnly? InstallationDate = null, string? Location = null, string? EnvironmentalType = null);
 
 public sealed record SensorResponse(
     Guid Id,
@@ -35,7 +35,7 @@ public sealed record SensorResponse(
     decimal Longitude,
     bool IsActive,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt)
+    DateTimeOffset UpdatedAt, DateOnly? InstallationDate = null, string? Location = null, string? EnvironmentalType = null)
 {
     public static SensorResponse FromEntity(Sensor sensor, string? communityName = null) =>
         new(
@@ -51,5 +51,5 @@ public sealed record SensorResponse(
             sensor.Longitude,
             sensor.IsActive,
             sensor.CreatedAt,
-            sensor.UpdatedAt);
+            sensor.UpdatedAt, sensor.InstallationDate, sensor.Location, sensor.EnvironmentalType);
 }

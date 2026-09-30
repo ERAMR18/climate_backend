@@ -9,6 +9,9 @@ internal sealed class CommunityConfiguration : IEntityTypeConfiguration<Communit
     public void Configure(EntityTypeBuilder<Community> builder)
     {
         builder.ToTable("Communities");
+        builder.Property(x => x.Municipality).HasMaxLength(120);
+        builder.Property(x => x.Department).HasMaxLength(120);
+        builder.Property(x => x.Country).HasMaxLength(120);
         builder.HasKey(community => community.Id);
         builder.Property(community => community.Name).HasMaxLength(120).IsRequired();
         builder.Property(community => community.Description).HasMaxLength(500);

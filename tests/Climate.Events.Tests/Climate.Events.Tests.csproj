@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../src/Services/EventService/Climate.Events.Api/Climate.Events.Api.csproj" />
     <ProjectReference Include="..\..\src\Services\EventService\Climate.Events.Application\Climate.Events.Application.csproj" />
     <ProjectReference Include="..\..\src\Services\EventService\Climate.Events.Domain\Climate.Events.Domain.csproj" />
     <ProjectReference Include="..\..\src\Services\EventService\Climate.Events.Infrastructure\Climate.Events.Infrastructure.csproj" />

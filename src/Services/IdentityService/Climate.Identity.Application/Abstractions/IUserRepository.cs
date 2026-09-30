@@ -16,5 +16,6 @@ public interface IUserRepository
 
     Task<IReadOnlyCollection<User>> ListAsync(CancellationToken cancellationToken);
 
+    Task<IReadOnlyCollection<User>> SearchAsync(string? search, string? role, bool? isActive, CancellationToken token);
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

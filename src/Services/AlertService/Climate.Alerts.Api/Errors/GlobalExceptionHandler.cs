@@ -14,6 +14,12 @@ internal sealed class GlobalExceptionHandler(
 
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
+        if (exception is Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
+        {
+            context.Response.StatusCode = 409;
+            return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext { HttpContext = context,
+                ProblemDetails = new ProblemDetails { Status = 409, Title = "The alert changed. Reload before retrying." } });
+        }
         LogUnhandledException(logger, context.TraceIdentifier, exception);
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext

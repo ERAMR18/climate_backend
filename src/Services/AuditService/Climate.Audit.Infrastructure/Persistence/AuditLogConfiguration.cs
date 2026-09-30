@@ -10,6 +10,7 @@ internal sealed class AuditLogConfiguration:IEntityTypeConfiguration<AuditLog>
         b.Property(x=>x.UserName).HasMaxLength(100).IsRequired(); b.Property(x=>x.Action).HasMaxLength(64).IsRequired();
         b.Property(x=>x.Resource).HasMaxLength(100).IsRequired(); b.Property(x=>x.ResourceId).HasMaxLength(100);
         b.Property(x=>x.Description).HasMaxLength(1000).IsRequired(); b.Property(x=>x.IpAddress).HasMaxLength(64);
+        b.Property(x=>x.CorrelationId).HasMaxLength(128);
         b.HasIndex(x=>x.Timestamp); b.HasIndex(x=>new{x.UserId,x.Timestamp}); b.HasIndex(x=>new{x.Action,x.Timestamp});
     }
 }

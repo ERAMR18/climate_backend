@@ -35,6 +35,37 @@ public sealed class ClimateAlert
     public decimal SensorValue { get; private set; }
     public decimal ThresholdValue { get; private set; }
     public DateTimeOffset GeneratedAt { get; private set; }
+    public Guid? RuleId { get; private set; }
+    public string? RuleName { get; private set; }
+    public decimal? MinimumValueSnapshot { get; private set; }
+    public decimal? MaximumValueSnapshot { get; private set; }
+    public AlertStatus Status { get; private set; }
+    public Guid? AttendedByUserId { get; private set; }
+    public DateTimeOffset? AttendedAt { get; private set; }
+    public Guid? ClosedByUserId { get; private set; }
+    public DateTimeOffset? ClosedAt { get; private set; }
+    public byte[] Version { get; private set; } = [];
+
+    public void SetRule(Guid? id, string? name, decimal? minimum, decimal? maximum)
+    {
+        RuleId = id; RuleName = name; MinimumValueSnapshot = minimum; MaximumValueSnapshot = maximum;
+    }
+
+    public bool Attend(Guid userId, DateTimeOffset now)
+    {
+        if (Status != AlertStatus.Active || userId == Guid.Empty) return false;
+        Status = AlertStatus.Attended; AttendedByUserId = userId; AttendedAt = now;
+        return true;
+    }
+
+    public bool Close(Guid userId, DateTimeOffset now)
+    {
+        if (Status != AlertStatus.Attended || userId == Guid.Empty) return false;
+        Status = AlertStatus.Closed; ClosedByUserId = userId; ClosedAt = now;
+        IsActive = false; ResolvedAt = now;
+        return true;
+    }
+
     public bool IsActive { get; private set; }
     public DateTimeOffset? ResolvedAt { get; private set; }
 
@@ -71,6 +102,8 @@ public sealed class ClimateAlert
 
     public void Resolve(DateTimeOffset resolvedAt)
     {
+        Status = AlertStatus.Closed;
+        ClosedAt = resolvedAt;
         IsActive = false;
         ResolvedAt = resolvedAt;
     }

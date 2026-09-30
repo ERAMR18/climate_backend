@@ -26,7 +26,7 @@ internal sealed class AlertRepository(AlertsDbContext dbContext) : IAlertReposit
         Guid? sensorId,
         Guid? communityId,
         bool? isActive,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken, DateTimeOffset? from = null, DateTimeOffset? until = null, AlertStatus? status = null)
     {
         IQueryable<ClimateAlert> query = dbContext.Alerts.AsNoTracking();
         if (riskType.HasValue)
@@ -54,6 +54,9 @@ internal sealed class AlertRepository(AlertsDbContext dbContext) : IAlertReposit
             query = query.Where(alert => alert.IsActive == isActive.Value);
         }
 
+        if (from.HasValue) query = query.Where(x => x.GeneratedAt >= from);
+        if (until.HasValue) query = query.Where(x => x.GeneratedAt <= until);
+        if (status.HasValue) query = query.Where(x => x.Status == status);
         return await query.OrderByDescending(alert => alert.GeneratedAt).ToArrayAsync(cancellationToken);
     }
 
