@@ -1,0 +1,26 @@
+# Combine with docker-compose.yml. Requires the Hostinger Traefik project.
+services:
+  sqlserver:
+    ports: !reset []
+  gateway:
+    ports: !reset []
+    environment:
+      Cors__AllowedOrigins__0: https://${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}
+    networks:
+      - backend
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK:-traefik-proxy}
+      - traefik.http.routers.climate-api.rule=Host(`${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}`) && (PathPrefix(`/api/`) || Path(`/api`) || PathPrefix(`/hubs/`) || Path(`/hubs`))
+      - traefik.http.routers.climate-api.priority=100
+      - traefik.http.routers.climate-api.entrypoints=websecure
+      - traefik.http.routers.climate-api.tls=true
+      - traefik.http.routers.climate-api.tls.certresolver=letsencrypt
+      - traefik.http.routers.climate-api.service=climate-api
+      - traefik.http.services.climate-api.loadbalancer.server.port=8080
+
+networks:
+  traefik-proxy:
+    external: true
+    name: ${TRAEFIK_NETWORK:-traefik-proxy}

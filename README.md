@@ -279,3 +279,8 @@ actualizada de vulnerabilidades: repetir la consulta cuando vuelva la conexión.
 - **No aparecen datos demo:** confirma `DEMO_SEED_ENABLED=true`; el seed solo agrega registros faltantes.
 - **Conflictos de puertos:** cambia `GATEWAY_PORT` o `SQLSERVER_PORT` en `.env`.
 - **Regeneración OpenAPI falla:** inicia con `docker-compose.swagger.yml`; Swagger está deshabilitado en Production deliberadamente.
+
+## Hostinger con Traefik
+
+Consulta [la guía de despliegue](docs/hostinger.md) para usar el dominio con HTTPS.
+
