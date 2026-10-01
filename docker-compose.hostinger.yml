@@ -4,6 +4,7 @@ services:
     ports: !reset []
   gateway:
     ports: !override
-      - "127.0.0.1:18080:8080"
+      - "179.236.231.32:18080:8080"
     environment:
       Cors__AllowedOrigins__0: https://${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}
+      Cors__AllowedOrigins__1: http://179.236.231.32:4200
