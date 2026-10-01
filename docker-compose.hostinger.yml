@@ -8,7 +8,6 @@ services:
       Cors__AllowedOrigins__0: https://${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}
     labels:
       - traefik.enable=true
-      - traefik.docker.network=climate-monitoring-backend
       - traefik.http.routers.climate-api.rule=Host(`${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}`) && (PathPrefix(`/api/`) || Path(`/api`) || PathPrefix(`/hubs/`) || Path(`/hubs`))
       - traefik.http.routers.climate-api.priority=100
       - traefik.http.routers.climate-api.entrypoints=websecure
