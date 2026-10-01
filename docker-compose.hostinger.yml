@@ -3,7 +3,7 @@ services:
   sqlserver:
     ports: !reset []
   gateway:
-    ports:
+    ports: !override
       - "127.0.0.1:18080:8080"
     environment:
       Cors__AllowedOrigins__0: https://${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}
