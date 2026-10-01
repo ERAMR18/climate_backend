@@ -4,10 +4,10 @@ ARG RUNTIME_IMAGE=mcr.microsoft.com/dotnet/aspnet:10.0.10@sha256:f1126d438ccc359
 FROM ${SDK_IMAGE} AS build
 WORKDIR /src
 COPY . .
-RUN --mount=type=cache,target=/root/.nuget/packages dotnet restore --locked-mode "src/Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj"
-RUN --mount=type=cache,target=/root/.nuget/packages dotnet publish "src/Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj" -c Release -o /app/publish --no-restore /p:UseAppHost=false
+RUN --mount=type=cache,id=climate-nuget-v2,target=/root/.nuget/packages,sharing=locked dotnet restore --locked-mode "src/Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj"
+RUN --mount=type=cache,id=climate-nuget-v2,target=/root/.nuget/packages,sharing=locked dotnet publish "src/Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj" -c Release -o /app/publish --no-restore /p:UseAppHost=false
 
-RUN --mount=type=cache,target=/root/.nuget/packages dotnet publish tools/HealthProbe/Climate.HealthProbe.csproj -c Release -o /app/health /p:UseAppHost=false
+RUN --mount=type=cache,id=climate-nuget-v2,target=/root/.nuget/packages,sharing=locked dotnet publish tools/HealthProbe/Climate.HealthProbe.csproj -c Release -o /app/health /p:UseAppHost=false
 
 FROM ${RUNTIME_IMAGE} AS final
 WORKDIR /app
