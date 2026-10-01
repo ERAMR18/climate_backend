@@ -9,8 +9,9 @@ Dominio: `analisissistemas2026proyecto.xyz`.
 2. Instala o reutiliza el proyecto Traefik del catálogo de Docker Manager:
    entrypoints `web` (80), `websecure` (443), resolver `letsencrypt`. Configura
    su correo y conserva su almacenamiento de certificados. Abre 80 y 443.
-3. Comprueba su red: `docker network inspect traefik-proxy`. Si usa otro nombre,
-   establece `TRAEFIK_NETWORK` con ese nombre en ambos proyectos.
+3. Este proyecto de Traefik usa `network_mode: host`; no necesita una red Docker
+   externa compartida. Los complementos Hostinger crean redes bridge estables
+   para que Traefik pueda alcanzar los contenedores por sus IP internas.
 4. Si el proyecto `agua` sigue usando este dominio, cambia su dominio o detén
    esa aplicación antes de activar Climate para evitar reglas competidoras.
 5. Copia los dos repositorios al VPS, incluidos los nuevos archivos Hostinger.
@@ -26,12 +27,10 @@ RabbitMQ, administrador y claves JWT e interna. No publiques `.env`.
 Cambiar la contraseña de seed no modifica una cuenta existente. Conserva las
 credenciales correspondientes al reutilizar volúmenes con datos.
 
-Estas variables son opcionales, con los siguientes valores predeterminados.
-Usa los mismos valores en ambos proyectos:
+Esta variable es opcional:
 
 ```dotenv
 CLIMATE_DOMAIN=analisissistemas2026proyecto.xyz
-TRAEFIK_NETWORK=traefik-proxy
 ```
 
 Los complementos configuran CORS y `GATEWAY_PUBLIC_URL` con el dominio HTTPS.

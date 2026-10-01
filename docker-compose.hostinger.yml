@@ -6,12 +6,9 @@ services:
     ports: !reset []
     environment:
       Cors__AllowedOrigins__0: https://${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}
-    networks:
-      - backend
-      - traefik-proxy
     labels:
       - traefik.enable=true
-      - traefik.docker.network=${TRAEFIK_NETWORK:-traefik-proxy}
+      - traefik.docker.network=climate-monitoring-backend
       - traefik.http.routers.climate-api.rule=Host(`${CLIMATE_DOMAIN:-analisissistemas2026proyecto.xyz}`) && (PathPrefix(`/api/`) || Path(`/api`) || PathPrefix(`/hubs/`) || Path(`/hubs`))
       - traefik.http.routers.climate-api.priority=100
       - traefik.http.routers.climate-api.entrypoints=websecure
@@ -21,6 +18,5 @@ services:
       - traefik.http.services.climate-api.loadbalancer.server.port=8080
 
 networks:
-  traefik-proxy:
-    external: true
-    name: ${TRAEFIK_NETWORK:-traefik-proxy}
+  backend:
+    name: climate-monitoring-backend
