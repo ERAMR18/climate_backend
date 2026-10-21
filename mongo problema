@@ -1,0 +1,114 @@
+cd /opt/climate/climate_backend
+
+cat > docker-compose.vps-mongo.yml <<'EOF'
+services:
+  audit-mongo:
+    image: mongo:7.0
+    volumes: !override
+      - audit-mongo7-data:/data/db
+
+  report-mongo:
+    image: mongo:7.0
+    volumes: !override
+      - report-mongo7-data:/data/db
+
+volumes:
+  audit-mongo7-data:
+  report-mongo7-data:
+EOF
+
+
+COMPOSE=(
+  docker compose
+  --project-name climate-phase3-vps
+  --env-file .env.phase3.local
+  -f docker-compose.legacy.yml
+  -f docker-compose.phase3-auth.yml
+  -f docker-compose.phase3-community.yml
+  -f docker-compose.phase3-alerts.yml
+  -f docker-compose.phase3-audit.yml
+  -f docker-compose.phase3-reports.yml
+  -f docker-compose.phase3-web.yml
+  -f docker-compose.phase3-images.yml
+  -f docker-compose.hostinger.yml
+  -f docker-compose.vps-mongo.yml
+)
+
+
+cd /opt/climate/climate_backend
+
+python3 - <<'PY'
+import json
+from pathlib import Path
+from urllib.request import Request, urlopen
+
+settings = dict(
+    line.split("=", 1)
+    for line in Path(".env.phase3.local").read_text().splitlines()
+    if line and not line.startswith("#") and "=" in line
+)
+base = "http://127.0.0.1:18080/api"
+token = None
+
+def api(path, body=None):
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = "Bearer " + token
+    data = None if body is None else json.dumps(body).encode("utf-8")
+    request = Request(base + path, data=data, headers=headers)
+    with urlopen(request, timeout=60) as response:
+        raw = response.read()
+        return json.loads(raw) if raw else None
+
+token = api("/auth/login", {
+    "login": settings.get("ADMIN_SEED_USERNAME", "admin"),
+    "password": settings["AUTH_ADMIN_SEED_PASSWORD"],
+})["accessToken"]
+
+fixture = json.loads(
+    Path("seed/phase3-demo.json").read_text(encoding="utf-8-sig")
+)
+
+communities = {x["name"]: x for x in api("/communities")}
+sensors = {x["code"]: x for x in api("/sensors")}
+rules = {x["name"] for x in api("/alert-rules")}
+
+for item in fixture["communities"]:
+    if item["name"] not in communities:
+        communities[item["name"]] = api("/communities", item)
+
+for item in fixture["rules"]:
+    if item["name"] not in rules:
+        api("/alert-rules", item)
+        rules.add(item["name"])
+
+for item in fixture["sensors"]:
+    if item["code"] not in sensors:
+        community = communities[item["communityName"]]
+        if not community["isActive"]:
+            continue
+        body = {
+            key: value for key, value in item.items()
+            if key not in ("communityName", "initialValue")
+        }
+        body["communityId"] = community["id"]
+        sensors[item["code"]] = api("/sensors", body)
+
+current = {x["sensorId"] for x in api("/monitoring/current")}
+
+for item in fixture["sensors"]:
+    sensor = sensors.get(item["code"])
+    if sensor and sensor["isActive"] and sensor["id"] not in current:
+        api("/monitoring/readings", {
+            "sensorId": sensor["id"],
+            "value": item["initialValue"],
+        })
+
+api("/monitoring/simulation/start", {})
+
+summary = api("/dashboard/summary")
+print("Comunidades:", summary["communityCount"])
+print("Sensores activos:", summary["activeSensorCount"])
+print("Lecturas actuales:", len(summary["readings"]))
+print("Simulación:", summary["simulation"])
+PY

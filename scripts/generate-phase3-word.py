@@ -59,7 +59,7 @@ def previous_body(path):
     return [deepcopy(el) for el in body if not el.tag.endswith('}sectPr')]
 
 
-def build(path, title, sources, preserve=False):
+def build(path, title, sources, preserve=False, consolidated=False):
     history = previous_body(path) if preserve else []
     doc = Document()
     section = doc.sections[0]
@@ -70,7 +70,7 @@ def build(path, title, sources, preserve=False):
         doc.styles[f'Heading {level}'].font.color.rgb = RGBColor(31, 78, 121)
     doc.add_heading(title, 0)
     doc.add_paragraph('Climate Monitoring System\nEntrega de Fase 3 — 21 de octubre de 2026')
-    doc.add_paragraph('Estado: implementación funcional validada localmente. VPS y conservación de históricos excluidos del alcance acordado. Credenciales y archivos privados de entorno no forman parte de esta entrega.')
+    doc.add_paragraph('Arquitectura, funcionalidades, contratos, operación y validación del sistema.' if consolidated else 'Estado: implementación funcional validada localmente. VPS y conservación de históricos excluidos del alcance acordado. Credenciales y archivos privados de entorno no forman parte de esta entrega.')
     doc.add_heading('Contenido de la entrega', 1)
     for source in sources:
         doc.add_paragraph(source.stem.replace('_', ' '), style='List Bullet')
@@ -95,8 +95,13 @@ def build(path, title, sources, preserve=False):
 
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--consolidated-only', action='store_true')
+    args = parser.parse_args()
     sources = [BACKEND/name for name in ['FASE_3_INFORME_FINAL.md', 'FASE_3_ARQUITECTURA.md', 'FASE_3_REPORTERIA.md', 'FASE_3_DATOS_DEMO.md', 'FASE_3_PRUEBAS.md', 'FASE_3_FUERA_DE_ALCANCE.md']]
     frontend = [FRONTEND/'FASE_3_ENTREGA.md']
-    build(BACKEND/'Documentacion_Esencial_Backend.docx', 'Documentación esencial del Backend — Fase 3', sources, True)
-    build(FRONTEND/'docs/angular-components/Documentacion_Componentes_Angular.docx', 'Documentación de Componentes Angular — Fase 3', frontend, True)
-    build(ROOT/'Documentacion_Climate_Monitoring_System.docx', 'Documentación técnica consolidada — Fase 3', sources+frontend)
+    if not args.consolidated_only:
+        build(BACKEND/'Documentacion_Esencial_Backend.docx', 'Documentación esencial del Backend — Fase 3', sources, True)
+        build(FRONTEND/'docs/angular-components/Documentacion_Componentes_Angular.docx', 'Documentación de Componentes Angular — Fase 3', frontend, True)
+    build(ROOT/'Documentacion_Climate_Monitoring_System.docx', 'Documentación técnica consolidada — Fase 3', [BACKEND/'FASE_3_DOCUMENTACION_CONSOLIDADA.md'], consolidated=True)
