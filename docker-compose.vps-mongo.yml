@@ -1,0 +1,17 @@
+# VPS compatibility override: append AFTER the Phase 3 and Hostinger files.
+# MongoDB 7 uses separate volumes; never mount existing MongoDB 8 data here.
+# Preserve these volume names when updating an installation using this override.
+services:
+  audit-mongo:
+    image: mongo:7.0
+    volumes: !override
+      - audit-mongo7-data:/data/db
+
+  report-mongo:
+    image: mongo:7.0
+    volumes: !override
+      - report-mongo7-data:/data/db
+
+volumes:
+  audit-mongo7-data:
+  report-mongo7-data:

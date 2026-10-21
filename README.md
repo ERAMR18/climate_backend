@@ -10,7 +10,7 @@ Frontend Angular22 y ocho PDFs integrados con Gateway, roles, historial y dashbo
 docker-compose.yml ejecuta ahora la arquitectura final completa; docker-compose.phase3.yml reúne
 sus fuentes por overlays y docker-compose.legacy.yml conserva la configuración anterior como referencia.
 Esta entrega funciona con instalación nueva: no requiere conservar ni importar datos anteriores.
-VPS está excluido por indicación del usuario. Las pruebas utilizan proyectos aislados.
+La configuración para la VPS Ubuntu 26.04 utiliza el [ajuste de MongoDB](docs/VPS_MONGO.md), conservado en `docker-compose.vps-mongo.yml`. Las pruebas utilizan proyectos aislados.
 
 Arranque local desde backend: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Start-Phase3.ps1 -NoBuild`.
 Omitir -NoBuild para construir imágenes. Genera .env.phase3.local solo si falta y utiliza proyecto
