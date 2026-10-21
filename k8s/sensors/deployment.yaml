@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: sensors
-        image: climate/sensors:phase2
+        image: climate/sensors:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

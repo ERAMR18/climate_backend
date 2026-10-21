@@ -1,0 +1,13 @@
+# Complete Phase 3 entry point. Reuses the same project and service names as Phase 2.
+# Requires Docker Compose >= 2.24.4. Fresh installations do not require legacy data.
+name: climate-monitoring
+include:
+  - path:
+      - docker-compose.legacy.yml
+      - docker-compose.phase3-auth.yml
+      - docker-compose.phase3-community.yml
+      - docker-compose.phase3-alerts.yml
+      - docker-compose.phase3-audit.yml
+      - docker-compose.phase3-reports.yml
+      - docker-compose.phase3-web.yml
+      - docker-compose.phase3-images.yml

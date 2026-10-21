@@ -62,6 +62,9 @@ public sealed class ClimateEventServiceTests
 
     private sealed class FakeRepository : IClimateEventRepository
     {
+        public Task<IReadOnlyCollection<ClimateEvent>> ListPageAsync(EventFilter filter, CancellationToken cancellationToken) =>
+            Task.FromResult<IReadOnlyCollection<ClimateEvent>>(Items.OrderByDescending(x => x.OccurredAt)
+                .Skip((filter.Page!.Value - 1) * filter.PageSize).Take(filter.PageSize).ToArray());
         public List<ClimateEvent> Items { get; } = [];
         public bool ListWasCalled { get; private set; }
         public Task<ClimateEvent?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => Task.FromResult(Items.FirstOrDefault(x => x.Id == id));

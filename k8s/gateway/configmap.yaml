@@ -21,3 +21,17 @@ data:
   DownstreamHealthEndpoints__4: http://event-service:8080/health
   ReverseProxy__Clusters__audit__Destinations__primary__Address: http://audit-service:8080/
   DownstreamHealthEndpoints__5: http://audit-service:8080/health
+  ReverseProxy__Routes__communities__ClusterId: communities
+  ReverseProxy__Routes__communities__AuthorizationPolicy: Default
+  ReverseProxy__Routes__communities__Match__Path: /api/communities/{**remainder}
+  ReverseProxy__Routes__communities__Transforms__0__PathRemovePrefix: /api/communities
+  ReverseProxy__Routes__communities__Transforms__1__PathPrefix: /api/v1/communities
+  ReverseProxy__Clusters__communities__Destinations__primary__Address: http://community-service:8080/
+  DownstreamHealthEndpoints__6: http://community-service:8080/health
+  ReverseProxy__Routes__reports__ClusterId: reports
+  ReverseProxy__Routes__reports__AuthorizationPolicy: Default
+  ReverseProxy__Routes__reports__Match__Path: /api/reports/{**remainder}
+  ReverseProxy__Routes__reports__Transforms__0__PathRemovePrefix: /api/reports
+  ReverseProxy__Routes__reports__Transforms__1__PathPrefix: /api/v1/reports
+  ReverseProxy__Clusters__reports__Destinations__primary__Address: http://report-service:8080/
+  DownstreamHealthEndpoints__7: http://report-service:8080/health

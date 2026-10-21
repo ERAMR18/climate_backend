@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: monitoring
-        image: climate/monitoring:phase2
+        image: climate/monitoring:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

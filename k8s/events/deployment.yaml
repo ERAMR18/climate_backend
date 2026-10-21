@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: events
-        image: climate/events:phase2
+        image: climate/events:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

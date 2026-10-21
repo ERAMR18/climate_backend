@@ -16,6 +16,7 @@ public static class SensorsDatabaseInitializer
         await using AsyncServiceScope scope = serviceProvider.CreateAsyncScope();
         SensorsDbContext dbContext = scope.ServiceProvider.GetRequiredService<SensorsDbContext>();
         await dbContext.Database.MigrateAsync(cancellationToken);
+        if (scope.ServiceProvider.GetRequiredService<CommunityDirectory>().Enabled) return;
 
         DemoSeedOptions options = scope.ServiceProvider.GetRequiredService<IOptions<DemoSeedOptions>>().Value;
         if (!options.Enabled)

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "reportTypes": 8,
+  "filterCases": 4,
+  "rows": 5000,
+  "concurrentRequests": 20,
+  "concurrentAccepted": 3,
+  "concurrentRejected": 17,
+  "overflowTested": true,
+  "leaseRecoveredAfterRestart": true,
+  "jwtValidatedInsideService": true
+}

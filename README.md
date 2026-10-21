@@ -1,5 +1,43 @@
 # Climate Monitoring System
 
+## Fase 3
+
+Documentación de entrega: [Word del backend](docs/Documentacion_Esencial_Backend.docx), [informe final](docs/FASE_3_INFORME_FINAL.md) y [datos de demostración](docs/FASE_3_DATOS_DEMO.md). Para regenerar los Word de ambos repositorios desde su directorio padre: `python backend/scripts/generate-phase3-word.py` (requiere `python-docx`).
+
+Auth NestJS/PostgreSQL, Community .NET/PostgreSQL, Alert Java/PostgreSQL, Audit FastAPI/MongoDB
+y Report FastAPI/MongoDB implementados. Monitoring, Sensor y Event mantienen .NET/SQL Server.
+Frontend Angular22 y ocho PDFs integrados con Gateway, roles, historial y dashboard.
+docker-compose.yml ejecuta ahora la arquitectura final completa; docker-compose.phase3.yml reúne
+sus fuentes por overlays y docker-compose.legacy.yml conserva la configuración anterior como referencia.
+Esta entrega funciona con instalación nueva: no requiere conservar ni importar datos anteriores.
+VPS está excluido por indicación del usuario. Las pruebas utilizan proyectos aislados.
+
+Arranque local desde backend: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Start-Phase3.ps1 -NoBuild`.
+Omitir -NoBuild para construir imágenes. Genera .env.phase3.local solo si falta y utiliza proyecto
+climate-phase3-local con volúmenes nuevos. Frontend http://localhost:4200 y Gateway http://localhost:8080.
+Usuario admin; contraseña en AUTH_ADMIN_SEED_PASSWORD del archivo privado .env.phase3.local. No publicarlo.
+
+- [Arquitectura y diagnóstico](docs/FASE_3_ARQUITECTURA.md).
+- [Matriz completa de requisitos](docs/FASE_3_MATRIZ_REQUISITOS.md).
+- [Migración y recuperación](docs/FASE_3_MIGRACION_DATOS.md).
+- [Despliegue incremental](docs/FASE_3_DESPLIEGUE.md).
+- [Validaciones ejecutadas](docs/FASE_3_PRUEBAS.md).
+- [Reportería](docs/FASE_3_REPORTERIA.md).
+- [Preparación Kubernetes](k8s/FASE_3.md).
+- [Fuera del alcance acordado](docs/FASE_3_FUERA_DE_ALCANCE.md).
+- [Informe final de cierre](docs/FASE_3_INFORME_FINAL.md).
+
+Pruebas de cierre: `scripts/Test-Phase3System.ps1 -Reports -LargeReports` y
+`scripts/Test-Phase3Compose.ps1 -Browser -Recovery` (secuenciales). Incluyen5 000 lecturas,
+20 solicitudes concurrentes, respaldo/restauración de8 volúmenes y navegador WCAG2.2 AA.
+
+Prueba real de Auth, Gateway, Community, Sensor y migración de Alert: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Phase3Auth.ps1`.
+Requiere Docker, .NET10, Node22 y dependencias instaladas en AuthService y tools/Phase3Migration.
+Usa exclusivamente fixtures separados de las bases de la aplicación.
+Pruebas Java/PostgreSQL y smoke AMQP: construir `climate/alerts:phase3` y ejecutar
+`powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Phase3Alerts.ps1`.
+Ejecutar ambos scripts secuencialmente porque comparten fixtures aislados.
+
 ## Cierre de Fase 2
 
 - [Arquitectura y flujo de auditoría](docs/phase-2-architecture.md).

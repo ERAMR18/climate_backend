@@ -16,6 +16,15 @@ public sealed class InternalSensorsController(
     ISensorCatalogRepository repository,
     IOptions<InternalApiOptions> options) : ControllerBase
 {
+    [HttpGet("counts")]
+    public async Task<ActionResult<Dictionary<Guid, int>>> Counts(
+        [FromServices] Climate.Sensors.Infrastructure.Persistence.SensorsDbContext db, CancellationToken token)
+    {
+        if (Request.Headers[InternalApiOptions.HeaderName] != options.Value.ApiKey) return Unauthorized();
+        return Ok(await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToDictionaryAsync(
+            db.Sensors.GroupBy(x => x.CommunityId).Select(x => new { Id = x.Key, Count = x.Count() }),
+            x => x.Id, x => x.Count, token));
+    }
     [HttpGet("{id:guid}/active")]
     public async Task<ActionResult<bool>> IsActive(Guid id, [FromServices] ISensorCatalogRepository repository, CancellationToken token)
     {

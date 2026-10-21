@@ -24,13 +24,14 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1654
-        runAsGroup: 1654
+        runAsUser: 1000
+        runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
+        fsGroup: 1000
       containers:
       - name: alerts
-        image: climate/alerts:phase2
+        image: climate/alerts:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -44,7 +45,7 @@ spec:
             memory: 128Mi
           limits:
             cpu: 1000m
-            memory: 512Mi
+            memory: 1Gi
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
@@ -66,7 +67,7 @@ spec:
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /health
+            path: /health/ready
             port: http
           periodSeconds: 10
           timeoutSeconds: 10
@@ -75,16 +76,31 @@ spec:
         - name: tmp
           mountPath: /tmp
         env:
-        - name: Jwt__SigningKey
+        - name: JWT_SIGNING_KEY
           valueFrom:
             secretKeyRef:
               name: climate-secrets
               key: JWT_SIGNING_KEY
-        - name: ConnectionStrings__AlertDb
+        - name: INTERNAL_API_KEY
           valueFrom:
             secretKeyRef:
               name: climate-secrets
-              key: SQL_ALERTS_CONNECTION
+              key: INTERNAL_API_KEY
+        - name: ALERT_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: ALERT_DATABASE_URL
+        - name: ALERT_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: ALERT_DATABASE_USER
+        - name: ALERT_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: ALERT_DATABASE_PASSWORD
         - name: RABBITMQ_USER
           valueFrom:
             secretKeyRef:
@@ -95,26 +111,12 @@ spec:
             secretKeyRef:
               name: climate-secrets
               key: RABBITMQ_PASSWORD
-        - name: InternalApi__ApiKey
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: INTERNAL_API_KEY
-        - name: SensorService__ApiKey
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: INTERNAL_API_KEY
-        - name: EventService__ApiKey
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: INTERNAL_API_KEY
-        - name: RealtimeService__ApiKey
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: INTERNAL_API_KEY
+        - name: SENSOR_SERVICE_URL
+          value: http://sensor-service:8080/
+        - name: EVENT_SERVICE_URL
+          value: http://event-service:8080/
+        - name: REALTIME_SERVICE_URL
+          value: http://monitoring-service:8080/
       volumes:
       - name: tmp
         emptyDir: {}

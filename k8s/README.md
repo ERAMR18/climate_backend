@@ -1,5 +1,7 @@
 # Kubernetes: secciones 31–50
 
+Arquitectura actual: [Fase 3](FASE_3.md), diez Deployments, Auth NestJS, Community PostgreSQL, Alert Java, Audit/Report Python y PVC PDF. El resto conserva contexto Fase 2; sus conexiones SQL Identity/Alert/Audit y etiquetas phase2 ya no describen los manifiestos actuales.
+
 La [guía final](../docs/kubernetes.md) amplía selección de registro, comandos,
 logs y diagnóstico. La [validación final](../docs/phase-2-validation.md) distingue
 las pruebas ejecutadas de la comprobación pendiente en un clúster real.

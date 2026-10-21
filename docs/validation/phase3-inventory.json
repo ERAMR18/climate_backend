@@ -1,0 +1,3116 @@
+{
+  "backend": [
+    {
+      "file": "Services/AlertServiceJava/pom.xml",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/package.json",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/tsconfig.json",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/appsettings.json",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Climate.Sensors.Api.csproj",
+      "lines": 21,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.AspNetCore.OpenApi\" Version=\"10.0.8\" />",
+        "<PackageReference Include=\"Microsoft.OpenApi\" Version=\"2.11.0\" />",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Program.cs",
+      "lines": 114,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Climate.Sensors.Application.csproj",
+      "lines": 19,
+      "contracts": [
+        "<PackageReference Include=\"FluentValidation.DependencyInjectionExtensions\" Version=\"12.1.1\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/DependencyInjection.cs",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Domain/Climate.Sensors.Domain.csproj",
+      "lines": 9,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Climate.Sensors.Infrastructure.csproj",
+      "lines": 22,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Options.ConfigurationExtensions\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/CommunityDirectory.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/DependencyInjection.cs",
+      "lines": 33,
+      "contracts": [
+        "services.AddHttpClient<CommunityDirectory>(client =>"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/CommunityConfiguration.cs",
+      "lines": 24,
+      "contracts": [
+        "builder.HasIndex(community => community.Name).IsUnique();",
+        "builder.HasIndex(community => community.IsActive);"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/SensorCatalogRepository.cs",
+      "lines": 127,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/SensorConfiguration.cs",
+      "lines": 32,
+      "contracts": [
+        "builder.HasIndex(sensor => sensor.NormalizedCode).IsUnique();",
+        "builder.HasIndex(sensor => new { sensor.CommunityId, sensor.IsActive });",
+        "builder.HasIndex(sensor => new { sensor.Type, sensor.IsActive });"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/SensorsDbContext.cs",
+      "lines": 14,
+      "contracts": [
+        "public DbSet<Community> Communities => Set<Community>();",
+        "public DbSet<Sensor> Sensors => Set<Sensor>();"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Seeding/DemoSeedOptions.cs",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Seeding/SensorsDatabaseInitializer.cs",
+      "lines": 105,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20260817163712_InitialSensors.cs",
+      "lines": 101,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20260817163712_InitialSensors.Designer.cs",
+      "lines": 150,
+      "contracts": [
+        "b.HasIndex(\"IsActive\");",
+        "b.HasIndex(\"Name\")",
+        "b.HasIndex(\"NormalizedCode\")",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Type\", \"IsActive\");",
+        "b.HasOne(\"Climate.Sensors.Domain.Communities.Community\", \"Community\")"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20260927195427_Phase2OutboxAndCatalog.cs",
+      "lines": 107,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20260927195427_Phase2OutboxAndCatalog.Designer.cs",
+      "lines": 196,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"IsActive\");",
+        "b.HasIndex(\"Name\")",
+        "b.HasIndex(\"NormalizedCode\")",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Type\", \"IsActive\");",
+        "b.HasOne(\"Climate.Sensors.Domain.Communities.Community\", \"Community\")"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20261021153228_Phase3CommunityOwnership.cs",
+      "lines": 30,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/20261021153228_Phase3CommunityOwnership.Designer.cs",
+      "lines": 185,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"IsActive\");",
+        "b.HasIndex(\"Name\")",
+        "b.HasIndex(\"NormalizedCode\")",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Type\", \"IsActive\");"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Infrastructure/Persistence/Migrations/SensorsDbContextModelSnapshot.cs",
+      "lines": 182,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"IsActive\");",
+        "b.HasIndex(\"Name\")",
+        "b.HasIndex(\"NormalizedCode\")",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Type\", \"IsActive\");"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Domain/Communities/Community.cs",
+      "lines": 60,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Domain/Sensors/Sensor.cs",
+      "lines": 106,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Domain/Sensors/SensorType.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Abstractions/ISensorCatalogRepository.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Common/ValidationError.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Communities/CommunityModels.cs",
+      "lines": 36,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Communities/CommunityService.cs",
+      "lines": 104,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Communities/CommunityValidators.cs",
+      "lines": 31,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Sensors/SensorModels.cs",
+      "lines": 55,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Sensors/SensorService.cs",
+      "lines": 166,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Application/Sensors/SensorValidators.cs",
+      "lines": 96,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Configuration/InternalApiOptions.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Configuration/JwtOptions.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Controllers/CommunitiesController.cs",
+      "lines": 71,
+      "contracts": [
+        "[Route(\"api/v1/communities\")]",
+        "[HttpGet]",
+        "[HttpPatch(\"{id:guid}/activate\")]",
+        "[HttpPatch(\"{id:guid}/deactivate\")]",
+        "[HttpGet(\"{id:guid}\", Name = \"GetCommunityById\")]",
+        "[HttpPost]",
+        "[HttpPut(\"{id:guid}\")]"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Controllers/InternalSensorsController.cs",
+      "lines": 60,
+      "contracts": [
+        "[Route(\"api/v1/internal/sensors\")]",
+        "[HttpGet(\"counts\")]",
+        "[HttpGet(\"{id:guid}/active\")]",
+        "[HttpGet(\"active\")]"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Controllers/SensorsController.cs",
+      "lines": 87,
+      "contracts": [
+        "[Route(\"api/v1/sensors\")]",
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\", Name = \"GetSensorById\")]",
+        "[HttpPost]",
+        "[HttpPut(\"{id:guid}\")]",
+        "[HttpPatch(\"{id:guid}/activate\")]",
+        "[HttpPatch(\"{id:guid}/deactivate\")]",
+        "[HttpDelete(\"{id:guid}\")]"
+      ]
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 37,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Errors/ResultExtensions.cs",
+      "lines": 30,
+      "contracts": []
+    },
+    {
+      "file": "Services/SensorService/Climate.Sensors.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/clients.py",
+      "lines": 72,
+      "contracts": [
+        "async def get(self, service: str, path: str, parameters: dict, correlation: str):",
+        "async def pages(self, service: str, path: str, parameters: dict, correlation: str):"
+      ]
+    },
+    {
+      "file": "Services/ReportService/report_service/data.py",
+      "lines": 153,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/main.py",
+      "lines": 145,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/models.py",
+      "lines": 98,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/render.py",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/worker.py",
+      "lines": 130,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/__init__.py",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/tests/test_reports.py",
+      "lines": 66,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/templates/footer.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/templates/header.html",
+      "lines": 5,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/templates/row.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/ReportService/report_service/templates/section.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/PythonCommon/climate_common/outbox.py",
+      "lines": 50,
+      "contracts": []
+    },
+    {
+      "file": "Services/PythonCommon/climate_common/security.py",
+      "lines": 51,
+      "contracts": []
+    },
+    {
+      "file": "Services/PythonCommon/climate_common/web.py",
+      "lines": 39,
+      "contracts": []
+    },
+    {
+      "file": "Services/PythonCommon/climate_common/__init__.py",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/appsettings.json",
+      "lines": 57,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Climate.Monitoring.Api.csproj",
+      "lines": 21,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.AspNetCore.OpenApi\" Version=\"10.0.8\" />",
+        "<PackageReference Include=\"Microsoft.OpenApi\" Version=\"2.11.0\" />",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Program.cs",
+      "lines": 97,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Climate.Monitoring.Application.csproj",
+      "lines": 19,
+      "contracts": [
+        "<PackageReference Include=\"FluentValidation.DependencyInjectionExtensions\" Version=\"12.1.1\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/DependencyInjection.cs",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Domain/Climate.Monitoring.Domain.csproj",
+      "lines": 9,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Climate.Monitoring.Infrastructure.csproj",
+      "lines": 24,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Hosting.Abstractions\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Http\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Options.ConfigurationExtensions\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/DependencyInjection.cs",
+      "lines": 60,
+      "contracts": [
+        "services.AddHttpClient<ISensorCatalogClient, SensorCatalogClient>((provider, client) =>",
+        "services.AddHttpClient<IAlertEvaluationClient, AlertEvaluationClient>((provider, client) =>",
+        "if (!configuration.GetValue<bool>(\"OpenApi:ExportOnly\")) services.AddHostedService<ClimateSimulationWorker>();"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Clients/AlertEvaluationClient.cs",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Clients/AlertServiceOptions.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Clients/SensorCatalogClient.cs",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Clients/SensorServiceOptions.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/MonitoringDatabaseInitializer.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/MonitoringDbContext.cs",
+      "lines": 13,
+      "contracts": [
+        "public DbSet<SimulationOverride> SimulationOverrides => Set<SimulationOverride>();",
+        "public DbSet<SensorReading> Readings => Set<SensorReading>();"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/MonitoringRepository.cs",
+      "lines": 63,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/SensorReadingConfiguration.cs",
+      "lines": 21,
+      "contracts": [
+        "builder.HasIndex(reading => new { reading.SensorId, reading.RecordedAt });",
+        "builder.HasIndex(reading => new { reading.CommunityId, reading.RecordedAt });",
+        "builder.HasIndex(reading => reading.RecordedAt);"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/SimulationOverrideConfiguration.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Simulation/ClimateSimulationWorker.cs",
+      "lines": 49,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Simulation/SimulatedValueGenerator.cs",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Simulation/SimulationControl.cs",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Simulation/SimulationOptions.cs",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260817164859_InitialMonitoring.cs",
+      "lines": 57,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260817164859_InitialMonitoring.Designer.cs",
+      "lines": 71,
+      "contracts": [
+        "b.HasIndex(\"RecordedAt\");",
+        "b.HasIndex(\"CommunityId\", \"RecordedAt\");",
+        "b.HasIndex(\"SensorId\", \"RecordedAt\");"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260927195430_Phase2OutboxAndCatalog.cs",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260927195430_Phase2OutboxAndCatalog.Designer.cs",
+      "lines": 94,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"RecordedAt\");",
+        "b.HasIndex(\"CommunityId\", \"RecordedAt\");",
+        "b.HasIndex(\"SensorId\", \"RecordedAt\");"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260927202754_Phase2RulesWorkflowAndReadings.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/20260927202754_Phase2RulesWorkflowAndReadings.Designer.cs",
+      "lines": 115,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"RecordedAt\");",
+        "b.HasIndex(\"CommunityId\", \"RecordedAt\");",
+        "b.HasIndex(\"SensorId\", \"RecordedAt\");"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Infrastructure/Persistence/Migrations/MonitoringDbContextModelSnapshot.cs",
+      "lines": 112,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"RecordedAt\");",
+        "b.HasIndex(\"CommunityId\", \"RecordedAt\");",
+        "b.HasIndex(\"SensorId\", \"RecordedAt\");"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Domain/Readings/SensorReading.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Domain/Readings/SensorType.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Domain/Readings/SimulationOverride.cs",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/IAlertEvaluationClient.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/IMonitoringRepository.cs",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/IRealtimePublisher.cs",
+      "lines": 5,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/ISensorCatalogClient.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/ISimulatedValueGenerator.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Abstractions/ISimulationControl.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Readings/CreateReadingRequestValidator.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Readings/IMonitoringService.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Readings/MonitoringErrors.cs",
+      "lines": 22,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Readings/MonitoringService.cs",
+      "lines": 173,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Readings/ReadingModels.cs",
+      "lines": 31,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Simulation/ISimulationService.cs",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Application/Simulation/SimulationService.cs",
+      "lines": 31,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Configuration/InternalApiOptions.cs",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Configuration/JwtOptions.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Controllers/DashboardController.cs",
+      "lines": 79,
+      "contracts": [
+        "[HttpGet(\"summary\")]"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Controllers/InternalRealtimeController.cs",
+      "lines": 19,
+      "contracts": [
+        "[HttpPost] public async Task<ActionResult> Publish(InternalRealtimeRequest request,CancellationToken cancellationToken)"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Controllers/MonitoringController.cs",
+      "lines": 99,
+      "contracts": [
+        "[Route(\"api/v1/monitoring\")]",
+        "[HttpGet(\"current\")]",
+        "[HttpGet(\"sensors/{sensorId:guid}/latest\")]",
+        "[HttpGet(\"sensors/{sensorId:guid}/history\")]",
+        "[HttpGet(\"sensors/{sensorId:guid}/chart\")]",
+        "[HttpPost(\"readings\")]",
+        "[HttpGet(\"simulation/status\")]",
+        "[HttpPost(\"simulation/start\")]",
+        "[HttpPost(\"simulation/stop\")]",
+        "[HttpPost(\"simulation/reset\")]",
+        "[HttpPost(\"system/reset\")]"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Controllers/ReadingsController.cs",
+      "lines": 60,
+      "contracts": [
+        "[HttpGet(\"readings\")]",
+        "[HttpGet(\"simulation/values/{sensorId:guid}\")]",
+        "[HttpPut(\"simulation/values/{sensorId:guid}\"), Authorize(Roles = SystemRoles.Administrator)]",
+        "[HttpDelete(\"simulation/values/{sensorId:guid}\"), Authorize(Roles = SystemRoles.Administrator)]"
+      ]
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 32,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Errors/ResultExtensions.cs",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Realtime/MonitoringHub.cs",
+      "lines": 5,
+      "contracts": []
+    },
+    {
+      "file": "Services/MonitoringService/Climate.Monitoring.Api/Realtime/SignalRRealtimePublisher.cs",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/appsettings.json",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Climate.Identity.Api.csproj",
+      "lines": 21,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.AspNetCore.OpenApi\" Version=\"10.0.8\" />",
+        "<PackageReference Include=\"Microsoft.OpenApi\" Version=\"2.11.0\" />",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Program.cs",
+      "lines": 87,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Climate.Identity.Application.csproj",
+      "lines": 19,
+      "contracts": [
+        "<PackageReference Include=\"FluentValidation.DependencyInjectionExtensions\" Version=\"12.1.1\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/DependencyInjection.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Domain/Climate.Identity.Domain.csproj",
+      "lines": 9,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Climate.Identity.Infrastructure.csproj",
+      "lines": 23,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Identity.Core\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.IdentityModel.Tokens.Jwt\" Version=\"8.19.2\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/DependencyInjection.cs",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/IdentityDbContext.cs",
+      "lines": 16,
+      "contracts": [
+        "public DbSet<User> Users => Set<User>();"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/UserConfiguration.cs",
+      "lines": 27,
+      "contracts": [
+        "builder.HasIndex(user => user.NormalizedUsername).IsUnique();",
+        "builder.HasIndex(user => user.NormalizedEmail).IsUnique();",
+        "builder.HasIndex(user => new { user.IsActive, user.Role });"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/UserRepository.cs",
+      "lines": 58,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Security/JwtOptions.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Security/JwtTokenGenerator.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Security/PasswordService.cs",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Seeding/AdminSeedOptions.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Seeding/IdentityDatabaseInitializer.cs",
+      "lines": 58,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/Migrations/20260817162545_InitialIdentity.cs",
+      "lines": 61,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/Migrations/20260817162545_InitialIdentity.Designer.cs",
+      "lines": 90,
+      "contracts": [
+        "b.HasIndex(\"NormalizedEmail\")",
+        "b.HasIndex(\"NormalizedUsername\")",
+        "b.HasIndex(\"IsActive\", \"Role\");"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/Migrations/20260927195424_Phase2OutboxAndCatalog.cs",
+      "lines": 52,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/Migrations/20260927195424_Phase2OutboxAndCatalog.Designer.cs",
+      "lines": 116,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"NormalizedEmail\")",
+        "b.HasIndex(\"NormalizedUsername\")",
+        "b.HasIndex(\"IsActive\", \"Role\");"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Infrastructure/Persistence/Migrations/IdentityDbContextModelSnapshot.cs",
+      "lines": 113,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"NormalizedEmail\")",
+        "b.HasIndex(\"NormalizedUsername\")",
+        "b.HasIndex(\"IsActive\", \"Role\");"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Domain/Users/User.cs",
+      "lines": 77,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Abstractions/IJwtTokenGenerator.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Abstractions/IPasswordService.cs",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Abstractions/IUserRepository.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/AccessToken.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/CreateUserRequest.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/IUserService.cs",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/LoginRequest.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/LoginRequestValidator.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/LoginResponse.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/RegisterRequest.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/RegisterRequestValidator.cs",
+      "lines": 28,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UpdateUserRequest.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UpdateUserRequestValidator.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UpdateUserStatusRequest.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UserErrors.cs",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UserResponse.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/UserService.cs",
+      "lines": 155,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Application/Users/ValidationError.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Controllers/AuthController.cs",
+      "lines": 52,
+      "contracts": [
+        "[Route(\"api/v1/auth\")]",
+        "[HttpPost(\"logout\")]",
+        "[HttpPost(\"register\")]",
+        "[HttpPost(\"login\")]"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Controllers/UsersController.cs",
+      "lines": 87,
+      "contracts": [
+        "[Route(\"api/v1/users\")]",
+        "[HttpPost]",
+        "[HttpGet(\"me\")]",
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\", Name = nameof(GetById))]",
+        "[HttpPut(\"{id:guid}\")]",
+        "[HttpPatch(\"{id:guid}/status\")]"
+      ]
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 36,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Errors/ResultExtensions.cs",
+      "lines": 35,
+      "contracts": []
+    },
+    {
+      "file": "Services/IdentityService/Climate.Identity.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/appsettings.json",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Climate.Events.Api.csproj",
+      "lines": 23,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\">",
+        "</PackageReference>",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Program.cs",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/Climate.Events.Application.csproj",
+      "lines": 19,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.Extensions.DependencyInjection.Abstractions\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/DependencyInjection.cs",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Domain/Climate.Events.Domain.csproj",
+      "lines": 13,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Climate.Events.Infrastructure.csproj",
+      "lines": 23,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\">",
+        "</PackageReference>",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/DependencyInjection.cs",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/ClimateEventConfiguration.cs",
+      "lines": 23,
+      "contracts": [
+        "builder.HasIndex(x => x.AlertId).IsUnique();",
+        "builder.HasIndex(x => new { x.RiskType, x.AlertLevel, x.OccurredAt });",
+        "builder.HasIndex(x => new { x.SensorId, x.OccurredAt });",
+        "builder.HasIndex(x => new { x.CommunityId, x.OccurredAt });"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/ClimateEventRepository.cs",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/EventsDatabaseInitializer.cs",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/EventsDbContext.cs",
+      "lines": 11,
+      "contracts": [
+        "public DbSet<ClimateEvent> Events => Set<ClimateEvent>();"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260817171106_InitialEvents.cs",
+      "lines": 66,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260817171106_InitialEvents.Designer.cs",
+      "lines": 80,
+      "contracts": [
+        "b.HasIndex(\"AlertId\")",
+        "b.HasIndex(\"CommunityId\", \"OccurredAt\");",
+        "b.HasIndex(\"SensorId\", \"OccurredAt\");",
+        "b.HasIndex(\"RiskType\", \"AlertLevel\", \"OccurredAt\");"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260927195436_Phase2OutboxAndCatalog.cs",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260927195436_Phase2OutboxAndCatalog.Designer.cs",
+      "lines": 103,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"AlertId\")",
+        "b.HasIndex(\"CommunityId\", \"OccurredAt\");",
+        "b.HasIndex(\"SensorId\", \"OccurredAt\");",
+        "b.HasIndex(\"RiskType\", \"AlertLevel\", \"OccurredAt\");"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260927202759_Phase2RulesWorkflowAndReadings.cs",
+      "lines": 54,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/20260927202759_Phase2RulesWorkflowAndReadings.Designer.cs",
+      "lines": 115,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"AlertId\")",
+        "b.HasIndex(\"CommunityId\", \"OccurredAt\");",
+        "b.HasIndex(\"SensorId\", \"OccurredAt\");",
+        "b.HasIndex(\"RiskType\", \"AlertLevel\", \"OccurredAt\");"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Infrastructure/Persistence/Migrations/EventsDbContextModelSnapshot.cs",
+      "lines": 112,
+      "contracts": [
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");",
+        "b.HasIndex(\"AlertId\")",
+        "b.HasIndex(\"CommunityId\", \"OccurredAt\");",
+        "b.HasIndex(\"SensorId\", \"OccurredAt\");",
+        "b.HasIndex(\"RiskType\", \"AlertLevel\", \"OccurredAt\");"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Domain/Events/ClimateEvent.cs",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/Abstractions/IClimateEventRepository.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/Events/ClimateEventService.cs",
+      "lines": 44,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/Events/EventModels.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Application/Events/IClimateEventService.cs",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Configuration/SecurityOptions.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Controllers/EventsController.cs",
+      "lines": 26,
+      "contracts": [
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\")]"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Controllers/EventStatisticsController.cs",
+      "lines": 27,
+      "contracts": [
+        "[HttpGet]"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Controllers/InternalEventsController.cs",
+      "lines": 24,
+      "contracts": [
+        "[HttpPost]"
+      ]
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Errors/ResultExtensions.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/EventService/Climate.Events.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Climate.Communities.Api.csproj",
+      "lines": 14,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Npgsql.EntityFrameworkCore.PostgreSQL\" Version=\"10.0.0\" />"
+      ]
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Contracts.cs",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Program.cs",
+      "lines": 63,
+      "contracts": [
+        "builder.Services.AddHttpClient<SensorCountsClient>(client =>"
+      ]
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/SensorCountsClient.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Controllers/CommunitiesController.cs",
+      "lines": 90,
+      "contracts": [
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\")]",
+        "[HttpPost, Authorize(Roles = \"Administrator\")]",
+        "[HttpPut(\"{id:guid}\"), Authorize(Roles = \"Administrator\")]",
+        "[HttpPatch(\"{id:guid}/activate\"), Authorize(Roles = \"Administrator\")]",
+        "[HttpPatch(\"{id:guid}/deactivate\"), Authorize(Roles = \"Administrator\")]",
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\")]"
+      ]
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Persistence/001_initial.sql",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/CommunityService/Climate.Communities.Api/Persistence/CommunityDbContext.cs",
+      "lines": 50,
+      "contracts": [
+        "public DbSet<Community> Communities => Set<Community>();"
+      ]
+    },
+    {
+      "file": "Services/AuthService/src/auth.guard.ts",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/config.ts",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/controllers.ts",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/database.ts",
+      "lines": 50,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/dtos.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/internal.controller.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/main.ts",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/migrate.ts",
+      "lines": 64,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/outbox.ts",
+      "lines": 73,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/passwords.ts",
+      "lines": 39,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/tokens.ts",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuthService/src/users.service.ts",
+      "lines": 102,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditServicePython/audit_service/consumer.py",
+      "lines": 75,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditServicePython/audit_service/main.py",
+      "lines": 71,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditServicePython/audit_service/models.py",
+      "lines": 45,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditServicePython/audit_service/__init__.py",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditServicePython/tests/test_contracts.py",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/appsettings.json",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/AuditConsumer.cs",
+      "lines": 87,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Climate.Audit.Api.csproj",
+      "lines": 20,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\"><PrivateAssets>all</PrivateAssets><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets></PackageReference>",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Program.cs",
+      "lines": 26,
+      "contracts": [
+        "if (!builder.Configuration.GetValue<bool>(\"OpenApi:ExportOnly\")) builder.Services.AddHostedService<AuditConsumer>();"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/Climate.Audit.Application.csproj",
+      "lines": 16,
+      "contracts": [
+        "<ItemGroup><PackageReference Include=\"Microsoft.Extensions.DependencyInjection.Abstractions\" Version=\"10.0.10\" /></ItemGroup>",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/DependencyInjection.cs",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Domain/Climate.Audit.Domain.csproj",
+      "lines": 10,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Climate.Audit.Infrastructure.csproj",
+      "lines": 20,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\"><PrivateAssets>all</PrivateAssets><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets></PackageReference>",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/DependencyInjection.cs",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/AuditDatabaseInitializer.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/AuditDbContext.cs",
+      "lines": 8,
+      "contracts": [
+        "public DbSet<AuditLog> AuditLogs=>Set<AuditLog>();"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/AuditLogConfiguration.cs",
+      "lines": 16,
+      "contracts": [
+        "b.HasIndex(x=>x.Timestamp); b.HasIndex(x=>new{x.UserId,x.Timestamp}); b.HasIndex(x=>new{x.Action,x.Timestamp});"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/AuditLogRepository.cs",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/Migrations/20260817171943_InitialAudit.cs",
+      "lines": 58,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/Migrations/20260817171943_InitialAudit.Designer.cs",
+      "lines": 81,
+      "contracts": [
+        "b.HasIndex(\"Timestamp\");",
+        "b.HasIndex(\"Action\", \"Timestamp\");",
+        "b.HasIndex(\"UserId\", \"Timestamp\");"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/Migrations/20260927192955_AddAuditCorrelation.cs",
+      "lines": 29,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/Migrations/20260927192955_AddAuditCorrelation.Designer.cs",
+      "lines": 85,
+      "contracts": [
+        "b.HasIndex(\"Timestamp\");",
+        "b.HasIndex(\"Action\", \"Timestamp\");",
+        "b.HasIndex(\"UserId\", \"Timestamp\");"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Infrastructure/Persistence/Migrations/AuditDbContextModelSnapshot.cs",
+      "lines": 82,
+      "contracts": [
+        "b.HasIndex(\"Timestamp\");",
+        "b.HasIndex(\"Action\", \"Timestamp\");",
+        "b.HasIndex(\"UserId\", \"Timestamp\");"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Domain/Auditing/AuditLog.cs",
+      "lines": 28,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/Abstractions/IAuditLogRepository.cs",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/Auditing/AuditModels.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/Auditing/AuditService.cs",
+      "lines": 35,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Application/Auditing/IAuditService.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Configuration/SecurityOptions.cs",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Controllers/AuditController.cs",
+      "lines": 13,
+      "contracts": [
+        "[HttpGet] public async Task<ActionResult<IReadOnlyCollection<AuditResponse>>> List([FromQuery]Guid? userId,[FromQuery]string? action,[FromQuery]string? resource,[FromQuery]DateTimeOffset? from,[FromQuery]DateTimeOffset? to,CancellationToken ct)",
+        "[HttpGet(\"{id:guid}\")] public async Task<ActionResult<AuditResponse>> Get(Guid id,CancellationToken ct)=>this.ToActionResult(await service.GetAsync(id,ct));"
+      ]
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Errors/ResultExtensions.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/AuditService/Climate.Audit.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/test/java/climate/alerts/DomainTests.java",
+      "lines": 57,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/test/java/climate/alerts/PostgresIntegrationTest.java",
+      "lines": 73,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/resources/application.yml",
+      "lines": 38,
+      "contracts": [
+        "base-path: /health"
+      ]
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/resources/schema.sql",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/AlertApplication.java",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/Api.java",
+      "lines": 62,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/Delivery.java",
+      "lines": 65,
+      "contracts": [
+        "private HttpRequest.Builder request(String base,String path,String correlation){return HttpRequest.newBuilder(URI.create(base.endsWith(\"/\")?base+path:base+\"/\"+path))"
+      ]
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/DomainService.java",
+      "lines": 77,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/Models.java",
+      "lines": 64,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/Security.java",
+      "lines": 56,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertServiceJava/src/main/java/climate/alerts/Store.java",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/appsettings.json",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Climate.Alerts.Api.csproj",
+      "lines": 21,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.AspNetCore.OpenApi\" Version=\"10.0.8\" />",
+        "<PackageReference Include=\"Microsoft.OpenApi\" Version=\"2.11.0\" />",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Program.cs",
+      "lines": 91,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Climate.Alerts.Application.csproj",
+      "lines": 19,
+      "contracts": [
+        "<PackageReference Include=\"FluentValidation.DependencyInjectionExtensions\" Version=\"12.1.1\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/DependencyInjection.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Climate.Alerts.Domain.csproj",
+      "lines": 9,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Climate.Alerts.Infrastructure.csproj",
+      "lines": 23,
+      "contracts": [
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Design\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.SqlServer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"System.Security.Cryptography.Pkcs\" Version=\"10.0.13\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Http\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.Extensions.Options.ConfigurationExtensions\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/DependencyInjection.cs",
+      "lines": 47,
+      "contracts": [
+        "services.AddHttpClient<ISensorActivityClient, SensorActivityClient>(client =>",
+        "services.AddHttpClient<IEventHistoryClient, EventHistoryClient>((provider, client) =>"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Clients/EventHistoryClient.cs",
+      "lines": 32,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Clients/EventServiceOptions.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Clients/SensorActivityClient.cs",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/AlertConfiguration.cs",
+      "lines": 32,
+      "contracts": [
+        "builder.HasIndex(x => new { x.CommunityId, x.Status, x.GeneratedAt });",
+        "builder.HasIndex(alert => new { alert.SensorId, alert.AlertType, alert.IsActive });",
+        "builder.HasIndex(alert => new { alert.CommunityId, alert.IsActive });",
+        "builder.HasIndex(alert => new { alert.Level, alert.IsActive });",
+        "builder.HasIndex(alert => alert.GeneratedAt);"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/AlertRepository.cs",
+      "lines": 65,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/AlertRuleConfiguration.cs",
+      "lines": 18,
+      "contracts": [
+        "builder.HasIndex(x => new { x.SensorType, x.IsActive });"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/AlertsDatabaseInitializer.cs",
+      "lines": 32,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/AlertsDbContext.cs",
+      "lines": 13,
+      "contracts": [
+        "public DbSet<AlertRule> AlertRules => Set<AlertRule>();",
+        "public DbSet<ClimateAlert> Alerts => Set<ClimateAlert>();"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Risk/ConfiguredRiskRuleProvider.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Risk/DatabaseRiskEvaluationService.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Risk/RiskRulesOptions.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260817165748_InitialAlerts.cs",
+      "lines": 68,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260817165748_InitialAlerts.Designer.cs",
+      "lines": 94,
+      "contracts": [
+        "b.HasIndex(\"GeneratedAt\");",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Level\", \"IsActive\");",
+        "b.HasIndex(\"SensorId\", \"AlertType\", \"IsActive\");"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260927195433_Phase2OutboxAndCatalog.cs",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260927195433_Phase2OutboxAndCatalog.Designer.cs",
+      "lines": 117,
+      "contracts": [
+        "b.HasIndex(\"GeneratedAt\");",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Level\", \"IsActive\");",
+        "b.HasIndex(\"SensorId\", \"AlertType\", \"IsActive\");",
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260927202757_Phase2RulesWorkflowAndReadings.cs",
+      "lines": 170,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/20260927202757_Phase2RulesWorkflowAndReadings.Designer.cs",
+      "lines": 210,
+      "contracts": [
+        "b.HasIndex(\"SensorType\", \"IsActive\");",
+        "b.HasIndex(\"GeneratedAt\");",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Level\", \"IsActive\");",
+        "b.HasIndex(\"CommunityId\", \"Status\", \"GeneratedAt\");",
+        "b.HasIndex(\"SensorId\", \"AlertType\", \"IsActive\");",
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Infrastructure/Persistence/Migrations/AlertsDbContextModelSnapshot.cs",
+      "lines": 207,
+      "contracts": [
+        "b.HasIndex(\"SensorType\", \"IsActive\");",
+        "b.HasIndex(\"GeneratedAt\");",
+        "b.HasIndex(\"CommunityId\", \"IsActive\");",
+        "b.HasIndex(\"Level\", \"IsActive\");",
+        "b.HasIndex(\"CommunityId\", \"Status\", \"GeneratedAt\");",
+        "b.HasIndex(\"SensorId\", \"AlertType\", \"IsActive\");",
+        "b.HasIndex(\"PublishedAt\", \"CreatedAt\");"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Alerts/AlertLevel.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Alerts/AlertRule.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Alerts/AlertStatus.cs",
+      "lines": 2,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Alerts/ClimateAlert.cs",
+      "lines": 110,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Domain/Alerts/RiskType.cs",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Abstractions/IAlertRepository.cs",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Abstractions/IEventHistoryClient.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Abstractions/ISensorActivityClient.cs",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Alerts/AlertModels.cs",
+      "lines": 44,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Alerts/AlertService.cs",
+      "lines": 137,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Alerts/IAlertService.cs",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Risk/RiskEvaluationService.cs",
+      "lines": 37,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Application/Risk/Rules.cs",
+      "lines": 38,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Configuration/SecurityOptions.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Controllers/AlertRulesController.cs",
+      "lines": 72,
+      "contracts": [
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\")]",
+        "[HttpPost, Authorize(Roles = SystemRoles.Administrator)]",
+        "[HttpPut(\"{id:guid}\"), Authorize(Roles = SystemRoles.Administrator)]",
+        "[HttpPatch(\"{id:guid}/activate\"), Authorize(Roles = SystemRoles.Administrator)]",
+        "[HttpPatch(\"{id:guid}/deactivate\"), Authorize(Roles = SystemRoles.Administrator)]"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Controllers/AlertsController.cs",
+      "lines": 60,
+      "contracts": [
+        "[Route(\"api/v1/alerts\")]",
+        "[HttpGet]",
+        "[HttpGet(\"{id:guid}\", Name = nameof(GetById))]",
+        "[HttpPatch(\"{id:guid}/attend\"), Authorize(Policy = \"ManageAlerts\")]",
+        "[HttpPatch(\"{id:guid}/close\"), Authorize(Policy = \"ManageAlerts\")]",
+        "[HttpPatch(\"{id:guid}/resolve\")]"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Controllers/InternalEvaluationController.cs",
+      "lines": 43,
+      "contracts": [
+        "[Route(\"api/v1/internal/risk-evaluations\")]",
+        "[HttpPost]"
+      ]
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Errors/GlobalExceptionHandler.cs",
+      "lines": 38,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Errors/ResultExtensions.cs",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "Services/AlertService/Climate.Alerts.Api/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Gateway/Climate.Gateway/appsettings.Development.json",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "Gateway/Climate.Gateway/appsettings.json",
+      "lines": 260,
+      "contracts": []
+    },
+    {
+      "file": "Gateway/Climate.Gateway/Climate.Gateway.csproj",
+      "lines": 22,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"Microsoft.AspNetCore.Authentication.JwtBearer\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Swashbuckle.AspNetCore\" Version=\"10.2.3\" />",
+        "<PackageReference Include=\"Yarp.ReverseProxy\" Version=\"2.3.0\" />"
+      ]
+    },
+    {
+      "file": "Gateway/Climate.Gateway/Program.cs",
+      "lines": 98,
+      "contracts": [
+        "builder.Services.AddHttpClient(nameof(DownstreamHealthCheck)).ConfigureHttpClient(client=>client.Timeout=TimeSpan.FromSeconds(3));"
+      ]
+    },
+    {
+      "file": "Gateway/Climate.Gateway/Health/DownstreamHealthCheck.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Gateway/Climate.Gateway/Health/HealthResponseWriter.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Gateway/Climate.Gateway/Properties/launchSettings.json",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Climate.Contracts.csproj",
+      "lines": 16,
+      "contracts": [
+        "<PackageReference Include=\"RabbitMQ.Client\" Version=\"7.2.0\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Relational\" Version=\"10.0.10\" />",
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/DatabaseStartup.cs",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Climate.SharedKernel.csproj",
+      "lines": 9,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>"
+      ]
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Pagination/PagedResult.cs",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Pagination/PaginationDefaults.cs",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Results/ApplicationError.cs",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Results/ErrorType.cs",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Results/Result.cs",
+      "lines": 36,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.SharedKernel/Results/ResultOfT.cs",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Alerts/AlertGenerated.cs",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Alerts/AlertLevel.cs",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Alerts/RiskType.cs",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditActions.cs",
+      "lines": 39,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditLogRequested.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditMessagingExtensions.cs",
+      "lines": 20,
+      "contracts": [
+        "if (!configuration.GetValue<bool>(\"OpenApi:ExportOnly\")) services.AddHostedService<OutboxAuditWorker<TContext>>();"
+      ]
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditOutbox.cs",
+      "lines": 35,
+      "contracts": [
+        "entity.HasIndex(x => new { x.PublishedAt, x.CreatedAt });"
+      ]
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditTopology.cs",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditTransactionFilter.cs",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/AuditWriter.cs",
+      "lines": 29,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/BackgroundAuditPublisher.cs",
+      "lines": 62,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/IAuditEventPublisher.cs",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/OutboxAuditWorker.cs",
+      "lines": 44,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/RabbitMqAuditOptions.cs",
+      "lines": 30,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Audit/RabbitMqAuditTransport.cs",
+      "lines": 49,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Common/CorrelationHeaders.cs",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Common/IntegrationEvent.cs",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Events/ClimateEventRequested.cs",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Identity/SystemRoles.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Monitoring/SensorReadingRecorded.cs",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Realtime/RealtimeEnvelope.cs",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Realtime/RealtimeEventNames.cs",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Sensors/SensorSummary.cs",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "BuildingBlocks/Climate.Contracts/Sensors/SensorType.cs",
+      "lines": 14,
+      "contracts": []
+    }
+  ],
+  "tests": [
+    {
+      "file": "Climate.Alerts.Tests/Climate.Alerts.Tests.csproj",
+      "lines": 32,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.InMemory\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"Moq\" Version=\"4.20.72\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.Audit.Tests/Climate.Audit.Tests.csproj",
+      "lines": 30,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Sqlite\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"SQLitePCLRaw.bundle_e_sqlite3\" Version=\"3.0.5\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/AuditMessagingTests.cs",
+      "lines": 78,
+      "contracts": []
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/Climate.BuildingBlocks.Tests.csproj",
+      "lines": 26,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/DatabaseStartupTests.cs",
+      "lines": 45,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Events.Tests/Climate.Events.Tests.csproj",
+      "lines": 30,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.InMemory\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.Identity.Tests/Climate.Identity.Tests.csproj",
+      "lines": 31,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.InMemory\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"Moq\" Version=\"4.20.72\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Climate.Monitoring.Tests.csproj",
+      "lines": 32,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.InMemory\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"Moq\" Version=\"4.20.72\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.Sensors.Tests/Climate.Sensors.Tests.csproj",
+      "lines": 34,
+      "contracts": [
+        "<TargetFramework>net10.0</TargetFramework>",
+        "<PackageReference Include=\"coverlet.collector\" Version=\"6.0.4\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.InMemory\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"Microsoft.EntityFrameworkCore.Sqlite\" Version=\"10.0.10\" />",
+        "<PackageReference Include=\"SQLitePCLRaw.bundle_e_sqlite3\" Version=\"3.0.5\" />",
+        "<PackageReference Include=\"Microsoft.NET.Test.Sdk\" Version=\"17.14.1\" />",
+        "<PackageReference Include=\"Moq\" Version=\"4.20.72\" />",
+        "<PackageReference Include=\"xunit\" Version=\"2.9.3\" />",
+        "<PackageReference Include=\"xunit.runner.visualstudio\" Version=\"3.1.4\" />"
+      ]
+    },
+    {
+      "file": "Climate.Sensors.Tests/Communities/CommunityDomainTests.cs",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Communities/CommunityServiceTests.cs",
+      "lines": 51,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Sensors/AuditDecouplingTests.cs",
+      "lines": 77,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Sensors/SensorDomainTests.cs",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Sensors/SensorServiceTests.cs",
+      "lines": 114,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Sensors/SensorValidatorTests.cs",
+      "lines": 49,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Sensors.Tests/Sensors/TransactionalOutboxTests.cs",
+      "lines": 147,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Readings/CreateReadingRequestValidatorTests.cs",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Readings/MonitoringServiceTests.cs",
+      "lines": 186,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Readings/ReadingsApiTests.cs",
+      "lines": 56,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Readings/SensorReadingDomainTests.cs",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Monitoring.Tests/Simulation/SimulationServiceTests.cs",
+      "lines": 49,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Identity.Tests/Users/RequestValidatorTests.cs",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Identity.Tests/Users/UserServiceTests.cs",
+      "lines": 152,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Identity.Tests/Users/UserTests.cs",
+      "lines": 41,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Events.Tests/Events/ClimateEventServiceTests.cs",
+      "lines": 78,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Events.Tests/Events/EventStatisticsTests.cs",
+      "lines": 36,
+      "contracts": []
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/Contracts/IntegrationContractTests.cs",
+      "lines": 63,
+      "contracts": []
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/Contracts/SystemRolesTests.cs",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/Pagination/PagedResultTests.cs",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "Climate.BuildingBlocks.Tests/Results/ResultTests.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Audit.Tests/Auditing/AuditConsumerTests.cs",
+      "lines": 50,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Audit.Tests/Auditing/AuditServiceTests.cs",
+      "lines": 46,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Audit.Tests/Auditing/RabbitMqIntegrationTests.cs",
+      "lines": 101,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Alerts.Tests/Alerts/AlertServiceTests.cs",
+      "lines": 135,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Alerts.Tests/Alerts/ClimateAlertDomainTests.cs",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Alerts.Tests/Alerts/RulesWorkflowTests.cs",
+      "lines": 94,
+      "contracts": []
+    },
+    {
+      "file": "Climate.Alerts.Tests/Risk/RiskEvaluationServiceTests.cs",
+      "lines": 87,
+      "contracts": []
+    }
+  ],
+  "frontend": [
+    {
+      "file": "index.html",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "main.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "app/app.config.ts",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "app/app.html",
+      "lines": 2,
+      "contracts": []
+    },
+    {
+      "file": "app/app.routes.ts",
+      "lines": 161,
+      "contracts": [
+        "path: 'login',",
+        "loadComponent: () => import('./features/auth/pages/login-page/login-page').then(component => component.LoginPage),",
+        "path: '',",
+        "{ path: 'reports', loadComponent: () => import('./features/reports/reports-page').then(m => m.ReportsPage), data: { pageTitle: 'Reportes' }, title: 'Reportes | Climate Monitoring' },",
+        "path: 'dashboard',",
+        "loadComponent: () => import('./features/dashboard/pages/dashboard-page/dashboard-page').then(component => component.DashboardPage),",
+        "path: 'monitoring',",
+        "loadComponent: () => import('./features/monitoring/pages/monitoring-page/monitoring-page').then(component => component.MonitoringPage),",
+        "path: 'sensors',",
+        "loadComponent: () => import('./features/sensors/pages/sensors-page/sensors-page').then(component => component.SensorsPage),",
+        "path: 'sensors/new',",
+        "loadComponent: () => import('./features/sensors/pages/sensor-form-page/sensor-form-page').then(component => component.SensorFormPage),",
+        "path: 'sensors/:id/edit',",
+        "loadComponent: () => import('./features/sensors/pages/sensor-form-page/sensor-form-page').then(component => component.SensorFormPage),",
+        "path: 'sensors/:id',",
+        "loadComponent: () => import('./features/sensors/pages/sensor-detail-page/sensor-detail-page').then(component => component.SensorDetailPage),",
+        "path: 'communities',",
+        "loadComponent: () => import('./features/communities/pages/communities-page/communities-page').then(component => component.CommunitiesPage),",
+        "path: 'communities/new',",
+        "loadComponent: () => import('./features/communities/pages/community-form-page/community-form-page').then(component => component.CommunityFormPage),",
+        "path: 'communities/:id/edit',",
+        "loadComponent: () => import('./features/communities/pages/community-form-page/community-form-page').then(component => component.CommunityFormPage),",
+        "path: 'communities/:id',",
+        "loadComponent: () => import('./features/communities/pages/community-detail-page/community-detail-page').then(component => component.CommunityDetailPage),",
+        "{ path: 'readings', loadComponent: () => import('./features/monitoring/pages/readings-page').then(m => m.ReadingsPage), data: { pageTitle: 'Lecturas históricas' } },",
+        "{ path: 'alert-rules', loadComponent: () => import('./features/alert-rules/alert-rules-page').then(m => m.AlertRulesPage), data: { pageTitle: 'Reglas de alerta' } },",
+        "{ path: 'alert-rules/new', canActivate: [roleGuard], data: { roles: ['Administrator'], pageTitle: 'Crear regla' }, loadComponent: () => import('./features/alert-rules/alert-rule-form-page').then(m => m.AlertRuleFormPage) },",
+        "{ path: 'alert-rules/:id/edit', canActivate: [roleGuard], data: { roles: ['Administrator'], pageTitle: 'Editar regla' }, loadComponent: () => import('./features/alert-rules/alert-rule-form-page').then(m => m.AlertRuleFormPage) },",
+        "path: 'alerts',",
+        "loadComponent: () => import('./features/alerts/pages/alerts-page/alerts-page').then(component => component.AlertsPage),",
+        "path: 'alerts/:id',",
+        "loadComponent: () => import('./features/alerts/pages/alert-detail-page/alert-detail-page').then(component => component.AlertDetailPage),",
+        "path: 'events',",
+        "loadComponent: () => import('./features/events/pages/events-page/events-page').then(component => component.EventsPage),",
+        "path: 'events/:id',",
+        "loadComponent: () => import('./features/events/pages/event-detail-page/event-detail-page').then(component => component.EventDetailPage),",
+        "path: 'users',",
+        "loadComponent: () => import('./features/users/pages/users-page/users-page').then(component => component.UsersPage),",
+        "path: 'users/new',",
+        "loadComponent: () => import('./features/users/pages/user-create-page/user-create-page').then(component => component.UserCreatePage),",
+        "path: 'users/:id/edit',",
+        "loadComponent: () => import('./features/users/pages/user-edit-page/user-edit-page').then(component => component.UserEditPage),",
+        "path: 'users/:id',",
+        "loadComponent: () => import('./features/users/pages/user-detail-page/user-detail-page').then(component => component.UserDetailPage),",
+        "path: 'audit',",
+        "loadComponent: () => import('./features/audit/pages/audit-page/audit-page').then(component => component.AuditPage),",
+        "path: 'audit/:id',",
+        "loadComponent: () => import('./features/audit/pages/audit-detail-page/audit-detail-page').then(component => component.AuditDetailPage),",
+        "{ path: 'system', component: FeaturePlaceholderPage, canActivate: [roleGuard], data: { pageTitle: 'Configuración del sistema', roles: ['Administrator'] } },",
+        "{ path: 'forbidden', component: ForbiddenPage, data: { pageTitle: 'Acceso restringido' } },",
+        "{ path: '', pathMatch: 'full', redirectTo: 'dashboard' },",
+        "{ path: '**', redirectTo: 'dashboard' },"
+      ]
+    },
+    {
+      "file": "app/app.spec.ts",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "app/app.ts",
+      "lines": 19,
+      "contracts": [
+        "imports: [RouterOutlet, ToastContainer],"
+      ]
+    },
+    {
+      "file": "environments/environment.production.ts",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "environments/environment.ts",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/directives/modal.directive.spec.ts",
+      "lines": 36,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/directives/modal.directive.ts",
+      "lines": 59,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/testing/api-contracts.spec.ts",
+      "lines": 137,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/testing/phase2-contracts.spec.ts",
+      "lines": 71,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/models/api/auth.models.ts",
+      "lines": 29,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/models/api/problem-details.model.ts",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/components/toast-container/toast-container.html",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "app/shared/components/toast-container/toast-container.ts",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alert-rules/alert-rule-form-page.html",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alert-rules/alert-rule-form-page.ts",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alert-rules/alert-rules-api.service.ts",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alert-rules/alert-rules-page.html",
+      "lines": 16,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alert-rules/alert-rules-page.ts",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/dashboard-api.service.ts",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/features/reports/reports-api.service.ts",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/features/reports/reports-page.html",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "app/features/reports/reports-page.ts",
+      "lines": 93,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/models/user.models.ts",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/services/users-api.service.ts",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/user-create-page/user-create-page.ts",
+      "lines": 45,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/user-detail-page/user-detail-page.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/user-detail-page/user-detail-page.ts",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/user-edit-page/user-edit-page.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/user-edit-page/user-edit-page.ts",
+      "lines": 30,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/users-page/users-page.html",
+      "lines": 159,
+      "contracts": []
+    },
+    {
+      "file": "app/features/users/pages/users-page/users-page.ts",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/models/sensor.models.ts",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/services/sensors-api.service.ts",
+      "lines": 39,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensor-detail-page/sensor-detail-page.html",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensor-detail-page/sensor-detail-page.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensor-form-page/sensor-form-page.html",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensor-form-page/sensor-form-page.ts",
+      "lines": 62,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensors-page/sensors-page.html",
+      "lines": 140,
+      "contracts": []
+    },
+    {
+      "file": "app/features/sensors/pages/sensors-page/sensors-page.ts",
+      "lines": 60,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/components/simulated-value.ts",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/models/monitoring.models.ts",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/pages/readings-page.html",
+      "lines": 9,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/pages/readings-page.ts",
+      "lines": 24,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/services/monitoring-api.service.ts",
+      "lines": 59,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/store/monitoring.store.ts",
+      "lines": 139,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/pages/monitoring-page/monitoring-page.html",
+      "lines": 33,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/pages/monitoring-page/monitoring-page.ts",
+      "lines": 45,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/components/sensor-chart/sensor-chart.html",
+      "lines": 4,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/components/sensor-chart/sensor-chart.ts",
+      "lines": 34,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/components/simulation-control/simulation-control.html",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "app/features/monitoring/components/simulation-control/simulation-control.ts",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/models/event.models.ts",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/services/events-api.service.ts",
+      "lines": 26,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/pages/event-detail-page/event-detail-page.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/pages/event-detail-page/event-detail-page.ts",
+      "lines": 28,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/pages/events-page/events-page.html",
+      "lines": 149,
+      "contracts": []
+    },
+    {
+      "file": "app/features/events/pages/events-page/events-page.ts",
+      "lines": 41,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/store/dashboard.store.spec.ts",
+      "lines": 78,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/store/dashboard.store.ts",
+      "lines": 91,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/pages/dashboard-page/dashboard-page.html",
+      "lines": 42,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/pages/dashboard-page/dashboard-page.ts",
+      "lines": 31,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/components/active-alerts-panel/active-alerts-panel.html",
+      "lines": 29,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/components/active-alerts-panel/active-alerts-panel.spec.ts",
+      "lines": 44,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/components/active-alerts-panel/active-alerts-panel.ts",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/components/climate-metric-card/climate-metric-card.html",
+      "lines": 19,
+      "contracts": []
+    },
+    {
+      "file": "app/features/dashboard/components/climate-metric-card/climate-metric-card.ts",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/models/community.models.ts",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/services/communities-api.service.ts",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/communities-page/communities-page.html",
+      "lines": 4,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/communities-page/communities-page.ts",
+      "lines": 31,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/community-detail-page/community-detail-page.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/community-detail-page/community-detail-page.ts",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/community-form-page/community-form-page.html",
+      "lines": 3,
+      "contracts": []
+    },
+    {
+      "file": "app/features/communities/pages/community-form-page/community-form-page.ts",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "app/features/auth/pages/login-page/login-page.html",
+      "lines": 65,
+      "contracts": []
+    },
+    {
+      "file": "app/features/auth/pages/login-page/login-page.spec.ts",
+      "lines": 67,
+      "contracts": []
+    },
+    {
+      "file": "app/features/auth/pages/login-page/login-page.ts",
+      "lines": 64,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/models/audit.models.ts",
+      "lines": 22,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/services/audit-api.service.ts",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/pages/audit-detail-page/audit-detail-page.html",
+      "lines": 1,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/pages/audit-detail-page/audit-detail-page.ts",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/pages/audit-page/audit-page.html",
+      "lines": 132,
+      "contracts": []
+    },
+    {
+      "file": "app/features/audit/pages/audit-page/audit-page.ts",
+      "lines": 29,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/models/alert.models.ts",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/services/alerts-api.service.ts",
+      "lines": 35,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/pages/alert-detail-page/alert-detail-page.html",
+      "lines": 2,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/pages/alert-detail-page/alert-detail-page.ts",
+      "lines": 38,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/pages/alerts-page/alerts-page.html",
+      "lines": 5,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/pages/alerts-page/alerts-page.ts",
+      "lines": 60,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/components/alert-card/alert-card.html",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "app/features/alerts/components/alert-card/alert-card.ts",
+      "lines": 17,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth-api.service.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth-session.model.ts",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth.service.spec.ts",
+      "lines": 37,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth.service.ts",
+      "lines": 32,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth.store.spec.ts",
+      "lines": 59,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/auth.store.ts",
+      "lines": 52,
+      "contracts": []
+    },
+    {
+      "file": "app/core/auth/token-storage.service.ts",
+      "lines": 44,
+      "contracts": []
+    },
+    {
+      "file": "app/core/config/app-config.model.ts",
+      "lines": 10,
+      "contracts": []
+    },
+    {
+      "file": "app/core/config/app-config.token.ts",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "app/core/config/runtime-config.spec.ts",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "app/core/config/runtime-config.ts",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "app/core/guards/auth.guard.ts",
+      "lines": 8,
+      "contracts": []
+    },
+    {
+      "file": "app/core/guards/guards.spec.ts",
+      "lines": 25,
+      "contracts": []
+    },
+    {
+      "file": "app/core/guards/guest.guard.ts",
+      "lines": 7,
+      "contracts": []
+    },
+    {
+      "file": "app/core/guards/pending-changes.guard.ts",
+      "lines": 4,
+      "contracts": []
+    },
+    {
+      "file": "app/core/guards/role.guard.ts",
+      "lines": 11,
+      "contracts": []
+    },
+    {
+      "file": "app/core/http/api-error.model.ts",
+      "lines": 6,
+      "contracts": []
+    },
+    {
+      "file": "app/core/http/problem-details.service.ts",
+      "lines": 27,
+      "contracts": []
+    },
+    {
+      "file": "app/core/interceptors/api-error.interceptor.ts",
+      "lines": 23,
+      "contracts": []
+    },
+    {
+      "file": "app/core/interceptors/auth.interceptor.ts",
+      "lines": 13,
+      "contracts": []
+    },
+    {
+      "file": "app/core/interceptors/interceptors.spec.ts",
+      "lines": 75,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/navigation.model.ts",
+      "lines": 14,
+      "contracts": [
+        "export interface NavItem { readonly label: string; readonly path: string; readonly icon: NavIconName; }",
+        "{ label: 'Monitoreo', path: '/monitoring', icon: 'monitoring' }, { label: 'Sensores', path: '/sensors', icon: 'sensors' },",
+        "{ label: 'Comunidades', path: '/communities', icon: 'communities' }, { label: 'Alertas', path: '/alerts', icon: 'alerts' },",
+        "{ label: 'Reglas de alerta', path: '/alert-rules', icon: 'alerts' },",
+        "{ label: 'Lecturas', path: '/readings', icon: 'monitoring' },",
+        "{ label: 'Historial', path: '/events', icon: 'events' },",
+        "{ label: 'Reportes', path: '/reports', icon: 'events' },",
+        "{ label: 'Usuarios', path: '/users', icon: 'users' }, { label: 'Auditoría', path: '/audit', icon: 'audit' },",
+        "{ label: 'Sistema', path: '/system', icon: 'system' },"
+      ]
+    },
+    {
+      "file": "app/core/notifications/toast.service.ts",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "app/core/realtime/realtime.service.ts",
+      "lines": 109,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/app-shell/app-shell.html",
+      "lines": 12,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/app-shell/app-shell.ts",
+      "lines": 47,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/core-welcome-page/core-welcome-page.ts",
+      "lines": 15,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/feature-placeholder-page/feature-placeholder-page.ts",
+      "lines": 18,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/forbidden-page/forbidden-page.ts",
+      "lines": 24,
+      "contracts": [
+        "imports: [RouterLink],"
+      ]
+    },
+    {
+      "file": "app/core/layout/nav-icon/nav-icon.html",
+      "lines": 14,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/nav-icon/nav-icon.ts",
+      "lines": 5,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/sidebar/sidebar.html",
+      "lines": 20,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/sidebar/sidebar.ts",
+      "lines": 25,
+      "contracts": [
+        "imports: [RouterLink, RouterLinkActive, NavIcon],"
+      ]
+    },
+    {
+      "file": "app/core/layout/topbar/topbar.html",
+      "lines": 21,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/topbar/topbar.spec.ts",
+      "lines": 69,
+      "contracts": []
+    },
+    {
+      "file": "app/core/layout/topbar/topbar.ts",
+      "lines": 61,
+      "contracts": []
+    }
+  ]
+}

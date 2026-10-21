@@ -83,6 +83,16 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 WebApplication app = builder.Build();
+if (builder.Configuration.GetValue<bool>("CommunityService:Enabled"))
+    app.Use(async (context, next) =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api/v1/communities"))
+        {
+            context.Response.StatusCode = StatusCodes.Status410Gone;
+            return;
+        }
+        await next(context);
+    });
 app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())

@@ -1,0 +1,47 @@
+# Stage C rollout. Keep the original Compose file and all legacy volumes for rollback.
+# docker compose -f docker-compose.yml -f docker-compose.phase3-auth.yml up -d --build
+services:
+  auth-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: auth
+      POSTGRES_PASSWORD: ${AUTH_POSTGRES_PASSWORD:?AUTH_POSTGRES_PASSWORD is required}
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth -d auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  identity-service:
+    build:
+      context: ./src/Services/AuthService
+      dockerfile: Dockerfile
+    environment: !override
+      NODE_ENV: production
+      PORT: 8080
+      AUTH_DATABASE_URL: postgresql://auth:${AUTH_POSTGRES_PASSWORD_URI:?URL-encoded password is required}@auth-postgres:5432/auth
+      JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY:?INTERNAL_API_KEY is required}
+      JWT_ISSUER: ClimateMonitoring.Identity
+      JWT_AUDIENCE: ClimateMonitoring.Client
+      JWT_EXPIRATION_MINUTES: ${JWT_EXPIRATION_MINUTES:-60}
+      RABBITMQ_URL: amqp://${RABBITMQ_USER_URI:?URL-encoded username is required}:${RABBITMQ_PASSWORD_URI:?URL-encoded password is required}@rabbitmq:5672
+      ADMIN_SEED_USERNAME: ${ADMIN_SEED_USERNAME:-admin}
+      ADMIN_SEED_EMAIL: ${ADMIN_SEED_EMAIL:-admin@example.com}
+      ADMIN_SEED_PASSWORD: ${AUTH_ADMIN_SEED_PASSWORD:-}
+    depends_on: !override
+      auth-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/health/ready').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  auth-postgres-data:

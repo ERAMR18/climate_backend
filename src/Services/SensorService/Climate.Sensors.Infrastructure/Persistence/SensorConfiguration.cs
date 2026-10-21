@@ -27,9 +27,6 @@ internal sealed class SensorConfiguration : IEntityTypeConfiguration<Sensor>
         builder.HasIndex(sensor => new { sensor.CommunityId, sensor.IsActive });
         builder.HasIndex(sensor => new { sensor.Type, sensor.IsActive });
 
-        builder.HasOne(sensor => sensor.Community)
-            .WithMany()
-            .HasForeignKey(sensor => sensor.CommunityId)
-            .OnDelete(DeleteBehavior.Restrict);
+        builder.Ignore(sensor => sensor.Community);
     }
 }

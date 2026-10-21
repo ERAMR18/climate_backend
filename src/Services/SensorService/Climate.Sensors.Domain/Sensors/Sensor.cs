@@ -36,6 +36,8 @@ public sealed class Sensor
     public string Unit { get; private set; } = string.Empty;
     public Guid CommunityId { get; private set; }
     public Community Community { get; private set; } = null!;
+    // Read-only domain snapshot hydrated through the owning service; never persisted with Sensor.
+    public void AttachCommunitySnapshot(Community community) => Community = community;
     public decimal Latitude { get; private set; }
     public decimal Longitude { get; private set; }
     public bool IsActive { get; private set; }

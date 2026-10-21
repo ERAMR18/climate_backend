@@ -22,3 +22,5 @@ data:
   DemoSeed__Enabled: 'false'
   AdminSeed__Username: admin
   AdminSeed__Email: admin@example.invalid
+  CommunityService__BaseUrl: http://community-service:8080/
+  CommunityService__Enabled: 'true'

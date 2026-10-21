@@ -4,7 +4,11 @@ using Climate.Events.Domain.Events;
 namespace Climate.Events.Application.Events;
 
 public sealed record EventFilter(RiskType? RiskType, AlertLevel? AlertLevel, Guid? SensorId,
-    Guid? CommunityId, DateTimeOffset? From, DateTimeOffset? To);
+    Guid? CommunityId, DateTimeOffset? From, DateTimeOffset? To)
+{
+    public int? Page { get; init; }
+    public int PageSize { get; init; } = 250;
+}
 
 public sealed record EventResponse(Guid Id, Guid AlertId, Guid SensorId, Guid CommunityId,
     RiskType RiskType, AlertLevel AlertLevel, string Description, DateTimeOffset OccurredAt,

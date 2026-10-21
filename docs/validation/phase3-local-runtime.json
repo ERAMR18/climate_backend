@@ -1,0 +1,22 @@
+{
+    "isolatedDataVolumes":  [
+                                "climate-phase3-local_sqlserver-data",
+                                "climate-phase3-local_rabbitmq-data",
+                                "climate-phase3-local_auth-postgres-data",
+                                "climate-phase3-local_community-postgres-data",
+                                "climate-phase3-local_alert-postgres-data",
+                                "climate-phase3-local_audit-mongo-data",
+                                "climate-phase3-local_report-mongo-data",
+                                "climate-phase3-local_report-files"
+                            ],
+    "authLogin":  true,
+    "project":  "climate-phase3-local",
+    "passed":  true,
+    "aggregateHealth":  "Healthy",
+    "reportTypes":  8,
+    "timestamp":  "2026-10-21T19:39:22.4826784Z",
+    "newSensorCount":  0,
+    "gateway":  "http://localhost:8080",
+    "frontend":  "http://localhost:4200",
+    "newCommunityCount":  0
+}

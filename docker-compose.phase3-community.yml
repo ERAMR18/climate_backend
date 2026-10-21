@@ -1,0 +1,61 @@
+# Add after the Auth overlay only after verifying community migration.
+services:
+  community-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: community
+      POSTGRES_USER: community
+      POSTGRES_PASSWORD: ${COMMUNITY_POSTGRES_PASSWORD:?COMMUNITY_POSTGRES_PASSWORD is required}
+    volumes:
+      - community-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U community -d community"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  community-service:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: src/Services/CommunityService/Climate.Communities.Api/Dockerfile
+    environment:
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__CommunityDb: Host=community-postgres;Database=community;Username=community;Password=${COMMUNITY_POSTGRES_PASSWORD}
+      Jwt__Issuer: ClimateMonitoring.Identity
+      Jwt__Audience: ClimateMonitoring.Client
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+      InternalApi__ApiKey: ${INTERNAL_API_KEY:?INTERNAL_API_KEY is required}
+      SensorService__BaseUrl: http://sensor-service:8080/
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER:?RABBITMQ_USER is required}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?RABBITMQ_PASSWORD is required}
+    depends_on:
+      community-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "dotnet", "/app/health/Climate.HealthProbe.dll", "http://localhost:8080/health/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    security_opt: ["no-new-privileges:true"]
+
+  sensor-service:
+    environment:
+      CommunityService__Enabled: "true"
+      CommunityService__BaseUrl: http://community-service:8080/
+      DemoSeed__Enabled: "false"
+
+  gateway:
+    environment:
+      ReverseProxy__Routes__communities__ClusterId: communities
+      ReverseProxy__Clusters__communities__Destinations__primary__Address: http://community-service:8080/
+      DownstreamHealthEndpoints__6: http://community-service:8080/health
+
+  monitoring-service:
+    environment:
+      CommunityService__BaseUrl: http://community-service:8080/
+
+volumes:
+  community-postgres-data:

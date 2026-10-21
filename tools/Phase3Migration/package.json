@@ -1,0 +1,7 @@
+{
+  "name": "climate-phase3-migration-tools",
+  "private": true,
+  "version": "3.0.0",
+  "scripts": { "communities": "node communities.cjs", "alerts": "node alerts.cjs", "audit": "node audit.cjs" },
+  "dependencies": { "mssql": "^12.7.10", "pg": "^8.16.0", "mongodb": "^6.20.0" }
+}

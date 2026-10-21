@@ -7,8 +7,9 @@ namespace Climate.Events.Application.Events;
 public sealed class ClimateEventService(IClimateEventRepository repository) : IClimateEventService
 {
     public async Task<IReadOnlyCollection<EventResponse>> ListAsync(EventFilter filter, CancellationToken cancellationToken) =>
-        (await repository.ListAsync(filter.RiskType, filter.AlertLevel, filter.SensorId, filter.CommunityId,
-            filter.From, filter.To, cancellationToken)).Select(EventResponse.FromEntity).ToArray();
+        (filter.Page.HasValue ? await repository.ListPageAsync(filter, cancellationToken)
+            : await repository.ListAsync(filter.RiskType, filter.AlertLevel, filter.SensorId, filter.CommunityId,
+                filter.From, filter.To, cancellationToken)).Select(EventResponse.FromEntity).ToArray();
 
     public async Task<Result<EventResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {

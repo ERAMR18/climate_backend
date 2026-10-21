@@ -18,14 +18,16 @@ internal sealed class GlobalExceptionHandler(
         CancellationToken cancellationToken)
     {
         LogUnhandledException(logger, httpContext.TraceIdentifier, exception);
-        httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        int status = exception is HttpRequestException or TaskCanceledException
+            ? StatusCodes.Status503ServiceUnavailable : StatusCodes.Status500InternalServerError;
+        httpContext.Response.StatusCode = status;
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
             ProblemDetails = new ProblemDetails
             {
-                Status = StatusCodes.Status500InternalServerError,
-                Title = "An unexpected error occurred.",
+                Status = status,
+                Title = status == 503 ? "Community dependency unavailable." : "An unexpected error occurred.",
                 Detail = "The server could not complete the request.",
                 Extensions = { ["traceId"] = httpContext.TraceIdentifier }
             },

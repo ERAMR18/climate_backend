@@ -20,6 +20,14 @@ public static class DependencyInjection
         services.AddHealthChecks().AddDbContextCheck<SensorsDbContext>("sensor-database");
         services.AddOptions<DemoSeedOptions>().Bind(configuration.GetSection(DemoSeedOptions.SectionName));
         services.AddScoped<ISensorCatalogRepository, SensorCatalogRepository>();
+        services.AddHttpContextAccessor();
+        services.AddSingleton(new CommunityDirectoryOptions(configuration.GetValue<bool>("CommunityService:Enabled"),
+            configuration["InternalApi:ApiKey"] ?? string.Empty));
+        services.AddHttpClient<CommunityDirectory>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["CommunityService:BaseUrl"] ?? "http://localhost:5107/");
+            client.Timeout = TimeSpan.FromSeconds(10);
+        });
         return services;
     }
 }

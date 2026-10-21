@@ -1,0 +1,62 @@
+services:
+  report-mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: reports
+      MONGO_INITDB_ROOT_PASSWORD: ${REPORT_MONGO_PASSWORD:?REPORT_MONGO_PASSWORD is required}
+    volumes:
+      - report-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD","mongosh","--quiet","--eval","quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  report-service:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: src/Services/ReportService/Dockerfile
+    environment:
+      MONGO_URL: mongodb://reports:${REPORT_MONGO_PASSWORD_URI:?URL-encoded report Mongo password is required}@report-mongo:27017/?authSource=admin
+      MONGO_DATABASE: reports
+      JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+      INTERNAL_API_KEY: ${INTERNAL_API_KEY:?INTERNAL_API_KEY is required}
+      AUTH_SERVICE_URL: http://identity-service:8080/
+      COMMUNITY_SERVICE_URL: http://community-service:8080/
+      SENSOR_SERVICE_URL: http://sensor-service:8080/
+      MONITORING_SERVICE_URL: http://monitoring-service:8080/
+      ALERT_SERVICE_URL: http://alert-service:8080/
+      EVENT_SERVICE_URL: http://event-service:8080/
+      RABBITMQ_URL: amqp://${RABBITMQ_USER_URI:?URL-encoded username is required}:${RABBITMQ_PASSWORD_URI:?URL-encoded password is required}@rabbitmq:5672/
+      REPORT_STORAGE_DIRECTORY: /data/reports
+      REPORT_MAX_ROWS: ${REPORT_MAX_ROWS:-50000}
+      REPORT_RETENTION_DAYS: ${REPORT_RETENTION_DAYS:-30}
+      REPORT_RENDER_TIMEOUT_SECONDS: ${REPORT_RENDER_TIMEOUT_SECONDS:-180}
+      REPORT_MAX_PENDING_PER_USER: ${REPORT_MAX_PENDING_PER_USER:-3}
+      SENSOR_COMMUNICATION_TIMEOUT_SECONDS: ${SENSOR_COMMUNICATION_TIMEOUT_SECONDS:-900}
+      RAINFALL_MODE: ${RAINFALL_MODE:-unknown}
+    volumes:
+      - report-files:/data/reports
+    depends_on:
+      report-mongo: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 1g
+    cpus: 2
+  gateway:
+    environment:
+      ReverseProxy__Routes__reports__ClusterId: reports
+      ReverseProxy__Routes__reports__AuthorizationPolicy: Default
+      ReverseProxy__Routes__reports__Match__Path: /api/reports/{**remainder}
+      ReverseProxy__Routes__reports__Transforms__0__PathRemovePrefix: /api/reports
+      ReverseProxy__Routes__reports__Transforms__1__PathPrefix: /api/v1/reports
+      ReverseProxy__Clusters__reports__Destinations__primary__Address: http://report-service:8080/
+      DownstreamHealthEndpoints__7: http://report-service:8080/health
+volumes:
+  report-mongo-data:
+  report-files:

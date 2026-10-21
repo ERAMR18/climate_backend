@@ -51,8 +51,8 @@ deployments = [x for x in objects if x['kind'] == 'Deployment']
 services = {x['metadata']['name']: x for x in objects if x['kind'] == 'Service'}
 configs = {x['metadata']['name']: x['data'] for x in objects if x['kind'] == 'ConfigMap'}
 workloads = deployments + [x for x in objects if x['kind'] == 'StatefulSet']
-require(len(deployments) == 8, 'Expected eight application Deployments.')
-require(len(workloads) == 9, 'Expected the eight Deployments and RabbitMQ StatefulSet.')
+require(len(deployments) == 10, 'Expected ten application Deployments in Phase 3.')
+require(len(workloads) == 11, 'Expected ten Deployments and RabbitMQ StatefulSet.')
 require(not any(x['kind'] == 'Secret' for x in objects), 'Example secrets must not be applied by kustomize.')
 require(not any('sqlserver' in x['metadata']['name'].lower() for x in workloads), 'SQL Server must stay outside Kubernetes.')
 for service in services.values():
@@ -76,7 +76,7 @@ for workload in workloads:
 for config in configs.values():
     for key, value in config.items():
         require(not any(word in key.lower() for word in ['password','signingkey','apikey','connectionstrings']), 'Secret value in ConfigMap.')
-        if key.endswith('__BaseUrl') or key.startswith('ReverseProxy__') or key.startswith('DownstreamHealthEndpoints__'):
+        if key.endswith('__BaseUrl') or (key.startswith('ReverseProxy__') and key.endswith('__Address')) or key.startswith('DownstreamHealthEndpoints__'):
             require(urlparse(value).hostname in services, f'Internal URL does not use a Kubernetes Service: {key}')
 broker = next(x for x in workloads if x['metadata']['name'] == 'rabbitmq')
 require(broker['spec'].get('volumeClaimTemplates'), 'RabbitMQ requires a persistent claim template.')

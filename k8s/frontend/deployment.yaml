@@ -30,7 +30,7 @@ spec:
           type: RuntimeDefault
       containers:
       - name: frontend
-        image: climate/frontend:phase2
+        image: climate/frontend:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http

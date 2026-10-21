@@ -12,10 +12,12 @@ public sealed class EventsController(IClimateEventService service) : ControllerB
     [HttpGet]
     public async Task<ActionResult<IReadOnlyCollection<EventResponse>>> List([FromQuery] RiskType? riskType,
         [FromQuery] AlertLevel? alertLevel, [FromQuery] Guid? sensorId, [FromQuery] Guid? communityId,
-        [FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to, CancellationToken token)
+        [FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to,
+        [FromQuery] int? page = null, [FromQuery] int pageSize = 250, CancellationToken token = default)
     {
         if (from > to) return ValidationProblem("'from' must be before or equal to 'to'.");
-        return Ok(await service.ListAsync(new(riskType, alertLevel, sensorId, communityId, from, to), token));
+        if (page is < 1 or > 1000000 || pageSize is < 1 or > 500) return Problem(statusCode: 422, title: "Invalid pagination.");
+        return Ok(await service.ListAsync(new(riskType, alertLevel, sensorId, communityId, from, to) { Page = page, PageSize = pageSize }, token));
     }
 
     [HttpGet("{id:guid}")]

@@ -1,0 +1,35 @@
+services:
+  audit-mongo:
+    image: mongo:8.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: audit
+      MONGO_INITDB_ROOT_PASSWORD: ${AUDIT_MONGO_PASSWORD:?AUDIT_MONGO_PASSWORD is required}
+    volumes:
+      - audit-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  audit-service:
+    build:
+      context: .
+      dockerfile: src/Services/AuditServicePython/Dockerfile
+    environment: !override
+      MONGO_URL: mongodb://audit:${AUDIT_MONGO_PASSWORD_URI:?URL-encoded audit Mongo password is required}@audit-mongo:27017/?authSource=admin
+      MONGO_DATABASE: audit
+      JWT_SIGNING_KEY: ${JWT_SIGNING_KEY:?JWT_SIGNING_KEY is required}
+      JWT_ISSUER: ClimateMonitoring.Identity
+      JWT_AUDIENCE: ClimateMonitoring.Client
+      RABBITMQ_URL: amqp://${RABBITMQ_USER_URI:?URL-encoded username is required}:${RABBITMQ_PASSWORD_URI:?URL-encoded password is required}@rabbitmq:5672/
+    depends_on: !override
+      audit-mongo:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+volumes:
+  audit-mongo-data:

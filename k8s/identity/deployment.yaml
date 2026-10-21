@@ -24,13 +24,14 @@ spec:
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1654
-        runAsGroup: 1654
+        runAsUser: 1000
+        runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
+        fsGroup: 1000
       containers:
       - name: identity
-        image: climate/identity:phase2
+        image: climate/auth:phase3
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
@@ -66,7 +67,7 @@ spec:
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /health
+            path: /health/ready
             port: http
           periodSeconds: 10
           timeoutSeconds: 10
@@ -75,36 +76,30 @@ spec:
         - name: tmp
           mountPath: /tmp
         env:
-        - name: Jwt__SigningKey
+        - name: JWT_SIGNING_KEY
           valueFrom:
             secretKeyRef:
               name: climate-secrets
               key: JWT_SIGNING_KEY
-        - name: ConnectionStrings__IdentityDb
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: SQL_IDENTITY_CONNECTION
-        - name: RABBITMQ_USER
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: RABBITMQ_USER
-        - name: RABBITMQ_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: climate-secrets
-              key: RABBITMQ_PASSWORD
-        - name: InternalApi__ApiKey
+        - name: INTERNAL_API_KEY
           valueFrom:
             secretKeyRef:
               name: climate-secrets
               key: INTERNAL_API_KEY
-        - name: AdminSeed__Password
+        - name: AUTH_DATABASE_URL
           valueFrom:
             secretKeyRef:
               name: climate-secrets
-              key: ADMIN_SEED_PASSWORD
+              key: AUTH_DATABASE_URL
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: RABBITMQ_URL
+        - name: NODE_ENV
+          value: production
+        - name: PORT
+          value: '8080'
       volumes:
       - name: tmp
         emptyDir: {}

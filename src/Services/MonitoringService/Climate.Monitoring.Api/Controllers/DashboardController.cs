@@ -18,7 +18,8 @@ public sealed class DashboardController(MonitoringDbContext db, IHttpClientFacto
     public async Task<ActionResult<DashboardSummary>> Get([FromQuery] Guid? communityId, CancellationToken token)
     {
         string filter = communityId.HasValue ? $"communityId={communityId:D}&" : string.Empty;
-        var communitiesTask = Fetch("SensorService", "api/v1/communities", token);
+        string communityOwner = string.IsNullOrWhiteSpace(configuration["CommunityService:BaseUrl"]) ? "SensorService" : "CommunityService";
+        var communitiesTask = Fetch(communityOwner, "api/v1/communities", token);
         var sensorsTask = Fetch("SensorService", $"api/v1/sensors?{filter}", token);
         var alertsTask = Fetch("AlertService", $"api/v1/alerts?{filter}isActive=true", token);
         var eventsTask = Fetch("EventService", $"api/v1/events/statistics?{filter}", token);
@@ -33,6 +34,11 @@ public sealed class DashboardController(MonitoringDbContext db, IHttpClientFacto
         var current = await query.GroupBy(x => x.SensorId)
             .Select(g => g.OrderByDescending(x => x.RecordedAt).First()).ToArrayAsync(token);
         var since = DateTimeOffset.UtcNow.AddHours(-24);
+        DashboardClimateStatistic[] climateStatistics = await query.Where(x => x.RecordedAt >= since)
+            .GroupBy(x => new { x.SensorType, x.Unit })
+            .Select(g => new DashboardClimateStatistic(g.Key.SensorType, g.Key.Unit, g.Count(),
+                g.Average(x => x.Value), g.Min(x => x.Value), g.Max(x => x.Value)))
+            .ToArrayAsync(token);
         var evolution = await query.Where(x => x.RecordedAt >= since)
             .GroupBy(x => new { x.SensorType, x.Unit, x.RecordedAt.Year, x.RecordedAt.Month, x.RecordedAt.Day, x.RecordedAt.Hour })
             .Select(g => new { g.Key.SensorType, g.Key.Unit, g.Key.Year, g.Key.Month, g.Key.Day, g.Key.Hour, Value = g.Average(x => x.Value) })
@@ -47,7 +53,7 @@ public sealed class DashboardController(MonitoringDbContext db, IHttpClientFacto
             alerts.Count(x => x.GetProperty("status").GetString() == "Active"),
             alerts.GroupBy(x => x.GetProperty("level").GetString()!).ToDictionary(g => g.Key, g => g.Count()),
             communities, sensors, alerts, current.Select(SensorReadingResponse.FromEntity).ToArray(),
-            simulation.GetStatus(), await eventsTask, points));
+            simulation.GetStatus(), await eventsTask, points, climateStatistics));
     }
 
     private async Task<JsonElement> Fetch(string service, string path, CancellationToken token)
@@ -63,8 +69,11 @@ public sealed class DashboardController(MonitoringDbContext db, IHttpClientFacto
 }
 
 public sealed record DashboardChartPoint(SensorType SensorType, string Unit, DateTimeOffset Timestamp, decimal Value);
+public sealed record DashboardClimateStatistic(SensorType SensorType, string Unit, int Count,
+    decimal Average, decimal Minimum, decimal Maximum);
 public sealed record DashboardSummary(int CommunityCount, int ActiveSensorCount, int InactiveSensorCount,
     int ActiveAlertCount, IReadOnlyDictionary<string, int> ByAlertLevel,
     IReadOnlyCollection<JsonElement> Communities, IReadOnlyCollection<JsonElement> Sensors,
     IReadOnlyCollection<JsonElement> Alerts, IReadOnlyCollection<SensorReadingResponse> Readings,
-    SimulationStatusResponse Simulation, JsonElement Events, IReadOnlyCollection<DashboardChartPoint> Evolution);
+    SimulationStatusResponse Simulation, JsonElement Events, IReadOnlyCollection<DashboardChartPoint> Evolution,
+    IReadOnlyCollection<DashboardClimateStatistic> ClimateStatistics);

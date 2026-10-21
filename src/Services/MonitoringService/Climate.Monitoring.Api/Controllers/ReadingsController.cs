@@ -14,12 +14,14 @@ public sealed class ReadingsController(MonitoringDbContext db, ISensorCatalogCli
     [HttpGet("readings")]
     public async Task<ActionResult<ReadingPage>> List([FromQuery] Guid? communityId, [FromQuery] Guid? sensorId,
         [FromQuery] DateTimeOffset? from, [FromQuery] DateTimeOffset? to,
-        [FromQuery] int page = 1, [FromQuery] int pageSize = 100, CancellationToken token = default)
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 100,
+        [FromQuery] SensorType? type = null, CancellationToken token = default)
     {
         if (from > to || page < 1 || page > 1000000 || pageSize < 1 || pageSize > 500) return ValidationProblem("Invalid range or pagination.");
         var query = db.Readings.AsNoTracking();
         if (communityId.HasValue) query = query.Where(x => x.CommunityId == communityId);
         if (sensorId.HasValue) query = query.Where(x => x.SensorId == sensorId);
+        if (type.HasValue) query = query.Where(x => x.SensorType == type);
         if (from.HasValue) query = query.Where(x => x.RecordedAt >= from);
         if (to.HasValue) query = query.Where(x => x.RecordedAt <= to);
         int total = await query.CountAsync(token);

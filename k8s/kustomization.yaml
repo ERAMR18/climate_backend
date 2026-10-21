@@ -26,3 +26,8 @@ resources:
 - rabbitmq/headless-service.yaml
 - rabbitmq/statefulset.yaml
 - rabbitmq/networkpolicy.yaml
+- community/deployment.yaml
+- community/service.yaml
+- reports/deployment.yaml
+- reports/service.yaml
+- reports/storage.yaml

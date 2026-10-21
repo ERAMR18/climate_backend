@@ -5,6 +5,7 @@ namespace Climate.Sensors.Application.Abstractions;
 
 public interface ISensorCatalogRepository
 {
+    Task<IReadOnlyCollection<Sensor>> SearchSensorsPageAsync(Guid? communityId, SensorType? type, bool? isActive, string? code, string? search, int page, int pageSize, CancellationToken token);
     Task<IReadOnlyCollection<Climate.Sensors.Application.Communities.CommunityResponse>> SearchCommunitiesAsync(string? search, bool? isActive, string? municipality, string? department, CancellationToken token);
     Task<IReadOnlyCollection<Sensor>> SearchSensorsAsync(Guid? communityId, SensorType? type, bool? isActive, string? code, string? search, CancellationToken token);
     Task<IReadOnlyCollection<Community>> ListCommunitiesAsync(CancellationToken cancellationToken);

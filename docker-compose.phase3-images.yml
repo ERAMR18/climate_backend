@@ -1,0 +1,11 @@
+services:
+  gateway: { image: climate/gateway:phase3 }
+  identity-service: { image: climate/auth:phase3 }
+  community-service: { image: climate/community:phase3 }
+  sensor-service: { image: climate/sensors:phase3 }
+  monitoring-service: { image: climate/monitoring:phase3 }
+  alert-service: { image: climate/alerts:phase3 }
+  event-service: { image: climate/events:phase3 }
+  audit-service: { image: climate/audit:phase3 }
+  report-service: { image: climate/reports:phase3 }
+  frontend: { image: climate/frontend:phase3 }

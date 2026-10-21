@@ -1,0 +1,38 @@
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
+spring:
+  datasource:
+    url: ${ALERT_DATABASE_URL}
+    username: ${ALERT_DATABASE_USER}
+    password: ${ALERT_DATABASE_PASSWORD}
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 10
+  sql:
+    init:
+      mode: always
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+    connection-timeout: 5s
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+management:
+  endpoints:
+    web:
+      base-path: /health
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
+logging:
+  level:
+    root: INFO
+    org.springframework.jdbc.core: WARN

@@ -1,0 +1,22 @@
+{
+    "catalogs":  {
+                     "communities":  3,
+                     "sensors":  15,
+                     "rules":  27
+                 },
+    "simulation":  {
+                       "isRunning":  true
+                   },
+    "seedIdempotent":  true,
+    "readingsBefore":  45,
+    "readingsAfter":  60,
+    "dashboard":  {
+                      "activeAlerts":  21,
+                      "activeSensors":  15,
+                      "evolutionPoints":  5,
+                      "statisticGroups":  5,
+                      "communities":  3,
+                      "currentReadings":  15
+                  },
+    "verifiedAt":  "2026-10-21T20:17:07.1485445Z"
+}

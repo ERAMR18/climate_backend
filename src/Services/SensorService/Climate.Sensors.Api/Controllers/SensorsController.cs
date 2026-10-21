@@ -18,8 +18,15 @@ public sealed class SensorsController(ISensorService service, AuditWriter auditW
     public async Task<ActionResult<IReadOnlyCollection<SensorResponse>>> GetAll(
         [FromServices] ISensorCatalogRepository repository, CancellationToken cancellationToken,
         [FromQuery] Guid? communityId = null, [FromQuery] SensorType? type = null, [FromQuery] bool? isActive = null,
-        [FromQuery] string? code = null, [FromQuery] string? search = null) =>
-        Ok((await repository.SearchSensorsAsync(communityId, type, isActive, code, search, cancellationToken)).Select(x => SensorResponse.FromEntity(x)).ToArray());
+        [FromQuery] string? code = null, [FromQuery] string? search = null,
+        [FromQuery] int? page = null, [FromQuery] int pageSize = 250)
+    {
+        if (page is < 1 or > 1000000 || pageSize is < 1 or > 500) return Problem(statusCode: 422, title: "Invalid pagination.");
+        IReadOnlyCollection<Sensor> sensors = page.HasValue
+            ? await repository.SearchSensorsPageAsync(communityId, type, isActive, code, search, page.Value, pageSize, cancellationToken)
+            : await repository.SearchSensorsAsync(communityId, type, isActive, code, search, cancellationToken);
+        return Ok(sensors.Select(x => SensorResponse.FromEntity(x)).ToArray());
+    }
 
     [HttpGet("{id:guid}", Name = "GetSensorById")]
     public async Task<ActionResult<SensorResponse>> GetById(Guid id, CancellationToken cancellationToken)

@@ -42,6 +42,9 @@ docker-compose.*.local.yml
 # Misc
 *.log
 node_modules/
+.venv-phase3/
+**/__pycache__/
+.pytest_cache/
 
 # MSBuild BuildHost artifacts
 **/BuildHost-*

@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reports
+  namespace: climate-monitoring
+  labels:
+    app.kubernetes.io/part-of: climate-monitoring
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels: &id001
+      app.kubernetes.io/name: reports
+      app.kubernetes.io/part-of: climate-monitoring
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: *id001
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 10001
+      containers:
+      - name: reports
+        image: climate/reports:phase3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: climate-config
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 5
+          failureThreshold: 60
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: pdfs
+          mountPath: /data/reports
+        env:
+        - name: JWT_SIGNING_KEY
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: JWT_SIGNING_KEY
+        - name: INTERNAL_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: INTERNAL_API_KEY
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: REPORT_MONGO_URL
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: climate-secrets
+              key: RABBITMQ_URL
+        - name: MONGO_DATABASE
+          value: reports
+        - name: REPORT_STORAGE_DIRECTORY
+          value: /data/reports
+        - name: REPORT_MAX_ROWS
+          value: '50000'
+        - name: REPORT_RETENTION_DAYS
+          value: '30'
+        - name: REPORT_RENDER_TIMEOUT_SECONDS
+          value: '180'
+        - name: RAINFALL_MODE
+          value: unknown
+        - name: AUTH_SERVICE_URL
+          value: http://identity-service:8080/
+        - name: COMMUNITY_SERVICE_URL
+          value: http://community-service:8080/
+        - name: SENSOR_SERVICE_URL
+          value: http://sensor-service:8080/
+        - name: MONITORING_SERVICE_URL
+          value: http://monitoring-service:8080/
+        - name: ALERT_SERVICE_URL
+          value: http://alert-service:8080/
+        - name: EVENT_SERVICE_URL
+          value: http://event-service:8080/
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: pdfs
+        persistentVolumeClaim:
+          claimName: report-files

@@ -1,0 +1,28 @@
+{
+    "passed":  true,
+    "volumes":  [
+                    "sqlserver-data",
+                    "rabbitmq-data",
+                    "auth-postgres-data",
+                    "community-postgres-data",
+                    "alert-postgres-data",
+                    "audit-mongo-data",
+                    "report-mongo-data",
+                    "report-files"
+                ],
+    "restoredInSeparateProject":  true,
+    "checks":  [
+                   "authLogin",
+                   "community",
+                   "sensorReference",
+                   "alertRule",
+                   "alert",
+                   "reading",
+                   "event",
+                   "auditHistory",
+                   "reportHistory",
+                   "pdfSha256"
+               ],
+    "volumeCount":  8,
+    "timestamp":  "2026-10-21T19:20:35.2897582Z"
+}

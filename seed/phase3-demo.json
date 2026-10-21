@@ -1,0 +1,464 @@
+{
+  "communities": [
+    {
+      "name": "Ciudad de Guatemala",
+      "description": "Estación urbana central.",
+      "latitude": 14.6349,
+      "longitude": -90.5069,
+      "country": "Guatemala"
+    },
+    {
+      "name": "Puerto Barrios",
+      "description": "Estación costera del Caribe.",
+      "latitude": 15.7278,
+      "longitude": -88.5944,
+      "country": "Guatemala"
+    },
+    {
+      "name": "Quetzaltenango",
+      "description": "Estación del altiplano occidental.",
+      "latitude": 14.8347,
+      "longitude": -91.5181,
+      "country": "Guatemala"
+    }
+  ],
+  "sensors": [
+    {
+      "name": "Temperatura capital",
+      "code": "GUA-TEMP-01",
+      "type": "Temperature",
+      "unit": "°C",
+      "communityName": "Ciudad de Guatemala",
+      "latitude": 14.6349,
+      "longitude": -90.5069,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 35
+    },
+    {
+      "name": "Humedad capital",
+      "code": "GUA-HUM-01",
+      "type": "Humidity",
+      "unit": "%",
+      "communityName": "Ciudad de Guatemala",
+      "latitude": 14.6349,
+      "longitude": -90.5069,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 55
+    },
+    {
+      "name": "Viento capital",
+      "code": "GUA-WIND-01",
+      "type": "WindSpeed",
+      "unit": "km/h",
+      "communityName": "Ciudad de Guatemala",
+      "latitude": 14.6349,
+      "longitude": -90.5069,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 25
+    },
+    {
+      "name": "Lluvia capital",
+      "code": "GUA-RAIN-01",
+      "type": "Rainfall",
+      "unit": "mm",
+      "communityName": "Ciudad de Guatemala",
+      "latitude": 14.6349,
+      "longitude": -90.5069,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 35
+    },
+    {
+      "name": "Nivel río Las Vacas",
+      "code": "GUA-WATER-01",
+      "type": "WaterLevel",
+      "unit": "m",
+      "communityName": "Ciudad de Guatemala",
+      "latitude": 14.676,
+      "longitude": -90.472,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 3
+    },
+    {
+      "name": "Temperatura Caribe",
+      "code": "PBR-TEMP-01",
+      "type": "Temperature",
+      "unit": "°C",
+      "communityName": "Puerto Barrios",
+      "latitude": 15.7278,
+      "longitude": -88.5944,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 44
+    },
+    {
+      "name": "Humedad Caribe",
+      "code": "PBR-HUM-01",
+      "type": "Humidity",
+      "unit": "%",
+      "communityName": "Puerto Barrios",
+      "latitude": 15.7278,
+      "longitude": -88.5944,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 18
+    },
+    {
+      "name": "Viento Caribe",
+      "code": "PBR-WIND-01",
+      "type": "WindSpeed",
+      "unit": "km/h",
+      "communityName": "Puerto Barrios",
+      "latitude": 15.7278,
+      "longitude": -88.5944,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 110
+    },
+    {
+      "name": "Lluvia Caribe",
+      "code": "PBR-RAIN-01",
+      "type": "Rainfall",
+      "unit": "mm",
+      "communityName": "Puerto Barrios",
+      "latitude": 15.7278,
+      "longitude": -88.5944,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 80
+    },
+    {
+      "name": "Nivel río Motagua",
+      "code": "PBR-WATER-01",
+      "type": "WaterLevel",
+      "unit": "m",
+      "communityName": "Puerto Barrios",
+      "latitude": 15.717,
+      "longitude": -88.612,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 8
+    },
+    {
+      "name": "Temperatura altiplano",
+      "code": "XELA-TEMP-01",
+      "type": "Temperature",
+      "unit": "°C",
+      "communityName": "Quetzaltenango",
+      "latitude": 14.8347,
+      "longitude": -91.5181,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": -2
+    },
+    {
+      "name": "Humedad altiplano",
+      "code": "XELA-HUM-01",
+      "type": "Humidity",
+      "unit": "%",
+      "communityName": "Quetzaltenango",
+      "latitude": 14.8347,
+      "longitude": -91.5181,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 65
+    },
+    {
+      "name": "Viento altiplano",
+      "code": "XELA-WIND-01",
+      "type": "WindSpeed",
+      "unit": "km/h",
+      "communityName": "Quetzaltenango",
+      "latitude": 14.8347,
+      "longitude": -91.5181,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 45
+    },
+    {
+      "name": "Lluvia altiplano",
+      "code": "XELA-RAIN-01",
+      "type": "Rainfall",
+      "unit": "mm",
+      "communityName": "Quetzaltenango",
+      "latitude": 14.8347,
+      "longitude": -91.5181,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 0.5
+    },
+    {
+      "name": "Nivel río Samalá",
+      "code": "XELA-WATER-01",
+      "type": "WaterLevel",
+      "unit": "m",
+      "communityName": "Quetzaltenango",
+      "latitude": 14.81,
+      "longitude": -91.54,
+      "description": "Sensor simulado para el escenario inicial.",
+      "initialValue": 4.5
+    }
+  ],
+  "rules": [
+    {
+      "name": "Riesgo de inundación (Yellow)",
+      "sensorType": "WaterLevel",
+      "riskType": "Flood",
+      "alertLevel": "Yellow",
+      "message": "El nivel de agua superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 3.9999
+    },
+    {
+      "name": "Riesgo de inundación (Orange)",
+      "sensorType": "WaterLevel",
+      "riskType": "Flood",
+      "alertLevel": "Orange",
+      "message": "El nivel de agua superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 5.4999
+    },
+    {
+      "name": "Riesgo de inundación (Red)",
+      "sensorType": "WaterLevel",
+      "riskType": "Flood",
+      "alertLevel": "Red",
+      "message": "El nivel de agua superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 6.9999
+    },
+    {
+      "name": "Lluvia intensa (Yellow)",
+      "sensorType": "Rainfall",
+      "riskType": "Flood",
+      "alertLevel": "Yellow",
+      "message": "La lluvia superó un límite simulado de inundación.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 29.9999
+    },
+    {
+      "name": "Lluvia intensa (Orange)",
+      "sensorType": "Rainfall",
+      "riskType": "Flood",
+      "alertLevel": "Orange",
+      "message": "La lluvia superó un límite simulado de inundación.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 49.9999
+    },
+    {
+      "name": "Lluvia intensa (Red)",
+      "sensorType": "Rainfall",
+      "riskType": "Flood",
+      "alertLevel": "Red",
+      "message": "La lluvia superó un límite simulado de inundación.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 69.9999
+    },
+    {
+      "name": "Precipitación insuficiente (Yellow)",
+      "sensorType": "Rainfall",
+      "riskType": "Drought",
+      "alertLevel": "Yellow",
+      "message": "La lluvia está por debajo del límite simulado.",
+      "isActive": true,
+      "minimumValue": 10.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Precipitación insuficiente (Orange)",
+      "sensorType": "Rainfall",
+      "riskType": "Drought",
+      "alertLevel": "Orange",
+      "message": "La lluvia está por debajo del límite simulado.",
+      "isActive": true,
+      "minimumValue": 5.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Precipitación insuficiente (Red)",
+      "sensorType": "Rainfall",
+      "riskType": "Drought",
+      "alertLevel": "Red",
+      "message": "La lluvia está por debajo del límite simulado.",
+      "isActive": true,
+      "minimumValue": 1.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Viento peligroso (Yellow)",
+      "sensorType": "WindSpeed",
+      "riskType": "Storm",
+      "alertLevel": "Yellow",
+      "message": "La velocidad del viento superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 39.9999
+    },
+    {
+      "name": "Viento peligroso (Orange)",
+      "sensorType": "WindSpeed",
+      "riskType": "Storm",
+      "alertLevel": "Orange",
+      "message": "La velocidad del viento superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 69.9999
+    },
+    {
+      "name": "Viento peligroso (Red)",
+      "sensorType": "WindSpeed",
+      "riskType": "Storm",
+      "alertLevel": "Red",
+      "message": "La velocidad del viento superó un límite simulado.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 99.9999
+    },
+    {
+      "name": "Riesgo de helada (Yellow)",
+      "sensorType": "Temperature",
+      "riskType": "Frost",
+      "alertLevel": "Yellow",
+      "message": "La temperatura descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 5.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Riesgo de helada (Orange)",
+      "sensorType": "Temperature",
+      "riskType": "Frost",
+      "alertLevel": "Orange",
+      "message": "La temperatura descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 2.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Riesgo de helada (Red)",
+      "sensorType": "Temperature",
+      "riskType": "Frost",
+      "alertLevel": "Red",
+      "message": "La temperatura descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 0.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Temperatura favorable a incendio (Yellow)",
+      "sensorType": "Temperature",
+      "riskType": "ForestFire",
+      "alertLevel": "Yellow",
+      "message": "La temperatura superó un límite simulado de incendio.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 31.9999
+    },
+    {
+      "name": "Temperatura favorable a incendio (Orange)",
+      "sensorType": "Temperature",
+      "riskType": "ForestFire",
+      "alertLevel": "Orange",
+      "message": "La temperatura superó un límite simulado de incendio.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 37.9999
+    },
+    {
+      "name": "Temperatura favorable a incendio (Red)",
+      "sensorType": "Temperature",
+      "riskType": "ForestFire",
+      "alertLevel": "Red",
+      "message": "La temperatura superó un límite simulado de incendio.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 42.9999
+    },
+    {
+      "name": "Humedad favorable a incendio (Yellow)",
+      "sensorType": "Humidity",
+      "riskType": "ForestFire",
+      "alertLevel": "Yellow",
+      "message": "La humedad descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 35.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Humedad favorable a incendio (Orange)",
+      "sensorType": "Humidity",
+      "riskType": "ForestFire",
+      "alertLevel": "Orange",
+      "message": "La humedad descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 25.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Humedad favorable a incendio (Red)",
+      "sensorType": "Humidity",
+      "riskType": "ForestFire",
+      "alertLevel": "Red",
+      "message": "La humedad descendió bajo un límite simulado.",
+      "isActive": true,
+      "minimumValue": 15.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Temperatura favorable a sequía (Yellow)",
+      "sensorType": "Temperature",
+      "riskType": "Drought",
+      "alertLevel": "Yellow",
+      "message": "La temperatura superó un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 29.9999
+    },
+    {
+      "name": "Temperatura favorable a sequía (Orange)",
+      "sensorType": "Temperature",
+      "riskType": "Drought",
+      "alertLevel": "Orange",
+      "message": "La temperatura superó un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 35.9999
+    },
+    {
+      "name": "Temperatura favorable a sequía (Red)",
+      "sensorType": "Temperature",
+      "riskType": "Drought",
+      "alertLevel": "Red",
+      "message": "La temperatura superó un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": null,
+      "maximumValue": 41.9999
+    },
+    {
+      "name": "Humedad baja (Yellow)",
+      "sensorType": "Humidity",
+      "riskType": "Drought",
+      "alertLevel": "Yellow",
+      "message": "La humedad descendió bajo un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": 40.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Humedad baja (Orange)",
+      "sensorType": "Humidity",
+      "riskType": "Drought",
+      "alertLevel": "Orange",
+      "message": "La humedad descendió bajo un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": 30.0001,
+      "maximumValue": null
+    },
+    {
+      "name": "Humedad baja (Red)",
+      "sensorType": "Humidity",
+      "riskType": "Drought",
+      "alertLevel": "Red",
+      "message": "La humedad descendió bajo un límite simulado de sequía.",
+      "isActive": true,
+      "minimumValue": 20.0001,
+      "maximumValue": null
+    }
+  ]
+}
