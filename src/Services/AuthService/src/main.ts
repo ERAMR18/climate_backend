@@ -10,6 +10,7 @@ import { Outbox } from './outbox';
 import { Tokens } from './tokens';
 import { UsersService } from './users.service';
 import { InternalAuthController } from './internal.controller';
+import { OAuthController, OAuthService } from './oauth';
 
 @Catch()
 class Problems implements ExceptionFilter {
@@ -26,7 +27,7 @@ class Problems implements ExceptionFilter {
       ...(typeof detail === 'object' ? { errors: detail } : {}), traceId: request.correlationId });
   }
 }
-@Module({ controllers: [AuthController, UsersController, HealthController, InternalAuthController], providers: [Database, Tokens, UsersService, Outbox, AuthGuard] })
+@Module({ controllers: [AuthController, UsersController, HealthController, InternalAuthController, OAuthController], providers: [Database, Tokens, UsersService, Outbox, AuthGuard, OAuthService] })
 class AppModule {}
 
 async function bootstrap(): Promise<void> {

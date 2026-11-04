@@ -13,7 +13,7 @@ public sealed record SensorReadingResponse(
     SensorType SensorType,
     decimal Value,
     string Unit,
-    DateTimeOffset RecordedAt, bool? SensorWasActive = null)
+    DateTimeOffset RecordedAt, bool? SensorWasActive = null, string Source = "SIMULATED", string? DeviceId = null)
 {
     public static SensorReadingResponse FromEntity(SensorReading reading) =>
         new(
@@ -23,9 +23,9 @@ public sealed record SensorReadingResponse(
             reading.SensorType,
             reading.Value,
             reading.Unit,
-            reading.RecordedAt, reading.SensorWasActive);
+            reading.RecordedAt, reading.SensorWasActive, reading.Source, reading.DeviceId);
 }
 
-public sealed record ChartPoint(DateTimeOffset Timestamp, decimal Value);
+public sealed record ChartPoint(DateTimeOffset Timestamp, decimal Value, string Source = "SIMULATED");
 public sealed record SensorChartResponse(Guid SensorId, string Unit, IReadOnlyCollection<ChartPoint> Data);
 public sealed record SimulationStatusResponse(bool IsRunning);

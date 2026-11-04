@@ -14,7 +14,8 @@ public sealed class MonitoringService(
     IRealtimePublisher realtimePublisher,
     ISimulatedValueGenerator valueGenerator,
     IValidator<CreateReadingRequest> validator,
-    TimeProvider timeProvider) : IMonitoringService
+    TimeProvider timeProvider,
+    Microsoft.Extensions.Options.IOptions<TelemetryOptions>? telemetry = null) : IMonitoringService
 {
     public async Task<IReadOnlyCollection<SensorReadingResponse>> GetCurrentAsync(CancellationToken cancellationToken) =>
         (await repository.GetCurrentAsync(cancellationToken)).Select(SensorReadingResponse.FromEntity).ToArray();
@@ -53,6 +54,8 @@ public sealed class MonitoringService(
         CreateReadingRequest request,
         CancellationToken cancellationToken)
     {
+        if (telemetry?.Value.Devices.Any(device => device.SensorId == request.SensorId) == true)
+            return Result.Failure<SensorReadingResponse>(ApplicationError.Validation("telemetry.exclusive", "This sensor accepts only authenticated device telemetry."));
         var validation = await validator.ValidateAsync(request, cancellationToken);
         if (!validation.IsValid)
         {
@@ -110,9 +113,9 @@ public sealed class MonitoringService(
         }
 
         ChartPoint[] points = readings
-            .GroupBy(reading => AlignToBucket(reading.RecordedAt, bucketSize))
-            .OrderBy(group => group.Key)
-            .Select(group => new ChartPoint(group.Key, decimal.Round(group.Average(item => item.Value), 3)))
+            .GroupBy(reading => new { Timestamp = AlignToBucket(reading.RecordedAt, bucketSize), reading.Source })
+            .OrderBy(group => group.Key.Timestamp)
+            .Select(group => new ChartPoint(group.Key.Timestamp, decimal.Round(group.Average(item => item.Value), 3), group.Key.Source))
             .ToArray();
         return Result.Success(new SensorChartResponse(sensorId, readings.First().Unit, points));
     }
@@ -125,7 +128,7 @@ public sealed class MonitoringService(
         var readings = new List<SensorReading>(sensors.Count);
         foreach (SensorSummary sensor in sensors)
         {
-            if (!sensor.IsActive) continue;
+            if (!sensor.IsActive || telemetry?.Value.Devices.Any(device => device.SensorId == sensor.Id) == true) continue;
             SensorReading reading = CreateReading(sensor, overrides is not null && overrides.TryGetValue(sensor.Id, out var simulatedValue) ? simulatedValue : valueGenerator.NextValue(sensor.Type), now);
             readings.Add(reading);
             await repository.AddAsync(reading, cancellationToken);

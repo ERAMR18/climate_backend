@@ -23,7 +23,19 @@ builder.Services.AddSignalR().AddJsonProtocol(options =>
     options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddSingleton<IRealtimePublisher,SignalRRealtimePublisher>();
 builder.Services.AddMonitoringApplication();
+builder.Services.AddOptions<Climate.Monitoring.Application.Readings.TelemetryOptions>()
+    .Bind(builder.Configuration.GetSection("Telemetry"))
+    .Validate(options => options.MinimumTemperature < options.MaximumTemperature, "Invalid telemetry temperature range.")
+    .Validate(options => options.Devices.Select(device => device.DeviceId).Distinct(StringComparer.Ordinal).Count() == options.Devices.Count,
+        "Telemetry device IDs must be unique.")
+    .Validate(options => options.Devices.Where(device => device.SensorId != Guid.Empty).Select(device => device.SensorId).Distinct().Count()
+        == options.Devices.Count(device => device.SensorId != Guid.Empty), "Only one device may own a sensor.")
+    .Validate(options => options.Devices.All(device => !device.IsActive || device.SensorId != Guid.Empty
+        && device.DeviceId.Length is > 0 and <= 100 && device.Source is "SIMULATED" or "ARDUINO"
+        && device.TokenSha256.Length == 64 && device.TokenSha256.All(Uri.IsHexDigit)), "Active telemetry devices require UUID, source and SHA256 token hash.")
+    .ValidateOnStart();
 builder.Services.AddMonitoringInfrastructure(builder.Configuration);
+if (!builder.Configuration.GetValue<bool>("OpenApi:ExportOnly")) builder.Services.AddHostedService<TelemetryDispatchWorker>();
 
 JwtOptions jwt = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
     ?? throw new InvalidOperationException("JWT configuration is required.");

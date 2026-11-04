@@ -10,6 +10,8 @@ internal sealed class SensorReadingConfiguration : IEntityTypeConfiguration<Sens
     {
         builder.ToTable("SensorReadings");
         builder.HasKey(reading => reading.Id);
+        builder.Property(reading => reading.Source).HasMaxLength(32).HasDefaultValue("SIMULATED").IsRequired();
+        builder.Property(reading => reading.DeviceId).HasMaxLength(100);
         builder.Property(reading => reading.SensorType).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(reading => reading.Value).HasPrecision(18, 4);
         builder.Property(reading => reading.Unit).HasMaxLength(20).IsRequired();

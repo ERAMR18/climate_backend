@@ -1,0 +1,26 @@
+# Overlay local; no publica puertos nuevos ni altera volúmenes.
+services:
+  frontend:
+    environment:
+      GATEWAY_PUBLIC_URL: http://localhost:8080
+  gateway:
+    environment:
+      Cors__AllowedOrigins__0: http://localhost:4200
+      Cors__AllowedOrigins__1: http://127.0.0.1:4200
+  identity-service:
+    environment:
+      OAUTH_FRONTEND_URL: ${OAUTH_FRONTEND_URL:-http://localhost:4200}
+      OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID:-}
+      OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET:-}
+      OAUTH_GOOGLE_CALLBACK_URL: ${OAUTH_GOOGLE_CALLBACK_URL:-http://localhost:8080/api/auth/oauth/google/callback}
+      OAUTH_GITHUB_CLIENT_ID: ${OAUTH_GITHUB_CLIENT_ID:-}
+      OAUTH_GITHUB_CLIENT_SECRET: ${OAUTH_GITHUB_CLIENT_SECRET:-}
+      OAUTH_GITHUB_CALLBACK_URL: ${OAUTH_GITHUB_CALLBACK_URL:-http://localhost:8080/api/auth/oauth/github/callback}
+      OAUTH_ALLOW_LOCAL_HTTP: 'true'
+  monitoring-service:
+    environment:
+      Telemetry__Devices__0__DeviceId: ${ARDUINO_DEVICE_ID:-arduino-temp-001}
+      Telemetry__Devices__0__SensorId: ${ARDUINO_SENSOR_ID:-00000000-0000-0000-0000-000000000000}
+      Telemetry__Devices__0__TokenSha256: ${ARDUINO_TOKEN_SHA256:-}
+      Telemetry__Devices__0__Source: ${ARDUINO_SOURCE:-SIMULATED}
+      Telemetry__Devices__0__IsActive: ${ARDUINO_ENABLED:-false}

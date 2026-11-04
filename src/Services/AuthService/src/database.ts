@@ -3,6 +3,11 @@ import { Pool, PoolClient } from 'pg';
 import { required } from './config';
 
 export const schema = `
+CREATE TABLE IF NOT EXISTS oauth_flows (
+ state_hash text PRIMARY KEY, provider text NOT NULL, verifier text NOT NULL, nonce text NOT NULL,
+ browser_hash text NOT NULL, challenge text NOT NULL, link_user_id uuid, expires_at timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_oauth_flows_expiry ON oauth_flows(expires_at);
 CREATE TABLE IF NOT EXISTS users (
  id uuid PRIMARY KEY, username varchar(50) NOT NULL, normalized_username varchar(50) NOT NULL UNIQUE,
  email varchar(254) NOT NULL, normalized_email varchar(254) NOT NULL UNIQUE,
@@ -16,6 +21,9 @@ CREATE TABLE IF NOT EXISTS audit_outbox (
 CREATE INDEX IF NOT EXISTS ix_outbox_pending ON audit_outbox(created_at) WHERE published_at IS NULL;
 CREATE TABLE IF NOT EXISTS revoked_tokens (id uuid PRIMARY KEY, expires_at timestamptz NOT NULL);
 CREATE INDEX IF NOT EXISTS ix_revoked_expiry ON revoked_tokens(expires_at);
+CREATE TABLE IF NOT EXISTS oauth_handoffs (
+ code_hash text PRIMARY KEY, user_id uuid NOT NULL REFERENCES users(id), challenge text NOT NULL, expires_at timestamptz NOT NULL
+);
 CREATE TABLE IF NOT EXISTS external_identities (
  provider varchar(64) NOT NULL, subject varchar(255) NOT NULL,
  user_id uuid NOT NULL REFERENCES users(id), PRIMARY KEY(provider, subject)

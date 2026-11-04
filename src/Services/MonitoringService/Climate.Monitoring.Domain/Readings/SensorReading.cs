@@ -26,6 +26,15 @@ public sealed class SensorReading
     }
 
     public bool? SensorWasActive { get; private set; }
+    public string Source { get; private set; } = "SIMULATED";
+    public string? DeviceId { get; private set; }
+    public bool TelemetryDispatched { get; private set; }
+    public void ConfirmTelemetryDispatch() => TelemetryDispatched = true;
+    public void SetTelemetryOrigin(string source, string deviceId)
+    {
+        Source = source;
+        DeviceId = deviceId;
+    }
     public Guid Id { get; private set; }
     public Guid SensorId { get; private set; }
     public Guid CommunityId { get; private set; }
