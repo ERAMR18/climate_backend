@@ -14,7 +14,7 @@ interface Provider { name: string; issuer: string; scope: string; oidc: boolean;
 // Extend with reviewed metadata; never accept arbitrary issuer URLs from HTTP input.
 const providers: Provider[] = [
   { name: 'google', issuer: 'https://accounts.google.com', scope: 'openid email profile', oidc: true },
-  { name: 'github', issuer: 'https://github.com', scope: 'read:user user:email', oidc: false,
+  { name: 'github', issuer: 'https://github.com/login/oauth', scope: 'read:user user:email', oidc: false,
     authorization: 'https://github.com/login/oauth/authorize', token: 'https://github.com/login/oauth/access_token' },
 ];
 interface Flow { provider: string; verifier: string; nonce: string; browser_hash: string; challenge: string; link_user_id: string | null; }
