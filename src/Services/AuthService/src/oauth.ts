@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Injectable, Param, Post, Query, Req, Res, ServiceUnavailableException, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Injectable, Logger, Param, Post, Query, Req, Res, ServiceUnavailableException, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import * as oidc from 'openid-client';
@@ -7,6 +7,7 @@ import { Tokens } from './tokens';
 import { AuthGuard, AuthRequest } from './auth.guard';
 import { UserRow } from './users.service';
 import { IsString, Matches, MaxLength } from 'class-validator';
+import { oauthFailureCode } from './oauth-diagnostics';
 
 const digest = (value: string) => createHash('sha256').update(value).digest('base64url');
 const random = () => randomBytes(32).toString('base64url');
@@ -140,6 +141,7 @@ export class OAuthService {
 
 @Controller('api/v1/auth/oauth')
 export class OAuthController {
+  private readonly logger = new Logger(OAuthController.name);
   constructor(private readonly oauth: OAuthService) {}
   @Get(':provider/start') async start(@Param('provider') provider: string, @Query('challenge') challenge: string, @Res() response: Response) {
     response.setHeader('Cache-Control', 'no-store');
@@ -152,7 +154,15 @@ export class OAuthController {
   @Get(':provider/callback') async callback(@Param('provider') provider: string, @Query() query: Record<string, string>, @Req() request: Request, @Res() response: Response) {
     response.setHeader('Cache-Control', 'no-store'); response.setHeader('Referrer-Policy', 'no-referrer');
     try { response.redirect(await this.oauth.callback(provider, query, request, response)); }
-    catch { response.status(401).send('No fue posible validar el proveedor. Vuelve al inicio de sesión e inténtalo nuevamente.'); }
+    catch (error: unknown) {
+      const reason = oauthFailureCode(error);
+      const reference = randomUUID();
+      const safeProvider = providers.some(value => value.name === provider) ? provider : 'unknown';
+      this.logger.warn(`OAuth callback rejected provider=${safeProvider} reason=${reason} reference=${reference}`);
+      response.setHeader('X-OAuth-Error', reason);
+      response.setHeader('X-OAuth-Reference', reference);
+      response.status(401).type('text/plain').send(`No fue posible validar el proveedor. Diagnóstico: ${reason}. Referencia: ${reference}. Vuelve al inicio de sesión e inténtalo nuevamente.`);
+    }
   }
   @Post('exchange') async exchange(@Body() input: ExchangeDto, @Res() response: Response) {
     response.setHeader('Cache-Control', 'no-store'); response.json(await this.oauth.exchange(input.code, input.verifier));
