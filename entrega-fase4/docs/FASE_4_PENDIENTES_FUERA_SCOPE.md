@@ -1,0 +1,24 @@
+# Requisitos excluidos y dependencias externas
+
+Los requisitos oficiales se tomaron de `references/phase_4.official.md`. Se excluye su ejecución por instrucción expresa del alcance local. Existencia de manifiestos no acredita despliegue. No se ejecutó kubectl, no se cambió VPS, DNS, firewall, ingress, Secrets ni almacenamiento productivo.
+
+| Requisito oficial | Estado | Motivo de exclusión | Implementación reutilizable | Dependencias externas | Acción del responsable | Cómo verificar | Riesgo pendiente |
+|---|---|---|---|---|---|---|---|
+| §10 Cluster Kubernetes/K3s | No ejecutado | Infraestructura excluida | backend/k8s | VPS y acceso autorizado | Aprovisionar clúster en ventana autorizada | Nodos Ready y versión soportada | Sin orquestación productiva |
+| §11 Pods | No validado en VPS | No acceso operativo autorizado | Deployments existentes | Clúster operativo | Desplegar imágenes revisadas | Pods Ready, logs y reinicios | Comportamiento real desconocido |
+| §11 Deployments | No aplicado | No desplegar producción | Manifiestos existentes | Registry e imágenes | Revisar rollout y rollback | rollout status/history | Sin recuperación demostrada |
+| §12 Services internos | No validado | Clúster excluido | Services existentes | DNS interno del clúster | Validar puertos/selectores por servicio | Consultar APIs desde Pod autorizado | Rutas internas podrían fallar |
+| §12 Ingress HTTPS | No validado | Ingress productivo excluido | Gateway y manifiestos | Controller y dominio | Revisar host, rutas y WebSocket | REST y SignalR por dominio | Tiempo real podría fallar |
+| §13 ConfigMaps | No aplicado | No cambiar clúster | Configuración por entorno | Endpoints internos definitivos | Inyectar OAUTH y Telemetry no sensibles | Inspección de configuración y health | Configuración incompleta |
+| RNF-OAUTH-02 / §13 Secrets reales | Pendiente externo | Credenciales productivas excluidas | Lectura de variables y ejemplos existentes | Secret store, credenciales válidas | Provisionar/injectar JWT, DB y OAuth sin versionar valores | Login y acceso autorizado sin revelar valores | Login indisponible o secretos expuestos si se hace mal |
+| §14 Persistent Volumes | No validado en K3s | Migración de volúmenes excluida | Persistencia local SQL/PostgreSQL/Mongo | StorageClass, capacidad y backups | Configurar y probar PVC/restauración | Reiniciar Pod y recuperar datos | Pérdida de datos productivos |
+| §14 Health checks/probes K3s | Preparados, no probados en K3s | No desplegar clúster | /health, /health/live y probes existentes | Clúster operativo | Verificar liveness/readiness por servicio | Fallo controlado y recuperación | Tráfico a instancias no listas |
+| Objetivo 7: escalabilidad horizontal | No medida | Escalado productivo excluido | Deployments, deduplicación por UUID | Balanceador, recursos y backplane SignalR | Probar réplicas y planificar backplane antes de escalar Monitoring | Clientes reciben eventos entre réplicas | SignalR actual en memoria no distribuye entre réplicas |
+| Objetivo 8 / finalización 6: DNS | No modificado | DNS excluido | URLs configurables | Dominio y acceso del propietario | Apuntar registros aprobados | Resolver dominio desde clientes | Sistema sin dominio público |
+| Objetivo 8 / §9: TLS público | No emitido/renovado | Certificados públicos excluidos | Exigencia HTTPS fuera de loopback | CA, dominio y renovación | Emitir y automatizar renovación | Cadena TLS, expiración y callback HTTPS | Secretos/tokens sin transporte seguro si se omite |
+| Objetivo 5: instalación K3s y nodos | No ejecutada | No administrar VPS | Documentos backend/k8s | Acceso y capacidad | Dimensionar e instalar versión soportada | Reinicio de nodo y recuperación | Sin tolerancia real demostrada |
+| §17.1: Google real | Integración de código; pendiente real | No hay credenciales válidas de prueba | OAuthService + Angular + pruebas OIDC simuladas | Google Cloud OAuth app | Registrar redirect exacto y consentimiento | Login, rechazo de nonce/state y rol Viewer reales | Restricciones de proveedor sin validar |
+| §17.1: GitHub real | Integración de código; pendiente real | No hay credenciales válidas de prueba | OAuthService + Angular + PKCE | GitHub OAuth App | Registrar callback y Client Secret | Login y email verificado reales | Cuenta sin email primario verificado rechazada |
+| Prompt Arduino: hardware físico | No probado | Sin Arduino conectado a esta sesión | Sketch, ISerialDataSource y Worker | Placa, cable, driver, sensor | Verificar cableado, compilar/subir y probar USB | Lectura serial y cambio térmico reflejado en dashboard | ADC, ruido y librería sin verificar físicamente |
+
+El firmware simulado tampoco prueba el ADC de un LM35. Probar la fuente simulada de .NET no demuestra que Arduino IDE compile para una placa particular. La compilación/subida física queda registrada en el informe de pruebas. No publicar imágenes en registros privados sin autorización posterior.

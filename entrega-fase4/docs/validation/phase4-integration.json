@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-10-30T01:35:34.533Z",
+  "checks": [
+    "human JWT cannot ingest without device credential",
+    "unknown device rejected",
+    "credential scoped to registered sensor",
+    "physical range validated",
+    "simulation cannot impersonate physical source",
+    "authenticated telemetry persisted in SQL Server",
+    "stable UUID idempotency and conflicting replay",
+    "SignalR publishes persisted reading through existing hub",
+    "existing temperature rules generate alerts",
+    "historical chart retains telemetry source",
+    "manual simulation cannot overwrite device sensor",
+    "server simulation excludes device sensor",
+    "real .NET bridge simulated serial source sends authenticated readings end to end",
+    "existing simulator remains active for other sensors",
+    "unconfigured OAuth reports controlled error without fabricated credentials"
+  ],
+  "sensorId": "3391662b-e60b-44e5-8473-c27b3c3523a5",
+  "status": "passed"
+}

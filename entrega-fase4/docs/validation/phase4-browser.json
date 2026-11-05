@@ -1,0 +1,17 @@
+{
+  "audits": [
+    {
+      "name": "login",
+      "violations": []
+    },
+    {
+      "name": "dashboard-desktop",
+      "violations": []
+    },
+    {
+      "name": "dashboard-mobile",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

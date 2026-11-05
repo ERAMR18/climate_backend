@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+tools/pdf-libs/
+**/__pycache__/
+**/.env*
+**/appsettings.json
+**/device-token.local
+**/*.db
+**/*.db-shm
+**/*.db-wal
+docs/validation/pdf-preview/
+*.tmp.pdf
