@@ -1,0 +1,10 @@
+# VPS device registration. Append to the existing production Compose file list.
+# Does not expose ports, alter volumes, or configure localhost URLs.
+services:
+  monitoring-service:
+    environment:
+      Telemetry__Devices__0__DeviceId: ${ARDUINO_DEVICE_ID:?Configure ARDUINO_DEVICE_ID}
+      Telemetry__Devices__0__SensorId: ${ARDUINO_SENSOR_ID:?Configure an existing VPS temperature sensor UUID}
+      Telemetry__Devices__0__TokenSha256: ${ARDUINO_TOKEN_SHA256:?Configure the bridge device token SHA256}
+      Telemetry__Devices__0__Source: ${ARDUINO_SOURCE:-SIMULATED}
+      Telemetry__Devices__0__IsActive: ${ARDUINO_ENABLED:-false}
